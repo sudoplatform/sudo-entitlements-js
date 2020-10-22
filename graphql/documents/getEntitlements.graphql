@@ -1,0 +1,5 @@
+query GetEntitlements {
+  getEntitlements {
+    ...EntitlementsSet
+  }
+}

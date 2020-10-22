@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ApiClient test suite redeemEntitlements tests should throw a FatalError if no data returned 1`] = `"redeemEntitlements did not return any result."`;

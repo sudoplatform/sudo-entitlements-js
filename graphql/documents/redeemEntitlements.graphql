@@ -1,0 +1,5 @@
+mutation RedeemEntitlements {
+  redeemEntitlements {
+    ...EntitlementsSet
+  }
+}

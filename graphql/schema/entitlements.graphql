@@ -1,0 +1,102 @@
+"""
+An entitlement
+"""
+type Entitlement {
+  """
+  Name of the entitlement
+  """
+  name: String!
+
+  """
+  Optional description of the entitlement as specified by the entitlements administrator.
+  """
+  description: String
+
+  """
+  Value of the entitlement.
+  """
+  value: Int!
+}
+
+"""
+Active entitlements for the user
+"""
+type EntitlementsSet {
+  """
+  Time at which the entitlements for the user was originally created
+  """
+  createdAtEpochMs: Float!
+
+  """
+  Time at which the entitlements for the user were most recently updated.
+  """
+  updatedAtEpochMs: Float!
+
+  """
+  Version number of the user's entitlements. This is incremented every
+  time there is a change of entitlements set or explicit entitlements
+  for this user.
+
+  For users entitled by entitlement set, the fractional part of this version
+  specifies the version of the entitlements set itself.
+  """
+  version: Float!
+
+  """
+  Name of the entitlements set specifying this user's entitlements
+  or the user's subject ID if the user's entitlements are specified
+  explicitly rather than by entitlements set name.
+  """
+  name: String!
+
+  """
+  Description, if any, of the entitlements set as specified by the entitlements
+  set administrator or null if user's entitlements are specified explicitly
+  rather than by entitlements set name.
+  """
+  description: String
+
+  """
+  The set of entitlements active for the user. This details the limits
+  of the user's entitlements and does not specify any information regarding
+  current consumption of those entitlements.
+  """
+  entitlements: [Entitlement!]!
+}
+
+type Query {
+  """
+  Return any entitlements for the currently logged in user or null if none.
+
+  This query will return null for any of the conditions that return errors
+  for the redeemEntitlements mutation.
+  """
+  getEntitlements: EntitlementsSet
+}
+
+type Mutation {
+  """
+  Redeem entitlements for an FSSO user according to configured identity
+  provider claim mappings.
+
+  If the user has already redeemed entitlements then the users current
+  entitlements as determined by the original redemption and any subsequent
+  administrative modifications are returned rather than entitlements
+  corresponding to the user's current identity token claims.
+
+  The following errors may be returned:
+
+  sudoplatform.InvalidTokenError:
+    - Identity token contains no FSSO user identity information
+    - Identity token contains no claims recognized as entitling the user
+    - Identity token claims that are recognized specify unrecognized entitlements sets
+
+  sudoplatform.ServiceError:
+    - An error occurred within the entitlements service that indicates an issue with
+      the configuration or operation of the service.
+
+  sudoplatform.entitlements.AmbiguousEntitlementsError:
+    - Multiple identity token claims are recognized and specify conflicting entitlement sets
+  """
+  redeemEntitlements: EntitlementsSet!
+}

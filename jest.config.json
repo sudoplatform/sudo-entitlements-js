@@ -1,0 +1,22 @@
+{
+  "testEnvironment": "node",
+  "testMatch": ["<rootDir>/src/**/*.spec.ts", "<rootDir>/test/**/*.test.ts"],
+  "testPathIgnorePatterns": ["/node_modules/", "/lib/"],
+  "clearMocks": true,
+  "collectCoverageFrom": [
+    "src/**/*.ts",
+    "!src/**/*.spec.ts",
+    "!**/*.d.ts",
+    "!node_modules/**"
+  ],
+  "coverageReporters": ["text", "json-summary"],
+  "coverageDirectory": "<rootDir>/build/coverage",
+  "coverageThreshold": {
+    "global": {
+      "statements": 90,
+      "branches": 0,
+      "functions": 90,
+      "lines": 90
+    }
+  }
+}
