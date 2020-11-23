@@ -2,6 +2,7 @@ import {
   ApiClientManager,
   DefaultApiClientManager,
 } from '@sudoplatform/sudo-api-client'
+import * as SudoCommon from '@sudoplatform/sudo-common'
 import { NormalizedCacheObject } from 'apollo-cache-inmemory'
 import AWSAppSyncClient from 'aws-appsync'
 import {
@@ -11,8 +12,6 @@ import {
   RedeemEntitlementsDocument,
   RedeemEntitlementsMutation,
 } from '../gen/graphqlTypes'
-import { FatalError } from '../global/error'
-
 /**
  * AppSync wrapper to use to invoke Entitlements Service APIs.
  */
@@ -46,7 +45,9 @@ export class ApiClient {
     if (result.data) {
       return result.data.redeemEntitlements ?? null
     } else {
-      throw new FatalError('redeemEntitlements did not return any result.')
+      throw new SudoCommon.FatalError(
+        'redeemEntitlements did not return any result.',
+      )
     }
   }
 }

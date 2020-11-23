@@ -1,7 +1,7 @@
+import * as SudoCommon from '@sudoplatform/sudo-common'
 import { SudoUserClient } from '@sudoplatform/sudo-user'
 import { ApiClient } from '../client/apiClient'
 import { EntitlementsSetTransformer } from '../data/transformers/entitlementsSetTransformer'
-import { NotSignedInError } from '../global/error'
 
 /**
  * Representation of an entitlement
@@ -74,7 +74,7 @@ export interface SudoEntitlementsClient {
   /**
    * Return any entitlements for the currently logged in user or null if none.
    *
-   * This will return undefined for any of the conditions that return errors
+   * This will return undefined for any of the conditions that return Sudos
    * for the redeemEntitlements API.
    *
    * @returns Currently active entitlements set, if any, for the logged in user.
@@ -119,7 +119,7 @@ export class DefaultSudoEntitlementsClient implements SudoEntitlementsClient {
   async getEntitlements(): Promise<EntitlementsSet | undefined> {
     const signedIn = await this.sudoUserClient.isSignedIn()
     if (!signedIn) {
-      throw new NotSignedInError()
+      throw new SudoCommon.NotSignedInError()
     }
 
     try {
@@ -136,7 +136,7 @@ export class DefaultSudoEntitlementsClient implements SudoEntitlementsClient {
   async redeemEntitlements(): Promise<EntitlementsSet> {
     const signedIn = await this.sudoUserClient.isSignedIn()
     if (!signedIn) {
-      throw new NotSignedInError()
+      throw new SudoCommon.NotSignedInError()
     }
 
     try {

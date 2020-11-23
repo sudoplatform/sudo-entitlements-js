@@ -1,8 +1,8 @@
+import * as SudoCommon from '@sudoplatform/sudo-common'
 import { SudoUserClient } from '@sudoplatform/sudo-user'
 import { instance, mock, reset, verify, when } from 'ts-mockito'
 import { ApiClient } from '../client/apiClient'
 import { EntitlementsSetTransformer } from '../data/transformers/entitlementsSetTransformer'
-import { NotSignedInError } from '../global/error'
 import {
   DefaultSudoEntitlementsClient,
   EntitlementsSet,
@@ -53,7 +53,7 @@ describe('DefaultSudoEntitlementsClient test suite', () => {
       when(mockSudoUserClient.isSignedIn()).thenResolve(false)
 
       await expect(sudoEntitlementsClient.getEntitlements()).rejects.toThrow(
-        new NotSignedInError(),
+        SudoCommon.NotSignedInError,
       )
 
       verify(mockSudoUserClient.isSignedIn()).once()
@@ -138,7 +138,7 @@ describe('DefaultSudoEntitlementsClient test suite', () => {
       when(mockSudoUserClient.isSignedIn()).thenResolve(false)
 
       await expect(sudoEntitlementsClient.redeemEntitlements()).rejects.toThrow(
-        new NotSignedInError(),
+        SudoCommon.NotSignedInError,
       )
 
       verify(mockSudoUserClient.isSignedIn()).once()

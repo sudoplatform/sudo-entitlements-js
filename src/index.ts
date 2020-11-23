@@ -4,4 +4,3 @@ export {
   DefaultSudoEntitlementsClient,
   SudoEntitlementsClient,
 } from './entitlements/entitlementsClient'
-export * from './global/error'
