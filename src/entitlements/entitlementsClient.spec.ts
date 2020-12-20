@@ -2,9 +2,11 @@ import * as SudoCommon from '@sudoplatform/sudo-common'
 import { SudoUserClient } from '@sudoplatform/sudo-user'
 import { instance, mock, reset, verify, when } from 'ts-mockito'
 import { ApiClient } from '../client/apiClient'
+import { EntitlementsConsumptionTransformer } from '../data/transformers/entitlementsConsumptionTransformer'
 import { EntitlementsSetTransformer } from '../data/transformers/entitlementsSetTransformer'
 import {
   DefaultSudoEntitlementsClient,
+  EntitlementsConsumption,
   EntitlementsSet,
 } from './entitlementsClient'
 
@@ -31,21 +33,19 @@ describe('DefaultSudoEntitlementsClient test suite', () => {
     entitlements: [{ name: 'jest-1', value: 1 }],
   }
 
-  class TestError extends Error {
-    public readonly graphQLErrors?: { errorType: string }[]
-    public constructor(
-      args: {
-        graphQLErrorType?: string
-        nonGraphQLError?: string
-      } = {},
-    ) {
-      super(
-        args.graphQLErrorType ? 'Custom GraphQL error' : args.nonGraphQLError,
-      )
-      if (args.graphQLErrorType) {
-        this.graphQLErrors = [{ errorType: args.graphQLErrorType }]
-      }
-    }
+  const entitlementsConsumption: EntitlementsConsumption = {
+    entitlements: {
+      entitlementsSetName: entitlementsSet.name,
+      version: 1.00001,
+      entitlements: entitlementsSet.entitlements,
+    },
+    consumption: [
+      {
+        ...entitlementsSet.entitlements[0],
+        consumed: 1,
+        available: entitlementsSet.entitlements[0].value - 1,
+      },
+    ],
   }
 
   describe('getEntitlements tests', () => {
@@ -89,47 +89,32 @@ describe('DefaultSudoEntitlementsClient test suite', () => {
       verify(mockSudoUserClient.isSignedIn()).once()
       verify(mockApiClient.getEntitlements()).once()
     })
+  })
 
-    it('should map a platform GraphQL error', async () => {
-      when(mockSudoUserClient.isSignedIn()).thenResolve(true)
-      when(mockApiClient.getEntitlements()).thenReject(
-        new TestError({ graphQLErrorType: 'sudoplatform.test.SomeError' }),
-      )
+  describe('getEntitlementsConsumption tests', () => {
+    it('should throw NotSignedInError if not signed in', async () => {
+      when(mockSudoUserClient.isSignedIn()).thenResolve(false)
 
       await expect(
-        sudoEntitlementsClient.getEntitlements(),
-      ).rejects.toThrowError(/sudoplatform.test.SomeError/)
+        sudoEntitlementsClient.getEntitlementsConsumption(),
+      ).rejects.toThrow(SudoCommon.NotSignedInError)
 
       verify(mockSudoUserClient.isSignedIn()).once()
-      verify(mockApiClient.getEntitlements()).once()
+      verify(mockApiClient.getEntitlementsConsumption()).never()
     })
 
-    it('should not map a non platform GraphQL error', async () => {
+    it('should invoke ApiClient.getEntitlementsConsumption successfully', async () => {
       when(mockSudoUserClient.isSignedIn()).thenResolve(true)
-      when(mockApiClient.getEntitlements()).thenReject(
-        new TestError({ graphQLErrorType: 'some.non.sudoplatform.Error' }),
+      when(mockApiClient.getEntitlementsConsumption()).thenResolve(
+        EntitlementsConsumptionTransformer.toGraphQL(entitlementsConsumption),
       )
 
       await expect(
-        sudoEntitlementsClient.getEntitlements(),
-      ).rejects.toThrowError(/Custom GraphQL error/)
+        sudoEntitlementsClient.getEntitlementsConsumption(),
+      ).resolves.toEqual(entitlementsConsumption)
 
       verify(mockSudoUserClient.isSignedIn()).once()
-      verify(mockApiClient.getEntitlements()).once()
-    })
-
-    it('should pass through a non GraphQL error', async () => {
-      when(mockSudoUserClient.isSignedIn()).thenResolve(true)
-      when(mockApiClient.getEntitlements()).thenReject(
-        new TestError({ nonGraphQLError: 'Other error' }),
-      )
-
-      await expect(
-        sudoEntitlementsClient.getEntitlements(),
-      ).rejects.toThrowError(/Other error/)
-
-      verify(mockSudoUserClient.isSignedIn()).once()
-      verify(mockApiClient.getEntitlements()).once()
+      verify(mockApiClient.getEntitlementsConsumption()).once()
     })
   })
 
@@ -154,48 +139,6 @@ describe('DefaultSudoEntitlementsClient test suite', () => {
       await expect(
         sudoEntitlementsClient.redeemEntitlements(),
       ).resolves.toEqual(entitlementsSet)
-
-      verify(mockSudoUserClient.isSignedIn()).once()
-      verify(mockApiClient.redeemEntitlements()).once()
-    })
-
-    it('should map a platform GraphQL error', async () => {
-      when(mockSudoUserClient.isSignedIn()).thenResolve(true)
-      when(mockApiClient.redeemEntitlements()).thenReject(
-        new TestError({ graphQLErrorType: 'sudoplatform.test.SomeError' }),
-      )
-
-      await expect(
-        sudoEntitlementsClient.redeemEntitlements(),
-      ).rejects.toThrowError(/sudoplatform.test.SomeError/)
-
-      verify(mockSudoUserClient.isSignedIn()).once()
-      verify(mockApiClient.redeemEntitlements()).once()
-    })
-
-    it('should not map a non platform GraphQL error', async () => {
-      when(mockSudoUserClient.isSignedIn()).thenResolve(true)
-      when(mockApiClient.redeemEntitlements()).thenReject(
-        new TestError({ graphQLErrorType: 'some.non.sudoplatform.Error' }),
-      )
-
-      await expect(
-        sudoEntitlementsClient.redeemEntitlements(),
-      ).rejects.toThrowError(/Custom GraphQL error/)
-
-      verify(mockSudoUserClient.isSignedIn()).once()
-      verify(mockApiClient.redeemEntitlements()).once()
-    })
-
-    it('should pass through a non GraphQL error', async () => {
-      when(mockSudoUserClient.isSignedIn()).thenResolve(true)
-      when(mockApiClient.redeemEntitlements()).thenReject(
-        new TestError({ nonGraphQLError: 'Other error' }),
-      )
-
-      await expect(
-        sudoEntitlementsClient.redeemEntitlements(),
-      ).rejects.toThrowError(/Other error/)
 
       verify(mockSudoUserClient.isSignedIn()).once()
       verify(mockApiClient.redeemEntitlements()).once()

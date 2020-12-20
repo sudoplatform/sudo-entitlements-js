@@ -1,0 +1,8 @@
+fragment EntitlementsConsumption on EntitlementsConsumption {
+  entitlements {
+    ...UserEntitlements
+  }
+  consumption {
+    ...EntitlementConsumption
+  }
+}

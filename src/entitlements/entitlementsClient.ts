@@ -1,6 +1,7 @@
 import * as SudoCommon from '@sudoplatform/sudo-common'
 import { SudoUserClient } from '@sudoplatform/sudo-user'
 import { ApiClient } from '../client/apiClient'
+import { EntitlementsConsumptionTransformer } from '../data/transformers/entitlementsConsumptionTransformer'
 import { EntitlementsSetTransformer } from '../data/transformers/entitlementsSetTransformer'
 
 /**
@@ -65,10 +66,32 @@ export interface EntitlementsSet {
   entitlements: Entitlement[]
 }
 
+export interface EntitlementConsumer {
+  id: string
+  issuer: string
+}
+
+export interface EntitlementConsumption {
+  name: string
+  consumer?: EntitlementConsumer
+  value: number
+  consumed: number
+  available: number
+}
+
+export interface UserEntitlements {
+  version: number
+  entitlementsSetName?: string
+  entitlements: Entitlement[]
+}
+
+export interface EntitlementsConsumption {
+  entitlements: UserEntitlements
+  consumption: EntitlementConsumption[]
+}
+
 /**
  * Client responsible for establishing entitlements of federated identities.
- *
- * @beta
  */
 export interface SudoEntitlementsClient {
   /**
@@ -80,6 +103,21 @@ export interface SudoEntitlementsClient {
    * @returns Currently active entitlements set, if any, for the logged in user.
    */
   getEntitlements(): Promise<EntitlementsSet | undefined>
+
+  /**
+   * Return entitlements consumption information for the user.
+   *
+   * @returns Currently active entitlements set, if any, for the logged in user.
+   *
+   * @throws {@link NoEntitlementsError}
+   * - Identity token has not been redeemed.
+   *
+   * @throws {@link InvalidTokenError}
+   * - Identity token contains no FSSO user identity information
+   * - Identity token contains no claims recognized as entitling the user
+   * - Identity token claims that are recognized specify unrecognized entitlements sets
+   */
+  getEntitlementsConsumption(): Promise<EntitlementsConsumption>
 
   /**
    * Redeem entitlements for the currently logged in user.
@@ -122,15 +160,21 @@ export class DefaultSudoEntitlementsClient implements SudoEntitlementsClient {
       throw new SudoCommon.NotSignedInError()
     }
 
-    try {
-      const entitlements = await this.apiClient.getEntitlements()
-      if (!entitlements) {
-        return undefined
-      }
-      return EntitlementsSetTransformer.toClient(entitlements)
-    } catch (err) {
-      throw this.extractPlatformError(err)
+    const entitlements = await this.apiClient.getEntitlements()
+    if (!entitlements) {
+      return undefined
     }
+    return EntitlementsSetTransformer.toClient(entitlements)
+  }
+
+  async getEntitlementsConsumption(): Promise<EntitlementsConsumption> {
+    const signedIn = await this.sudoUserClient.isSignedIn()
+    if (!signedIn) {
+      throw new SudoCommon.NotSignedInError()
+    }
+
+    const entitlementsConsumption = await this.apiClient.getEntitlementsConsumption()
+    return EntitlementsConsumptionTransformer.toClient(entitlementsConsumption)
   }
 
   async redeemEntitlements(): Promise<EntitlementsSet> {
@@ -139,20 +183,7 @@ export class DefaultSudoEntitlementsClient implements SudoEntitlementsClient {
       throw new SudoCommon.NotSignedInError()
     }
 
-    try {
-      const entitlements = await this.apiClient.redeemEntitlements()
-      return EntitlementsSetTransformer.toClient(entitlements)
-    } catch (err) {
-      throw this.extractPlatformError(err)
-    }
-  }
-
-  private extractPlatformError(err: unknown): unknown {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const anyErr = err as any
-    if (anyErr?.graphQLErrors?.[0]?.errorType?.startsWith('sudoplatform.')) {
-      return new Error(anyErr.graphQLErrors[0].errorType)
-    }
-    return err
+    const entitlements = await this.apiClient.redeemEntitlements()
+    return EntitlementsSetTransformer.toClient(entitlements)
   }
 }

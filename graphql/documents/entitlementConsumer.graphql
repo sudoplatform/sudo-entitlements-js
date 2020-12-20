@@ -1,0 +1,4 @@
+fragment EntitlementConsumer on EntitlementConsumer {
+  id
+  issuer
+}

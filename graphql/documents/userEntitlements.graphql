@@ -1,0 +1,7 @@
+fragment UserEntitlements on UserEntitlements {
+  version
+  entitlementsSetName
+  entitlements {
+    ...Entitlement
+  }
+}

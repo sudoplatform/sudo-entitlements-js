@@ -71,10 +71,6 @@
 					<div class="lead">
 						<p>Client responsible for establishing entitlements of federated identities.</p>
 					</div>
-					<dl class="tsd-comment-tags">
-						<dt>beta</dt>
-						<dd></dd>
-					</dl>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
@@ -99,6 +95,7 @@
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="sudoentitlementsclient.html#getentitlements" class="tsd-kind-icon">get<wbr>Entitlements</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="sudoentitlementsclient.html#getentitlementsconsumption" class="tsd-kind-icon">get<wbr>Entitlements<wbr>Consumption</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="sudoentitlementsclient.html#redeementitlements" class="tsd-kind-icon">redeem<wbr>Entitlements</a></li>
 							</ul>
 						</section>
@@ -117,7 +114,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in entitlements/entitlementsClient.ts:82</li>
+									<li>Defined in entitlements/entitlementsClient.ts:105</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -133,6 +130,45 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="getentitlementsconsumption" class="tsd-anchor"></a>
+					<h3>get<wbr>Entitlements<wbr>Consumption</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Entitlements<wbr>Consumption<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">EntitlementsConsumption</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in entitlements/entitlementsClient.ts:120</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Return entitlements consumption information for the user.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>{@link NoEntitlementsError}</p>
+										<ul>
+											<li>Identity token has not been redeemed.</li>
+										</ul>
+									</dd>
+									<dt>throws</dt>
+									<dd><p>{@link InvalidTokenError}</p>
+										<ul>
+											<li>Identity token contains no FSSO user identity information</li>
+											<li>Identity token contains no claims recognized as entitling the user</li>
+											<li>Identity token claims that are recognized specify unrecognized entitlements sets</li>
+										</ul>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">EntitlementsConsumption</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>Currently active entitlements set, if any, for the logged in user.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="redeementitlements" class="tsd-anchor"></a>
 					<h3>redeem<wbr>Entitlements</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
@@ -142,7 +178,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in entitlements/entitlementsClient.ts:106</li>
+									<li>Defined in entitlements/entitlementsClient.ts:144</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -204,6 +240,9 @@
 						<ul>
 							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="sudoentitlementsclient.html#getentitlements" class="tsd-kind-icon">get<wbr>Entitlements</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="sudoentitlementsclient.html#getentitlementsconsumption" class="tsd-kind-icon">get<wbr>Entitlements<wbr>Consumption</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="sudoentitlementsclient.html#redeementitlements" class="tsd-kind-icon">redeem<wbr>Entitlements</a>

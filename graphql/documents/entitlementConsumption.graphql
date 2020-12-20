@@ -1,0 +1,9 @@
+fragment EntitlementConsumption on EntitlementConsumption {
+  name
+  consumer {
+    ...EntitlementConsumer
+  }
+  value
+  consumed
+  available
+}
