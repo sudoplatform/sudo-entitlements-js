@@ -1,4 +1,5 @@
 import * as SudoCommon from '@sudoplatform/sudo-common'
+import { IllegalArgumentError } from '@sudoplatform/sudo-common'
 import { SudoUserClient } from '@sudoplatform/sudo-user'
 import { instance, mock, reset, verify, when } from 'ts-mockito'
 import { ApiClient } from '../client/apiClient'
@@ -8,6 +9,7 @@ import {
   DefaultSudoEntitlementsClient,
   EntitlementsConsumption,
   EntitlementsSet,
+  splitUserEntitlementsVersion,
 } from './entitlementsClient'
 
 describe('DefaultSudoEntitlementsClient test suite', () => {
@@ -47,6 +49,49 @@ describe('DefaultSudoEntitlementsClient test suite', () => {
       },
     ],
   }
+
+  describe('splitUserEntitlementsVersion tests', () => {
+    it.each`
+      version    | expected
+      ${2.00001} | ${[2, 1]}
+      ${1}       | ${[1, 0]}
+      ${0}       | ${[0, 0]}
+      ${2.0001}  | ${[2, 10]}
+      ${20.001}  | ${[20, 100]}
+    `(
+      'should return $expected for $version',
+      ({
+        version,
+        expected,
+      }: {
+        version: number
+        expected: [number, number]
+      }) => {
+        expect(splitUserEntitlementsVersion(version)).toEqual(expected)
+      },
+    )
+
+    it.each`
+      version      | message
+      ${-1}        | ${/negative/}
+      ${1.0000001} | ${/precise/}
+    `(
+      'should throw IllegalArgumentError for $version',
+      ({ version, message }) => {
+        let thrown: Error | undefined
+        try {
+          splitUserEntitlementsVersion(version)
+        } catch (err) {
+          thrown = err
+        }
+        expect(thrown).toBeInstanceOf(IllegalArgumentError)
+        expect(thrown).toMatchObject({
+          name: 'IllegalArgumentError',
+          message,
+        })
+      },
+    )
+  })
 
   describe('getEntitlements tests', () => {
     it('should throw NotSignedInError if not signed in', async () => {

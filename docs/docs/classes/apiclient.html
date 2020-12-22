@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>DefaultSudoEntitlementsClient | @sudoplatform/sudo-entitlements</title>
+	<title>ApiClient | @sudoplatform/sudo-entitlements</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,28 +56,29 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="defaultsudoentitlementsclient.html">DefaultSudoEntitlementsClient</a>
+					<a href="apiclient.html">ApiClient</a>
 				</li>
 			</ul>
-			<h1>Class DefaultSudoEntitlementsClient</h1>
+			<h1>Class ApiClient</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>AppSync wrapper to use to invoke Entitlements Service APIs.</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">DefaultSudoEntitlementsClient</span>
+						<span class="target">ApiClient</span>
 					</li>
-				</ul>
-			</section>
-			<section class="tsd-panel">
-				<h3>Implements</h3>
-				<ul class="tsd-hierarchy">
-					<li><a href="../interfaces/sudoentitlementsclient.html" class="tsd-signature-type">SudoEntitlementsClient</a></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -87,15 +88,15 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="defaultsudoentitlementsclient.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="apiclient.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="defaultsudoentitlementsclient.html#getentitlements" class="tsd-kind-icon">get<wbr>Entitlements</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="defaultsudoentitlementsclient.html#getentitlementsconsumption" class="tsd-kind-icon">get<wbr>Entitlements<wbr>Consumption</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="defaultsudoentitlementsclient.html#redeementitlements" class="tsd-kind-icon">redeem<wbr>Entitlements</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="apiclient.html#getentitlements" class="tsd-kind-icon">get<wbr>Entitlements</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="apiclient.html#getentitlementsconsumption" class="tsd-kind-icon">get<wbr>Entitlements<wbr>Consumption</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="apiclient.html#redeementitlements" class="tsd-kind-icon">redeem<wbr>Entitlements</a></li>
 							</ul>
 						</section>
 					</div>
@@ -107,25 +108,22 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Default<wbr>Sudo<wbr>Entitlements<wbr>Client<span class="tsd-signature-symbol">(</span>sudoUserClient<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SudoUserClient</span>, apiClient<span class="tsd-signature-symbol">?: </span><a href="apiclient.html" class="tsd-signature-type">ApiClient</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="defaultsudoentitlementsclient.html" class="tsd-signature-type">DefaultSudoEntitlementsClient</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Api<wbr>Client<span class="tsd-signature-symbol">(</span>apiClientManager<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ApiClientManager</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="apiclient.html" class="tsd-signature-type">ApiClient</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in src/entitlements/entitlementsClient.ts:268</li>
+									<li>Defined in src/client/apiClient.ts:25</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>sudoUserClient: <span class="tsd-signature-type">SudoUserClient</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> apiClient: <a href="apiclient.html" class="tsd-signature-type">ApiClient</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> apiClientManager: <span class="tsd-signature-type">ApiClientManager</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="defaultsudoentitlementsclient.html" class="tsd-signature-type">DefaultSudoEntitlementsClient</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="apiclient.html" class="tsd-signature-type">ApiClient</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -136,17 +134,16 @@
 					<a name="getentitlements" class="tsd-anchor"></a>
 					<h3>get<wbr>Entitlements</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Entitlements<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/entitlementsset.html" class="tsd-signature-type">EntitlementsSet</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Entitlements<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/entitlementsset.html" class="tsd-signature-type">EntitlementsSet</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Implementation of <a href="../interfaces/sudoentitlementsclient.html">SudoEntitlementsClient</a>.<a href="../interfaces/sudoentitlementsclient.html#getentitlements">getEntitlements</a></p>
 								<ul>
-									<li>Defined in src/entitlements/entitlementsClient.ts:277</li>
+									<li>Defined in src/client/apiClient.ts:34</li>
 								</ul>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/entitlementsset.html" class="tsd-signature-type">EntitlementsSet</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/entitlementsset.html" class="tsd-signature-type">EntitlementsSet</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -159,9 +156,8 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Implementation of <a href="../interfaces/sudoentitlementsclient.html">SudoEntitlementsClient</a>.<a href="../interfaces/sudoentitlementsclient.html#getentitlementsconsumption">getEntitlementsConsumption</a></p>
 								<ul>
-									<li>Defined in src/entitlements/entitlementsClient.ts:290</li>
+									<li>Defined in src/client/apiClient.ts:61</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/entitlementsconsumption.html" class="tsd-signature-type">EntitlementsConsumption</a><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -177,9 +173,8 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Implementation of <a href="../interfaces/sudoentitlementsclient.html">SudoEntitlementsClient</a>.<a href="../interfaces/sudoentitlementsclient.html#redeementitlements">redeemEntitlements</a></p>
 								<ul>
-									<li>Defined in src/entitlements/entitlementsClient.ts:300</li>
+									<li>Defined in src/client/apiClient.ts:87</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/entitlementsset.html" class="tsd-signature-type">EntitlementsSet</a><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -201,30 +196,30 @@
 					<li class=" tsd-kind-class">
 						<a href="ambiguousentitlementserror.html" class="tsd-kind-icon">Ambiguous<wbr>Entitlements<wbr>Error</a>
 					</li>
-					<li class=" tsd-kind-class">
-						<a href="apiclient.html" class="tsd-kind-icon">Api<wbr>Client</a>
-					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class">
-						<a href="defaultsudoentitlementsclient.html" class="tsd-kind-icon">Default<wbr>Sudo<wbr>Entitlements<wbr>Client</a>
+						<a href="apiclient.html" class="tsd-kind-icon">Api<wbr>Client</a>
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
-								<a href="defaultsudoentitlementsclient.html#constructor" class="tsd-kind-icon">constructor</a>
+								<a href="apiclient.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="defaultsudoentitlementsclient.html#getentitlements" class="tsd-kind-icon">get<wbr>Entitlements</a>
+								<a href="apiclient.html#getentitlements" class="tsd-kind-icon">get<wbr>Entitlements</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="defaultsudoentitlementsclient.html#getentitlementsconsumption" class="tsd-kind-icon">get<wbr>Entitlements<wbr>Consumption</a>
+								<a href="apiclient.html#getentitlementsconsumption" class="tsd-kind-icon">get<wbr>Entitlements<wbr>Consumption</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="defaultsudoentitlementsclient.html#redeementitlements" class="tsd-kind-icon">redeem<wbr>Entitlements</a>
+								<a href="apiclient.html#redeementitlements" class="tsd-kind-icon">redeem<wbr>Entitlements</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-class">
+						<a href="defaultsudoentitlementsclient.html" class="tsd-kind-icon">Default<wbr>Sudo<wbr>Entitlements<wbr>Client</a>
+					</li>
 					<li class=" tsd-kind-interface">
 						<a href="../interfaces/entitlement.html" class="tsd-kind-icon">Entitlement</a>
 					</li>

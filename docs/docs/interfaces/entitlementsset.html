@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>SudoEntitlementsClient | @sudoplatform/sudo-entitlements</title>
+	<title>EntitlementsSet | @sudoplatform/sudo-entitlements</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,10 +56,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="sudoentitlementsclient.html">SudoEntitlementsClient</a>
+					<a href="entitlementsset.html">EntitlementsSet</a>
 				</li>
 			</ul>
-			<h1>Interface SudoEntitlementsClient</h1>
+			<h1>Interface EntitlementsSet</h1>
 		</div>
 	</div>
 </header>
@@ -69,7 +69,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Client responsible for establishing entitlements of federated identities.</p>
+						<p>Set of entitlements current for the user</p>
 					</div>
 				</div>
 			</section>
@@ -77,14 +77,8 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">SudoEntitlementsClient</span>
+						<span class="target">EntitlementsSet</span>
 					</li>
-				</ul>
-			</section>
-			<section class="tsd-panel">
-				<h3>Implemented by</h3>
-				<ul class="tsd-hierarchy">
-					<li><a href="../classes/defaultsudoentitlementsclient.html" class="tsd-signature-type">DefaultSudoEntitlementsClient</a></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -92,133 +86,118 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Methods</h3>
+							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="sudoentitlementsclient.html#getentitlements" class="tsd-kind-icon">get<wbr>Entitlements</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="sudoentitlementsclient.html#getentitlementsconsumption" class="tsd-kind-icon">get<wbr>Entitlements<wbr>Consumption</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="sudoentitlementsclient.html#redeementitlements" class="tsd-kind-icon">redeem<wbr>Entitlements</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="entitlementsset.html#createdat" class="tsd-kind-icon">created<wbr>At</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="entitlementsset.html#description" class="tsd-kind-icon">description</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="entitlementsset.html#entitlements" class="tsd-kind-icon">entitlements</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="entitlementsset.html#name" class="tsd-kind-icon">name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="entitlementsset.html#updatedat" class="tsd-kind-icon">updated<wbr>At</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="entitlementsset.html#version" class="tsd-kind-icon">version</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
-					<a name="getentitlements" class="tsd-anchor"></a>
-					<h3>get<wbr>Entitlements</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Entitlements<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="entitlementsset.html" class="tsd-signature-type">EntitlementsSet</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in src/entitlements/entitlementsClient.ts:223</li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Return any entitlements for the currently logged in user or null if none.</p>
-								</div>
-								<p>This will return undefined for any of the conditions that return Sudos
-								for the redeemEntitlements API.</p>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="entitlementsset.html" class="tsd-signature-type">EntitlementsSet</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>Currently active entitlements set as an <a href="entitlementsset.html"><code>EntitlementsSet</code></a>, if any, for the logged in user.</p>
-						</li>
-					</ul>
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="createdat" class="tsd-anchor"></a>
+					<h3>created<wbr>At</h3>
+					<div class="tsd-signature tsd-kind-icon">created<wbr>At<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Date</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in src/entitlements/entitlementsClient.ts:35</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Time at which the entitlements for the user was originally created</p>
+						</div>
+					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
-					<a name="getentitlementsconsumption" class="tsd-anchor"></a>
-					<h3>get<wbr>Entitlements<wbr>Consumption</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Entitlements<wbr>Consumption<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="entitlementsconsumption.html" class="tsd-signature-type">EntitlementsConsumption</a><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in src/entitlements/entitlementsClient.ts:240</li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Return entitlements consumption information for the user.</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>throws</dt>
-									<dd><p>{@link NoEntitlementsError}</p>
-										<ul>
-											<li>Identity token has not been redeemed.</li>
-										</ul>
-									</dd>
-									<dt>throws</dt>
-									<dd><p>{@link InvalidTokenError}</p>
-										<ul>
-											<li>Identity token contains no FSSO user identity information</li>
-											<li>Identity token contains no claims recognized as entitling the user</li>
-											<li>Identity token claims that are recognized specify unrecognized entitlements sets</li>
-										</ul>
-									</dd>
-									<dt>function</dt>
-									<dd></dd>
-								</dl>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="entitlementsconsumption.html" class="tsd-signature-type">EntitlementsConsumption</a><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p><a href="entitlementsconsumption.html"><code>EntitlementsConsumption</code></a>: Current entitlements and consumption for the logged in user.</p>
-						</li>
-					</ul>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="description" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> description</h3>
+					<div class="tsd-signature tsd-kind-icon">description<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in src/entitlements/entitlementsClient.ts:60</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Description, if any, of the entitlements set as specified by the entitlements
+								set administrator or undefined if user&#39;s entitlements are specified explicitly
+							rather than by entitlements set name.</p>
+						</div>
+					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
-					<a name="redeementitlements" class="tsd-anchor"></a>
-					<h3>redeem<wbr>Entitlements</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">redeem<wbr>Entitlements<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="entitlementsset.html" class="tsd-signature-type">EntitlementsSet</a><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in src/entitlements/entitlementsClient.ts:264</li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Redeem entitlements for the currently logged in user.</p>
-								</div>
-								<p>If the user has already redeemed entitlements then the user&#39;s current
-									entitlements as determined by the original redemption and any subsequent
-									administrative modifications rather than entitlements corresponding
-								to the user&#39;s current identity token claims are returned.</p>
-								<dl class="tsd-comment-tags">
-									<dt>throws</dt>
-									<dd><p>{@link InvalidTokenError}</p>
-										<ul>
-											<li>Identity token contains no FSSO user identity information</li>
-											<li>Identity token contains no claims recognized as entitling the user</li>
-											<li>Identity token claims that are recognized specify unrecognized entitlements sets</li>
-										</ul>
-									</dd>
-									<dt>throws</dt>
-									<dd><p>{@link ServiceError}</p>
-										<ul>
-											<li>An error occurred within the entitlements service that indicates an issue with
-											the configuration or operation of the service.</li>
-										</ul>
-									</dd>
-									<dt>throws</dt>
-									<dd><p>(@link AmbiguousEntitlementsError}</p>
-										<ul>
-											<li>Multiple identity token claims are recognized and specify conflicting entitlement sets</li>
-										</ul>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="entitlementsset.html" class="tsd-signature-type">EntitlementsSet</a><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>Redeemed or currently active entitlements set for the logged in user.</p>
-						</li>
-					</ul>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="entitlements" class="tsd-anchor"></a>
+					<h3>entitlements</h3>
+					<div class="tsd-signature tsd-kind-icon">entitlements<span class="tsd-signature-symbol">:</span> <a href="entitlement.html" class="tsd-signature-type">Entitlement</a><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in src/entitlements/entitlementsClient.ts:67</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The set of entitlements active for the user. This details the limits
+								of the user&#39;s entitlements and does not specify any information regarding
+							current consumption of those entitlements.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="name" class="tsd-anchor"></a>
+					<h3>name</h3>
+					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in src/entitlements/entitlementsClient.ts:53</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Name of the entitlements set specifying this user&#39;s entitlements
+								or the user&#39;s subject ID if the user&#39;s entitlements are specified
+							explicitly rather than by entitlements set name.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="updatedat" class="tsd-anchor"></a>
+					<h3>updated<wbr>At</h3>
+					<div class="tsd-signature tsd-kind-icon">updated<wbr>At<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Date</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in src/entitlements/entitlementsClient.ts:40</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Time at which the entitlements for the user were most recently updated.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="version" class="tsd-anchor"></a>
+					<h3>version</h3>
+					<div class="tsd-signature tsd-kind-icon">version<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in src/entitlements/entitlementsClient.ts:47</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Version number of the user&#39;s entitlements. This is incremented every
+								time there is a change of entitlements set or explicit entitlements
+							for this user.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 		</div>
@@ -253,27 +232,36 @@
 					<li class=" tsd-kind-interface">
 						<a href="entitlementsconsumption.html" class="tsd-kind-icon">Entitlements<wbr>Consumption</a>
 					</li>
-					<li class=" tsd-kind-interface">
-						<a href="entitlementsset.html" class="tsd-kind-icon">Entitlements<wbr>Set</a>
-					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface">
-						<a href="sudoentitlementsclient.html" class="tsd-kind-icon">Sudo<wbr>Entitlements<wbr>Client</a>
+						<a href="entitlementsset.html" class="tsd-kind-icon">Entitlements<wbr>Set</a>
 						<ul>
-							<li class=" tsd-kind-method tsd-parent-kind-interface">
-								<a href="sudoentitlementsclient.html#getentitlements" class="tsd-kind-icon">get<wbr>Entitlements</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="entitlementsset.html#createdat" class="tsd-kind-icon">created<wbr>At</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface">
-								<a href="sudoentitlementsclient.html#getentitlementsconsumption" class="tsd-kind-icon">get<wbr>Entitlements<wbr>Consumption</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="entitlementsset.html#description" class="tsd-kind-icon">description</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface">
-								<a href="sudoentitlementsclient.html#redeementitlements" class="tsd-kind-icon">redeem<wbr>Entitlements</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="entitlementsset.html#entitlements" class="tsd-kind-icon">entitlements</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="entitlementsset.html#name" class="tsd-kind-icon">name</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="entitlementsset.html#updatedat" class="tsd-kind-icon">updated<wbr>At</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="entitlementsset.html#version" class="tsd-kind-icon">version</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-interface">
+						<a href="sudoentitlementsclient.html" class="tsd-kind-icon">Sudo<wbr>Entitlements<wbr>Client</a>
+					</li>
 					<li class=" tsd-kind-interface">
 						<a href="userentitlements.html" class="tsd-kind-icon">User<wbr>Entitlements</a>
 					</li>

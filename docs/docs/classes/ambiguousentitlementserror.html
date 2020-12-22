@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>DefaultSudoEntitlementsClient | @sudoplatform/sudo-entitlements</title>
+	<title>AmbiguousEntitlementsError | @sudoplatform/sudo-entitlements</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,28 +56,35 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="defaultsudoentitlementsclient.html">DefaultSudoEntitlementsClient</a>
+					<a href="ambiguousentitlementserror.html">AmbiguousEntitlementsError</a>
 				</li>
 			</ul>
-			<h1>Class DefaultSudoEntitlementsClient</h1>
+			<h1>Class AmbiguousEntitlementsError</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>The token contained multiple recognized claims identitying
+						different entitlements sets on redemption.</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">DefaultSudoEntitlementsClient</span>
+						<a href="ambiguousentitlementserror.html#error" class="tsd-signature-type">Error</a>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">AmbiguousEntitlementsError</span>
+							</li>
+						</ul>
 					</li>
-				</ul>
-			</section>
-			<section class="tsd-panel">
-				<h3>Implements</h3>
-				<ul class="tsd-hierarchy">
-					<li><a href="../interfaces/sudoentitlementsclient.html" class="tsd-signature-type">SudoEntitlementsClient</a></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -87,15 +94,16 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="defaultsudoentitlementsclient.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="ambiguousentitlementserror.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
-							<h3>Methods</h3>
+							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="defaultsudoentitlementsclient.html#getentitlements" class="tsd-kind-icon">get<wbr>Entitlements</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="defaultsudoentitlementsclient.html#getentitlementsconsumption" class="tsd-kind-icon">get<wbr>Entitlements<wbr>Consumption</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="defaultsudoentitlementsclient.html#redeementitlements" class="tsd-kind-icon">redeem<wbr>Entitlements</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="ambiguousentitlementserror.html#message" class="tsd-kind-icon">message</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="ambiguousentitlementserror.html#name" class="tsd-kind-icon">name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="ambiguousentitlementserror.html#stack" class="tsd-kind-icon">stack</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="ambiguousentitlementserror.html#error" class="tsd-kind-icon">Error</a></li>
 							</ul>
 						</section>
 					</div>
@@ -107,84 +115,64 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Default<wbr>Sudo<wbr>Entitlements<wbr>Client<span class="tsd-signature-symbol">(</span>sudoUserClient<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SudoUserClient</span>, apiClient<span class="tsd-signature-symbol">?: </span><a href="apiclient.html" class="tsd-signature-type">ApiClient</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="defaultsudoentitlementsclient.html" class="tsd-signature-type">DefaultSudoEntitlementsClient</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Ambiguous<wbr>Entitlements<wbr>Error<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="ambiguousentitlementserror.html" class="tsd-signature-type">AmbiguousEntitlementsError</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in src/entitlements/entitlementsClient.ts:268</li>
+									<li>Defined in src/errors/error.ts:5</li>
 								</ul>
 							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>sudoUserClient: <span class="tsd-signature-type">SudoUserClient</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> apiClient: <a href="apiclient.html" class="tsd-signature-type">ApiClient</a></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="defaultsudoentitlementsclient.html" class="tsd-signature-type">DefaultSudoEntitlementsClient</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="ambiguousentitlementserror.html" class="tsd-signature-type">AmbiguousEntitlementsError</a></h4>
 						</li>
 					</ul>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="getentitlements" class="tsd-anchor"></a>
-					<h3>get<wbr>Entitlements</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Entitlements<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/entitlementsset.html" class="tsd-signature-type">EntitlementsSet</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Implementation of <a href="../interfaces/sudoentitlementsclient.html">SudoEntitlementsClient</a>.<a href="../interfaces/sudoentitlementsclient.html#getentitlements">getEntitlements</a></p>
-								<ul>
-									<li>Defined in src/entitlements/entitlementsClient.ts:277</li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/entitlementsset.html" class="tsd-signature-type">EntitlementsSet</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">&gt;</span></h4>
-						</li>
-					</ul>
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="message" class="tsd-anchor"></a>
+					<h3>message</h3>
+					<div class="tsd-signature tsd-kind-icon">message<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="ambiguousentitlementserror.html">AmbiguousEntitlementsError</a>.<a href="ambiguousentitlementserror.html#message">message</a></p>
+						<ul>
+							<li>Defined in node_modules/typescript/lib/lib.es5.d.ts:974</li>
+						</ul>
+					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="getentitlementsconsumption" class="tsd-anchor"></a>
-					<h3>get<wbr>Entitlements<wbr>Consumption</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Entitlements<wbr>Consumption<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/entitlementsconsumption.html" class="tsd-signature-type">EntitlementsConsumption</a><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Implementation of <a href="../interfaces/sudoentitlementsclient.html">SudoEntitlementsClient</a>.<a href="../interfaces/sudoentitlementsclient.html#getentitlementsconsumption">getEntitlementsConsumption</a></p>
-								<ul>
-									<li>Defined in src/entitlements/entitlementsClient.ts:290</li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/entitlementsconsumption.html" class="tsd-signature-type">EntitlementsConsumption</a><span class="tsd-signature-symbol">&gt;</span></h4>
-						</li>
-					</ul>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="name" class="tsd-anchor"></a>
+					<h3>name</h3>
+					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="ambiguousentitlementserror.html">AmbiguousEntitlementsError</a>.<a href="ambiguousentitlementserror.html#name">name</a></p>
+						<ul>
+							<li>Defined in node_modules/typescript/lib/lib.es5.d.ts:973</li>
+						</ul>
+					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="redeementitlements" class="tsd-anchor"></a>
-					<h3>redeem<wbr>Entitlements</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">redeem<wbr>Entitlements<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/entitlementsset.html" class="tsd-signature-type">EntitlementsSet</a><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Implementation of <a href="../interfaces/sudoentitlementsclient.html">SudoEntitlementsClient</a>.<a href="../interfaces/sudoentitlementsclient.html#redeementitlements">redeemEntitlements</a></p>
-								<ul>
-									<li>Defined in src/entitlements/entitlementsClient.ts:300</li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/entitlementsset.html" class="tsd-signature-type">EntitlementsSet</a><span class="tsd-signature-symbol">&gt;</span></h4>
-						</li>
-					</ul>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="stack" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> stack</h3>
+					<div class="tsd-signature tsd-kind-icon">stack<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="ambiguousentitlementserror.html">AmbiguousEntitlementsError</a>.<a href="ambiguousentitlementserror.html#stack">stack</a></p>
+						<ul>
+							<li>Defined in node_modules/typescript/lib/lib.es5.d.ts:975</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
+					<a name="error" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> Error</h3>
+					<div class="tsd-signature tsd-kind-icon">Error<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ErrorConstructor</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in node_modules/typescript/lib/lib.es5.d.ts:984</li>
+						</ul>
+					</aside>
 				</section>
 			</section>
 		</div>
@@ -198,33 +186,36 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class">
-						<a href="ambiguousentitlementserror.html" class="tsd-kind-icon">Ambiguous<wbr>Entitlements<wbr>Error</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="apiclient.html" class="tsd-kind-icon">Api<wbr>Client</a>
-					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class">
-						<a href="defaultsudoentitlementsclient.html" class="tsd-kind-icon">Default<wbr>Sudo<wbr>Entitlements<wbr>Client</a>
+						<a href="ambiguousentitlementserror.html" class="tsd-kind-icon">Ambiguous<wbr>Entitlements<wbr>Error</a>
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
-								<a href="defaultsudoentitlementsclient.html#constructor" class="tsd-kind-icon">constructor</a>
+								<a href="ambiguousentitlementserror.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="defaultsudoentitlementsclient.html#getentitlements" class="tsd-kind-icon">get<wbr>Entitlements</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="ambiguousentitlementserror.html#message" class="tsd-kind-icon">message</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="defaultsudoentitlementsclient.html#getentitlementsconsumption" class="tsd-kind-icon">get<wbr>Entitlements<wbr>Consumption</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="ambiguousentitlementserror.html#name" class="tsd-kind-icon">name</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="defaultsudoentitlementsclient.html#redeementitlements" class="tsd-kind-icon">redeem<wbr>Entitlements</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="ambiguousentitlementserror.html#stack" class="tsd-kind-icon">stack</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
+								<a href="ambiguousentitlementserror.html#error" class="tsd-kind-icon">Error</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-class">
+						<a href="apiclient.html" class="tsd-kind-icon">Api<wbr>Client</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="defaultsudoentitlementsclient.html" class="tsd-kind-icon">Default<wbr>Sudo<wbr>Entitlements<wbr>Client</a>
+					</li>
 					<li class=" tsd-kind-interface">
 						<a href="../interfaces/entitlement.html" class="tsd-kind-icon">Entitlement</a>
 					</li>

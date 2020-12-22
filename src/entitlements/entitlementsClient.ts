@@ -1,4 +1,5 @@
 import * as SudoCommon from '@sudoplatform/sudo-common'
+import { IllegalArgumentError } from '@sudoplatform/sudo-common'
 import { SudoUserClient } from '@sudoplatform/sudo-user'
 import { ApiClient } from '../client/apiClient'
 import { EntitlementsConsumptionTransformer } from '../data/transformers/entitlementsConsumptionTransformer'
@@ -66,27 +67,144 @@ export interface EntitlementsSet {
   entitlements: Entitlement[]
 }
 
+/**
+ * The sub-user level consuming resource of an entitlement
+ */
 export interface EntitlementConsumer {
+  /**
+   * ID of the resource consuming an entitlement
+   */
   id: string
+
+  /**
+   * The issuer of the ID. For example `sudoplatform.sudoservice` for a Sudo ID
+   */
   issuer: string
 }
 
+/**
+ * The consumption of a particular entitlement
+ */
 export interface EntitlementConsumption {
+  /**
+   * Name of the consumed entitlement
+   */
   name: string
+
+  /**
+   * Consumer of the entitlement. If present this indicates the sub-user level resource
+   * responsible for consumption of the entitlement. If not present, the entitlement is
+   * consumed directly by the user.
+   */
   consumer?: EntitlementConsumer
+
+  /**
+   * The maximum amount of the entitlement that can be consumed by the consumer
+   */
   value: number
+
+  /**
+   * The amount of the entitlement that has been consumed
+   */
   consumed: number
+
+  /**
+   * The amount of the entitlement that is yet to be consumed. Provided for convenience.
+   * `available` + `consumed` always equals `value`
+   */
   available: number
 }
 
+/**
+ * Entitlements of the user.
+ */
 export interface UserEntitlements {
+  /**
+   * Version number of the user's entitlements. This is incremented every
+   * time there is a change of entitlements set or explicit entitlements
+   * for this user.
+   *
+   * For users entitled by entitlement set, the fractional part of this version
+   * specifies the version of the entitlements set itself divided by 100000
+   * (specified by [[`entitlementsSetVersionScalingFactor`]]).
+   *
+   * See also:
+   *  - [[`entitlementsSetVersionScalingFactor`]]
+   *  - [[`splitUserEntitlementsVersion`]]
+   */
   version: number
+
+  /**
+   * Name of the entitlement set assigned to the user or undefined if the user's
+   * entitlements are assigned directly.
+   */
   entitlementsSetName?: string
+
+  /**
+   * The full set of entitlements assigned to the user.
+   */
   entitlements: Entitlement[]
 }
 
+/**
+ * Scaling factor used in construction of composite user entitlements version
+ */
+export const entitlementsSetVersionScalingFactor = 100000
+
+/**
+ * Split the components of the composite version. Returns a tuple with
+ * the version of the user's entitlements assigned as the first element
+ * and the version of the entitlements set the user is assigned to as the
+ * second element. If the user is not assigned an entitlements set then
+ * 0 is returned for the second element.
+ *
+ * @param version The version of a [[`UserEntitlements`]]
+ *
+ * @returns Returns the version split as a tuple: `[userEntitlementVersion: number, entitlementsSetVersion: number]`
+ */
+export function splitUserEntitlementsVersion(
+  version: number,
+): [number, number] {
+  if (version < 0) {
+    throw new IllegalArgumentError('version negative')
+  }
+
+  const userEntitlementsVersion = Math.floor(version)
+  const entitlementsSetVersion = Math.floor(
+    (version * entitlementsSetVersionScalingFactor) %
+      entitlementsSetVersionScalingFactor,
+  )
+
+  if (
+    userEntitlementsVersion +
+      entitlementsSetVersion / entitlementsSetVersionScalingFactor !==
+    version
+  ) {
+    throw new IllegalArgumentError('version too precise')
+  }
+
+  return [userEntitlementsVersion, entitlementsSetVersion]
+}
+
+/**
+ * Entitlements consumption information for the user
+ */
 export interface EntitlementsConsumption {
+  /**
+   * The user's current assigned entitlements
+   */
   entitlements: UserEntitlements
+
+  /**
+   * Consumption information for consumed entitlements.
+   *
+   * Absence of an element in this array for a particular entitlement
+   * indicates that the entitlement has not been consumed at all.
+   *
+   * For sub-user level resource consumption, absence of an element in this
+   * array for a particular potential consumer indicates that the entitlement
+   * has not be consumed at all by that consumer.
+   */
   consumption: EntitlementConsumption[]
 }
 
@@ -100,14 +218,14 @@ export interface SudoEntitlementsClient {
    * This will return undefined for any of the conditions that return Sudos
    * for the redeemEntitlements API.
    *
-   * @returns Currently active entitlements set, if any, for the logged in user.
+   * @returns Currently active entitlements set as an [[`EntitlementsSet`]], if any, for the logged in user.
    */
   getEntitlements(): Promise<EntitlementsSet | undefined>
 
   /**
    * Return entitlements consumption information for the user.
    *
-   * @returns Currently active entitlements set, if any, for the logged in user.
+   * @returns [[`EntitlementsConsumption`]]: Current entitlements and consumption for the logged in user.
    *
    * @throws {@link NoEntitlementsError}
    * - Identity token has not been redeemed.
@@ -116,6 +234,8 @@ export interface SudoEntitlementsClient {
    * - Identity token contains no FSSO user identity information
    * - Identity token contains no claims recognized as entitling the user
    * - Identity token claims that are recognized specify unrecognized entitlements sets
+   *
+   * @function
    */
   getEntitlementsConsumption(): Promise<EntitlementsConsumption>
 
