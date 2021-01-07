@@ -126,9 +126,7 @@ describe('sudo-entitlements API integration tests', () => {
         it('should return null for raw test user', async () => {
           expectBeforesComplete()
 
-          await expect(
-            sudoEntitlements.getEntitlementsConsumption(),
-          ).resolves.toBeNull()
+          await expect(sudoEntitlements.getEntitlements()).resolves.toBeNull()
         })
       },
     )
@@ -139,9 +137,9 @@ describe('sudo-entitlements API integration tests', () => {
         it('should throw InvalidTokenError for raw test usedr', async () => {
           expectBeforesComplete()
 
-          await expect(
-            sudoEntitlements.getEntitlementsConsumption(),
-          ).rejects.toThrowError(new InvalidTokenError())
+          await expect(sudoEntitlements.getEntitlements()).rejects.toThrowError(
+            new InvalidTokenError(),
+          )
         })
       },
     )

@@ -2,15 +2,15 @@ import * as SudoCommon from '@sudoplatform/sudo-common'
 import { IllegalArgumentError } from '@sudoplatform/sudo-common'
 import { SudoUserClient } from '@sudoplatform/sudo-user'
 import { instance, mock, reset, verify, when } from 'ts-mockito'
-import { ApiClient } from '../client/apiClient'
-import { EntitlementsConsumptionTransformer } from '../data/transformers/entitlementsConsumptionTransformer'
-import { EntitlementsSetTransformer } from '../data/transformers/entitlementsSetTransformer'
+import { ApiClient } from '../../../src/client/apiClient'
+import { EntitlementsConsumptionTransformer } from '../../../src/data/transformers/entitlementsConsumptionTransformer'
+import { EntitlementsSetTransformer } from '../../../src/data/transformers/entitlementsSetTransformer'
 import {
   DefaultSudoEntitlementsClient,
   EntitlementsConsumption,
   EntitlementsSet,
   splitUserEntitlementsVersion,
-} from './entitlementsClient'
+} from '../../../src/entitlements/entitlementsClient'
 
 describe('DefaultSudoEntitlementsClient test suite', () => {
   const mockSudoUserClient = mock<SudoUserClient>()

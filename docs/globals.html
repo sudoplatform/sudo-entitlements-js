@@ -70,18 +70,93 @@
 						<section class="tsd-index-section ">
 							<h3>Classes</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-class"><a href="classes/ambiguousentitlementserror.html" class="tsd-kind-icon">Ambiguous<wbr>Entitlements<wbr>Error</a></li>
+								<li class="tsd-kind-class"><a href="classes/apiclient.html" class="tsd-kind-icon">Api<wbr>Client</a></li>
 								<li class="tsd-kind-class"><a href="classes/defaultsudoentitlementsclient.html" class="tsd-kind-icon">Default<wbr>Sudo<wbr>Entitlements<wbr>Client</a></li>
-								<li class="tsd-kind-class"><a href="classes/fatalerror.html" class="tsd-kind-icon">Fatal<wbr>Error</a></li>
-								<li class="tsd-kind-class"><a href="classes/notsignedinerror.html" class="tsd-kind-icon">Not<wbr>Signed<wbr>InError</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Interfaces</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-interface"><a href="interfaces/entitlement.html" class="tsd-kind-icon">Entitlement</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/entitlementconsumer.html" class="tsd-kind-icon">Entitlement<wbr>Consumer</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/entitlementconsumption.html" class="tsd-kind-icon">Entitlement<wbr>Consumption</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/entitlementsconsumption.html" class="tsd-kind-icon">Entitlements<wbr>Consumption</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/entitlementsset.html" class="tsd-kind-icon">Entitlements<wbr>Set</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/sudoentitlementsclient.html" class="tsd-kind-icon">Sudo<wbr>Entitlements<wbr>Client</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/userentitlements.html" class="tsd-kind-icon">User<wbr>Entitlements</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Variables</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-variable"><a href="globals.html#entitlementssetversionscalingfactor" class="tsd-kind-icon">entitlements<wbr>Set<wbr>Version<wbr>Scaling<wbr>Factor</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Functions</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-function"><a href="globals.html#splituserentitlementsversion" class="tsd-kind-icon">split<wbr>User<wbr>Entitlements<wbr>Version</a></li>
 							</ul>
 						</section>
 					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Variables</h2>
+				<section class="tsd-panel tsd-member tsd-kind-variable">
+					<a name="entitlementssetversionscalingfactor" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> entitlements<wbr>Set<wbr>Version<wbr>Scaling<wbr>Factor</h3>
+					<div class="tsd-signature tsd-kind-icon">entitlements<wbr>Set<wbr>Version<wbr>Scaling<wbr>Factor<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">100000</span><span class="tsd-signature-symbol"> = 100000</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in src/entitlements/entitlementsClient.ts:152</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Scaling factor used in construction of composite user entitlements version</p>
+						</div>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function">
+					<a name="splituserentitlementsversion" class="tsd-anchor"></a>
+					<h3>split<wbr>User<wbr>Entitlements<wbr>Version</h3>
+					<ul class="tsd-signatures tsd-kind-function">
+						<li class="tsd-signature tsd-kind-icon">split<wbr>User<wbr>Entitlements<wbr>Version<span class="tsd-signature-symbol">(</span>version<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-symbol">]</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in src/entitlements/entitlementsClient.ts:165</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Split the components of the composite version. Returns a tuple with
+										the version of the user&#39;s entitlements assigned as the first element
+										and the version of the entitlements set the user is assigned to as the
+										second element. If the user is not assigned an entitlements set then
+									0 is returned for the second element.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>version: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The version of a <a href="interfaces/userentitlements.html"><code>UserEntitlements</code></a></p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">[</span><span class="tsd-signature-symbol">]</span></h4>
+							<p>Returns the version split as a tuple: <code>[userEntitlementVersion: number, entitlementsSetVersion: number]</code></p>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -96,16 +171,40 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-class">
+						<a href="classes/ambiguousentitlementserror.html" class="tsd-kind-icon">Ambiguous<wbr>Entitlements<wbr>Error</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/apiclient.html" class="tsd-kind-icon">Api<wbr>Client</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="classes/defaultsudoentitlementsclient.html" class="tsd-kind-icon">Default<wbr>Sudo<wbr>Entitlements<wbr>Client</a>
 					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/fatalerror.html" class="tsd-kind-icon">Fatal<wbr>Error</a>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/entitlement.html" class="tsd-kind-icon">Entitlement</a>
 					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/notsignedinerror.html" class="tsd-kind-icon">Not<wbr>Signed<wbr>InError</a>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/entitlementconsumer.html" class="tsd-kind-icon">Entitlement<wbr>Consumer</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/entitlementconsumption.html" class="tsd-kind-icon">Entitlement<wbr>Consumption</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/entitlementsconsumption.html" class="tsd-kind-icon">Entitlements<wbr>Consumption</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/entitlementsset.html" class="tsd-kind-icon">Entitlements<wbr>Set</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/sudoentitlementsclient.html" class="tsd-kind-icon">Sudo<wbr>Entitlements<wbr>Client</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/userentitlements.html" class="tsd-kind-icon">User<wbr>Entitlements</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#entitlementssetversionscalingfactor" class="tsd-kind-icon">entitlements<wbr>Set<wbr>Version<wbr>Scaling<wbr>Factor</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#splituserentitlementsversion" class="tsd-kind-icon">split<wbr>User<wbr>Entitlements<wbr>Version</a>
 					</li>
 				</ul>
 			</nav>

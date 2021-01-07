@@ -1,11 +1,10 @@
 {
   "testEnvironment": "node",
-  "testMatch": ["<rootDir>/src/**/*.spec.ts", "<rootDir>/test/**/*.test.ts"],
+  "testMatch": ["<rootDir>/test/**/*.test.ts"],
   "testPathIgnorePatterns": ["/node_modules/", "/lib/"],
   "clearMocks": true,
   "collectCoverageFrom": [
     "src/**/*.ts",
-    "!src/**/*.spec.ts",
     "!**/*.d.ts",
     "!node_modules/**"
   ],

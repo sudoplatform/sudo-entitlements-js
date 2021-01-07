@@ -8,15 +8,15 @@ import { NormalizedCacheObject } from 'apollo-cache-inmemory'
 import { NetworkStatus } from 'apollo-client'
 import AWSAppSyncClient from 'aws-appsync'
 import { anything, instance, mock, reset, verify, when } from 'ts-mockito'
-import { AmbiguousEntitlementsError } from '../errors/error'
+import { ApiClient } from '../../../src/client/apiClient'
+import { AmbiguousEntitlementsError } from '../../../src/errors/error'
 import {
   EntitlementsConsumption,
   EntitlementsSet,
   GetEntitlementsConsumptionQuery,
   GetEntitlementsQuery,
   RedeemEntitlementsMutation,
-} from '../gen/graphqlTypes'
-import { ApiClient } from './apiClient'
+} from '../../../src/gen/graphqlTypes'
 
 describe('ApiClient test suite', () => {
   const mockApiClientManager = mock<ApiClientManager>()
