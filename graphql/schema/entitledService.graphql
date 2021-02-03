@@ -59,6 +59,12 @@ type EntitlementConsumption @aws_api_key @aws_iam @aws_cognito_user_pools {
 
   # Available amount
   available: Int!
+
+  # time this entitlement was first consumed
+  firstConsumedAtEpochMs: Float
+
+  # time of most recent consumption of this entitlement
+  lastConsumedAtEpochMs: Float
 }
 
 type EntitlementsConsumption @aws_api_key @aws_iam @aws_cognito_user_pools {

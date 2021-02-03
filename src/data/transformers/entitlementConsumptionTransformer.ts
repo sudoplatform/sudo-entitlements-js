@@ -16,6 +16,8 @@ export class EntitlementConsumptionTransformer {
         : undefined,
       consumed: graphql.consumed,
       available: graphql.available,
+      firstConsumedAtEpochMs: graphql.firstConsumedAtEpochMs,
+      lastConsumedAtEpochMs: graphql.lastConsumedAtEpochMs,
     }
   }
 
@@ -30,6 +32,8 @@ export class EntitlementConsumptionTransformer {
         : undefined,
       consumed: client.consumed,
       available: client.available,
+      firstConsumedAtEpochMs: client.firstConsumedAtEpochMs,
+      lastConsumedAtEpochMs: client.lastConsumedAtEpochMs,
     }
   }
 }

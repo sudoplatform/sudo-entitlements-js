@@ -6,4 +6,6 @@ fragment EntitlementConsumption on EntitlementConsumption {
   value
   consumed
   available
+  firstConsumedAtEpochMs
+  lastConsumedAtEpochMs
 }

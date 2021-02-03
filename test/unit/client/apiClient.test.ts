@@ -56,6 +56,8 @@ describe('ApiClient test suite', () => {
         value: entitlementsSet.entitlements[0].value,
         consumed: 1,
         available: entitlementsSet.entitlements[0].value - 1,
+        firstConsumedAtEpochMs: 1,
+        lastConsumedAtEpochMs: 2,
       },
     ],
   }

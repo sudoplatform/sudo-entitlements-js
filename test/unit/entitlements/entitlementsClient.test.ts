@@ -46,6 +46,8 @@ describe('DefaultSudoEntitlementsClient test suite', () => {
         ...entitlementsSet.entitlements[0],
         consumed: 1,
         available: entitlementsSet.entitlements[0].value - 1,
+        firstConsumedAtEpochMs: 1,
+        lastConsumedAtEpochMs: 2,
       },
     ],
   }

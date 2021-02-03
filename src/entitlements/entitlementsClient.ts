@@ -113,6 +113,16 @@ export interface EntitlementConsumption {
    * `available` + `consumed` always equals `value`
    */
   available: number
+
+  /**
+   * The time at which this entitlement was first consumed
+   */
+  firstConsumedAtEpochMs?: number
+
+  /**
+   * The most recent time at which this entitlement was consumed
+   */
+  lastConsumedAtEpochMs?: number
 }
 
 /**
