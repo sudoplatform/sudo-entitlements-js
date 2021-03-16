@@ -23,6 +23,7 @@ import {
 } from './describe'
 import { updateUserCustomClaims } from './updateUserCustomClaims'
 require('isomorphic-fetch')
+global.crypto = require('isomorphic-webcrypto')
 
 describe('sudo-entitlements API integration tests', () => {
   jest.setTimeout(30000)
