@@ -127,174 +127,181 @@ describe('sudo-entitlements API integration tests', () => {
         it('should return null for raw test user', async () => {
           expectBeforesComplete()
 
-          await expect(sudoEntitlements.getEntitlements()).resolves.toBeNull()
+          await expect(
+            sudoEntitlements.getEntitlements(),
+          ).resolves.toBeUndefined()
         })
       },
     )
 
     describeNoDefaultEntitlementsSetForTestUsersTests(
       'No default entitlements set for test users tests',
-      () => {
-        it('should throw InvalidTokenError for raw test usedr', async () => {
-          expectBeforesComplete()
-
-          await expect(sudoEntitlements.getEntitlements()).rejects.toThrowError(
-            new InvalidTokenError(),
-          )
-        })
-      },
-    )
-
-    describeIntegrationTestEntitlementsSetTests(
-      'Tests needing integration-test entitlements set',
-      () => {
-        describeUserAttributeAdminTests(
-          'Tests requiring user attribute admin authority',
-          () => {
-            it('should get integration-test entitlements set for redeemed user', async () => {
-              await updateUserCustomClaims(userPoolId, sudoUser, {
-                ent: {
-                  externalId: sudoUser.getUserName(),
-                  claims: { 'custom:entitlementsSet': 'integration-test' },
-                },
-              })
-
-              const redeemed = await sudoEntitlements.redeemEntitlements()
-              checkIntegrationTestEntitlementsSet(redeemed)
-              const gotten = await sudoEntitlements.getEntitlements()
-              expect(gotten).toEqual(redeemed)
-            })
-          },
-        )
-      },
-    )
-  })
-
-  describe('getEntitlementsConsumption tests', () => {
-    describeDefaultEntitlementsSetForTestUsersTests(
-      'Default entitlements set for test users tests',
       () => {
         it('should throw NoEntitlementsError for raw test user', async () => {
           expectBeforesComplete()
 
           await expect(
-            sudoEntitlements.getEntitlementsConsumption(),
-          ).rejects.toThrowError(new NoEntitlementsError())
+            sudoEntitlements.getEntitlements(),
+          ).resolves.toBeUndefined()
         })
-      },
-    )
 
-    describeNoDefaultEntitlementsSetForTestUsersTests(
-      'No default entitlements set for test users tests',
-      () => {
-        it('should throw InvalidTokenError for raw test user', async () => {
-          expectBeforesComplete()
-
-          await expect(
-            sudoEntitlements.getEntitlementsConsumption(),
-          ).rejects.toThrowError(new InvalidTokenError())
-        })
-      },
-    )
-    describeIntegrationTestEntitlementsSetTests(
-      'Tests needing integration-test entitlements set',
-      () => {
-        describeUserAttributeAdminTests(
-          'Tests requiring user attribute admin authority',
+        describeIntegrationTestEntitlementsSetTests(
+          'Tests needing integration-test entitlements set',
           () => {
-            it('should get entitlements consumption for redeemed user', async () => {
-              await updateUserCustomClaims(userPoolId, sudoUser, {
-                ent: {
-                  externalId: sudoUser.getUserName(),
-                  claims: { 'custom:entitlementsSet': 'integration-test' },
-                },
-              })
+            describeUserAttributeAdminTests(
+              'Tests requiring user attribute admin authority',
+              () => {
+                it('should get integration-test entitlements set for redeemed user', async () => {
+                  await updateUserCustomClaims(userPoolId, sudoUser, {
+                    ent: {
+                      externalId: sudoUser.getUserName(),
+                      claims: { 'custom:entitlementsSet': 'integration-test' },
+                    },
+                  })
 
-              const redeemed = await sudoEntitlements.redeemEntitlements()
-              checkIntegrationTestEntitlementsSet(redeemed)
-              const consumption = await sudoEntitlements.getEntitlementsConsumption()
-              expect(consumption.entitlements.entitlementsSetName).toEqual(
-                redeemed.name,
-              )
-              expect(consumption.entitlements.entitlements).toEqual(
-                redeemed.entitlements,
-              )
-              expect(consumption.entitlements.version).toEqual(redeemed.version)
-              expect(consumption.consumption).toHaveLength(0)
-            })
-          },
-        )
-      },
-    )
-  })
-
-  describe('redeemEntitlements tests', () => {
-    describeDefaultEntitlementsSetForTestUsersTests(
-      'Default entitlements set for test users tests',
-      () => {
-        it('should succeed for raw test user', async () => {
-          expectBeforesComplete()
-
-          await expect(
-            sudoEntitlements.redeemEntitlements(),
-          ).resolves.toBeDefined()
-        })
-      },
-    )
-
-    describeNoDefaultEntitlementsSetForTestUsersTests(
-      'No default entitlements set for test users tests',
-      () => {
-        it('should throw InvalidTokenError for raw test user', async () => {
-          expectBeforesComplete()
-
-          await expect(
-            sudoEntitlements.redeemEntitlements(),
-          ).rejects.toThrowError(new InvalidTokenError())
-        })
-      },
-    )
-
-    describeIntegrationTestEntitlementsSetTests(
-      'Tests needing integration-test entitlements set',
-      () => {
-        describeUserAttributeAdminTests(
-          'Tests requiring user attribute admin authority',
-          () => {
-            it('should redeem to integration-test entitlements set', async () => {
-              await updateUserCustomClaims(userPoolId, sudoUser, {
-                ent: {
-                  externalId: sudoUser.getUserName(),
-                  claims: { 'custom:entitlementsSet': 'integration-test' },
-                },
-              })
-
-              const redeemed = await sudoEntitlements.redeemEntitlements()
-              checkIntegrationTestEntitlementsSet(redeemed)
-            })
+                  const redeemed = await sudoEntitlements.redeemEntitlements()
+                  checkIntegrationTestEntitlementsSet(redeemed)
+                  const gotten = await sudoEntitlements.getEntitlements()
+                  expect(gotten).toEqual(redeemed)
+                })
+              },
+            )
           },
         )
       },
     )
 
-    describeUserAttributeAdminTests(
-      'Tests requiring user attribute admin authority',
-      () => {
-        it('should throw InvalidTokenError if no entitlements set can be found', async () => {
-          expectBeforesComplete()
+    describe('getEntitlementsConsumption tests', () => {
+      describeDefaultEntitlementsSetForTestUsersTests(
+        'Default entitlements set for test users tests',
+        () => {
+          it('should throw NoEntitlementsError for raw test user', async () => {
+            expectBeforesComplete()
 
-          await updateUserCustomClaims(userPoolId, sudoUser, {
-            ent: {
-              externalId: sudoUser.getUserName(),
-              claims: { 'custom:entitlementsSet': 'no-such-entitlements-set' },
-            },
+            await expect(
+              sudoEntitlements.getEntitlementsConsumption(),
+            ).rejects.toThrowError(new NoEntitlementsError())
           })
+        },
+      )
 
-          await expect(
-            sudoEntitlements.redeemEntitlements(),
-          ).rejects.toThrowError(new InvalidTokenError())
-        })
-      },
-    )
+      describeNoDefaultEntitlementsSetForTestUsersTests(
+        'No default entitlements set for test users tests',
+        () => {
+          it('should throw NoEntitlementsError for raw test user', async () => {
+            expectBeforesComplete()
+
+            await expect(
+              sudoEntitlements.getEntitlementsConsumption(),
+            ).rejects.toThrowError(new NoEntitlementsError())
+          })
+        },
+      )
+
+      describeIntegrationTestEntitlementsSetTests(
+        'Tests needing integration-test entitlements set',
+        () => {
+          describeUserAttributeAdminTests(
+            'Tests requiring user attribute admin authority',
+            () => {
+              it('should get entitlements consumption for redeemed user', async () => {
+                await updateUserCustomClaims(userPoolId, sudoUser, {
+                  ent: {
+                    externalId: sudoUser.getUserName(),
+                    claims: { 'custom:entitlementsSet': 'integration-test' },
+                  },
+                })
+
+                const redeemed = await sudoEntitlements.redeemEntitlements()
+                checkIntegrationTestEntitlementsSet(redeemed)
+                const consumption = await sudoEntitlements.getEntitlementsConsumption()
+                expect(consumption.entitlements.entitlementsSetName).toEqual(
+                  redeemed.name,
+                )
+                expect(consumption.entitlements.entitlements).toEqual(
+                  redeemed.entitlements,
+                )
+                expect(consumption.entitlements.version).toEqual(
+                  redeemed.version,
+                )
+                expect(consumption.consumption).toHaveLength(0)
+              })
+            },
+          )
+        },
+      )
+    })
+
+    describe('redeemEntitlements tests', () => {
+      describeDefaultEntitlementsSetForTestUsersTests(
+        'Default entitlements set for test users tests',
+        () => {
+          it('should succeed for raw test user', async () => {
+            expectBeforesComplete()
+
+            await expect(
+              sudoEntitlements.redeemEntitlements(),
+            ).resolves.toBeDefined()
+          })
+        },
+      )
+
+      describeNoDefaultEntitlementsSetForTestUsersTests(
+        'No default entitlements set for test users tests',
+        () => {
+          it('should throw InvalidTokenError for raw test user', async () => {
+            expectBeforesComplete()
+
+            await expect(
+              sudoEntitlements.redeemEntitlements(),
+            ).rejects.toThrowError(new InvalidTokenError())
+          })
+        },
+      )
+
+      describeIntegrationTestEntitlementsSetTests(
+        'Tests needing integration-test entitlements set',
+        () => {
+          describeUserAttributeAdminTests(
+            'Tests requiring user attribute admin authority',
+            () => {
+              it('should redeem to integration-test entitlements set', async () => {
+                await updateUserCustomClaims(userPoolId, sudoUser, {
+                  ent: {
+                    externalId: sudoUser.getUserName(),
+                    claims: { 'custom:entitlementsSet': 'integration-test' },
+                  },
+                })
+
+                const redeemed = await sudoEntitlements.redeemEntitlements()
+                checkIntegrationTestEntitlementsSet(redeemed)
+              })
+            },
+          )
+        },
+      )
+
+      describeUserAttributeAdminTests(
+        'Tests requiring user attribute admin authority',
+        () => {
+          it('should throw InvalidTokenError if no entitlements set can be found', async () => {
+            expectBeforesComplete()
+
+            await updateUserCustomClaims(userPoolId, sudoUser, {
+              ent: {
+                externalId: sudoUser.getUserName(),
+                claims: {
+                  'custom:entitlementsSet': 'no-such-entitlements-set',
+                },
+              },
+            })
+
+            await expect(
+              sudoEntitlements.redeemEntitlements(),
+            ).rejects.toThrowError(new InvalidTokenError())
+          })
+        },
+      )
+    })
   })
 })
