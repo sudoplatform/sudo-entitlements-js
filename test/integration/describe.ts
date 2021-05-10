@@ -19,8 +19,10 @@ if (defaultEntitlementsSetForTestUsers) {
   _noDefaultEntitlementsSetForTestUsersTests = describe.skip
   _defaultEntitlementsSetForTestUsersTests = describe
 }
-export const describeDefaultEntitlementsSetForTestUsersTests = _defaultEntitlementsSetForTestUsersTests
-export const describeNoDefaultEntitlementsSetForTestUsersTests = _noDefaultEntitlementsSetForTestUsersTests
+export const describeDefaultEntitlementsSetForTestUsersTests =
+  _defaultEntitlementsSetForTestUsersTests
+export const describeNoDefaultEntitlementsSetForTestUsersTests =
+  _noDefaultEntitlementsSetForTestUsersTests
 
 export const userAttributeAdmin = process.env.USER_ATTRIBUTE_ADMIN === 'true'
 let _userAttributeAdminTests: typeof describe = describe.skip
@@ -39,4 +41,5 @@ let _integrationTestEntitlementsSetTests: typeof describe = describe.skip
 if (integrationTestEntitlementsSetAvailable) {
   _integrationTestEntitlementsSetTests = describe
 }
-export const describeIntegrationTestEntitlementsSetTests = _integrationTestEntitlementsSetTests
+export const describeIntegrationTestEntitlementsSetTests =
+  _integrationTestEntitlementsSetTests

@@ -303,7 +303,8 @@ export class DefaultSudoEntitlementsClient implements SudoEntitlementsClient {
       throw new SudoCommon.NotSignedInError()
     }
 
-    const entitlementsConsumption = await this.apiClient.getEntitlementsConsumption()
+    const entitlementsConsumption =
+      await this.apiClient.getEntitlementsConsumption()
     return EntitlementsConsumptionTransformer.toClient(entitlementsConsumption)
   }
 

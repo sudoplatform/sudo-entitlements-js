@@ -66,9 +66,8 @@ describe('sudo-entitlements API integration tests', () => {
     const configurationManager = DefaultConfigurationManager.getInstance()
     configurationManager.setConfig(sudoPlatformConfig)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const identityServiceConfig: any = configurationManager.getConfigSet(
-      'identityService',
-    )
+    const identityServiceConfig: any =
+      configurationManager.getConfigSet('identityService')
     expect(identityServiceConfig?.poolId).toBeTruthy()
     if (!identityServiceConfig?.poolId) {
       fail('identityServiceConfig.poolId unexpectedly falsy')
@@ -214,7 +213,8 @@ describe('sudo-entitlements API integration tests', () => {
 
                 const redeemed = await sudoEntitlements.redeemEntitlements()
                 checkIntegrationTestEntitlementsSet(redeemed)
-                const consumption = await sudoEntitlements.getEntitlementsConsumption()
+                const consumption =
+                  await sudoEntitlements.getEntitlementsConsumption()
                 expect(consumption.entitlements.entitlementsSetName).toEqual(
                   redeemed.name,
                 )
