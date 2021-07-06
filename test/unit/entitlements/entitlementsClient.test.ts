@@ -52,6 +52,38 @@ describe('DefaultSudoEntitlementsClient test suite', () => {
     ],
   }
 
+  const entitlementsConsumptionWithConsumers: EntitlementsConsumption = {
+    entitlements: {
+      entitlementsSetName: entitlementsSet.name,
+      version: 1.00001,
+      entitlements: entitlementsSet.entitlements,
+    },
+    consumption: [
+      {
+        ...entitlementsSet.entitlements[0],
+        consumed: 1,
+        available: entitlementsSet.entitlements[0].value - 1,
+        firstConsumedAtEpochMs: 1,
+        lastConsumedAtEpochMs: 2,
+        consumer: {
+          id: 'sudo-1',
+          issuer: 'sudoplatform.sudoservice',
+        },
+      },
+      {
+        ...entitlementsSet.entitlements[0],
+        consumed: 1,
+        available: entitlementsSet.entitlements[0].value - 1,
+        firstConsumedAtEpochMs: 1,
+        lastConsumedAtEpochMs: 2,
+        consumer: {
+          id: 'sudo-2',
+          issuer: 'sudoplatform.sudoservice',
+        },
+      },
+    ],
+  }
+
   describe('splitUserEntitlementsVersion tests', () => {
     it.each`
       version    | expected
@@ -159,6 +191,22 @@ describe('DefaultSudoEntitlementsClient test suite', () => {
       await expect(
         sudoEntitlementsClient.getEntitlementsConsumption(),
       ).resolves.toEqual(entitlementsConsumption)
+
+      verify(mockSudoUserClient.isSignedIn()).once()
+      verify(mockApiClient.getEntitlementsConsumption()).once()
+    })
+
+    it('should invoke ApiClient.getEntitlementsConsumption successfully and return consumer info', async () => {
+      when(mockSudoUserClient.isSignedIn()).thenResolve(true)
+      when(mockApiClient.getEntitlementsConsumption()).thenResolve(
+        EntitlementsConsumptionTransformer.toGraphQL(
+          entitlementsConsumptionWithConsumers,
+        ),
+      )
+
+      await expect(
+        sudoEntitlementsClient.getEntitlementsConsumption(),
+      ).resolves.toEqual(entitlementsConsumptionWithConsumers)
 
       verify(mockSudoUserClient.isSignedIn()).once()
       verify(mockApiClient.getEntitlementsConsumption()).once()

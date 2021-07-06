@@ -2,6 +2,8 @@ import { ApiClientManager } from '@sudoplatform/sudo-api-client'
 import {
   InvalidTokenError,
   NoEntitlementsError,
+  NotAuthorizedError,
+  RequestFailedError,
   ServiceError,
 } from '@sudoplatform/sudo-common'
 import { NormalizedCacheObject } from 'apollo-cache-inmemory'
@@ -23,6 +25,8 @@ describe('ApiClient test suite', () => {
   const mockAWSAppSyncClient = mock<AWSAppSyncClient<NormalizedCacheObject>>()
 
   let apiClient: ApiClient
+
+  const notAuthorizedError = new NotAuthorizedError()
 
   beforeEach(() => {
     reset(mockApiClientManager)
@@ -114,12 +118,13 @@ describe('ApiClient test suite', () => {
 
       verify(mockAWSAppSyncClient.query(anything())).once()
     })
+
     it.each`
       code                                  | error
       ${'sudoplatform.NoEntitlementsError'} | ${new NoEntitlementsError()}
       ${'sudoplatform.InvalidTokenError'}   | ${new InvalidTokenError()}
       ${'sudoplatform.ServiceError'}        | ${new ServiceError('graphql-error')}
-    `('should map $code error', async ({ code, error }) => {
+    `('should map $code error when returned', async ({ code, error }) => {
       when(mockAWSAppSyncClient.query(anything())).thenResolve({
         data: undefined,
         loading: false,
@@ -136,6 +141,71 @@ describe('ApiClient test suite', () => {
 
       await expect(apiClient.getEntitlements()).rejects.toThrow(error)
     })
+
+    describe.each`
+      code                                  | error
+      ${'sudoplatform.NoEntitlementsError'} | ${new NoEntitlementsError()}
+      ${'sudoplatform.InvalidTokenError'}   | ${new InvalidTokenError()}
+      ${'sudoplatform.ServiceError'}        | ${new ServiceError('graphql-error')}
+    `('should map $code error', ({ code, error }) => {
+      it('when error is returned', async () => {
+        when(mockAWSAppSyncClient.query(anything())).thenResolve({
+          data: undefined,
+          loading: false,
+          networkStatus: NetworkStatus.ready,
+          stale: false,
+          errors: [
+            {
+              errorType: code,
+              message: 'graphql-error',
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            } as any,
+          ],
+        })
+
+        await expect(apiClient.getEntitlements()).rejects.toThrow(error)
+      })
+
+      it('when error is thrown', async () => {
+        when(mockAWSAppSyncClient.query(anything())).thenReject({
+          message: 'error',
+          name: 'error',
+          graphQLErrors: [
+            {
+              name: 'GraphQLError',
+              errorType: code,
+              message: 'graphql-error',
+            },
+          ],
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } as any)
+
+        await expect(apiClient.getEntitlements()).rejects.toThrow(error)
+      })
+    })
+
+    it.each`
+      networkError           | clientError
+      ${{ statusCode: 401 }} | ${notAuthorizedError}
+      ${{ statusCode: 500 }} | ${'default'}
+      ${{}}                  | ${'default'}
+    `(
+      'should map network error $networkError to $clientError',
+      async ({ networkError, clientError }) => {
+        when(mockAWSAppSyncClient.query(anything())).thenReject({
+          message: 'error',
+          name: 'error',
+          networkError,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } as any)
+
+        if (clientError === 'default') {
+          clientError = new RequestFailedError(networkError)
+        }
+
+        await expect(apiClient.getEntitlements()).rejects.toThrow(clientError)
+      },
+    )
   })
 
   describe('getEntitlementsConsumption tests', () => {
@@ -171,30 +241,77 @@ describe('ApiClient test suite', () => {
 
       verify(mockAWSAppSyncClient.query(anything())).once()
     })
-    it.each`
+
+    describe.each`
       code                                  | error
       ${'sudoplatform.NoEntitlementsError'} | ${new NoEntitlementsError()}
       ${'sudoplatform.InvalidTokenError'}   | ${new InvalidTokenError()}
       ${'sudoplatform.ServiceError'}        | ${new ServiceError('graphql-error')}
-    `('should map $code error', async ({ code, error }) => {
-      when(mockAWSAppSyncClient.query(anything())).thenResolve({
-        data: undefined,
-        loading: false,
-        networkStatus: NetworkStatus.ready,
-        stale: false,
-        errors: [
-          {
-            errorType: code,
-            message: 'graphql-error',
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          } as any,
-        ],
+    `('should map $code error', ({ code, error }) => {
+      it('when error is returned', async () => {
+        when(mockAWSAppSyncClient.query(anything())).thenResolve({
+          data: undefined,
+          loading: false,
+          networkStatus: NetworkStatus.ready,
+          stale: false,
+          errors: [
+            {
+              errorType: code,
+              message: 'graphql-error',
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            } as any,
+          ],
+        })
+
+        await expect(apiClient.getEntitlementsConsumption()).rejects.toThrow(
+          error,
+        )
       })
 
-      await expect(apiClient.getEntitlementsConsumption()).rejects.toThrow(
-        error,
-      )
+      it('when error is thrown', async () => {
+        when(mockAWSAppSyncClient.query(anything())).thenReject({
+          message: 'error',
+          name: 'error',
+          graphQLErrors: [
+            {
+              name: 'GraphQLError',
+              errorType: code,
+              message: 'graphql-error',
+            },
+          ],
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } as any)
+
+        await expect(apiClient.getEntitlementsConsumption()).rejects.toThrow(
+          error,
+        )
+      })
     })
+
+    it.each`
+      networkError           | clientError
+      ${{ statusCode: 401 }} | ${notAuthorizedError}
+      ${{ statusCode: 500 }} | ${'default'}
+      ${{}}                  | ${'default'}
+    `(
+      'should map network error $networkError to $clientError',
+      async ({ networkError, clientError }) => {
+        when(mockAWSAppSyncClient.query(anything())).thenReject({
+          message: 'error',
+          name: 'error',
+          networkError,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } as any)
+
+        if (clientError === 'default') {
+          clientError = new RequestFailedError(networkError)
+        }
+
+        await expect(apiClient.getEntitlementsConsumption()).rejects.toThrow(
+          clientError,
+        )
+      },
+    )
   })
 
   describe('redeemEntitlements tests', () => {
@@ -240,24 +357,72 @@ describe('ApiClient test suite', () => {
       verify(mockAWSAppSyncClient.mutate(anything())).once()
     })
 
-    it.each`
+    describe.each`
       code                                                      | error
       ${'sudoplatform.entitlements.AmbiguousEntitlementsError'} | ${new AmbiguousEntitlementsError()}
       ${'sudoplatform.InvalidTokenError'}                       | ${new InvalidTokenError()}
       ${'sudoplatform.ServiceError'}                            | ${new ServiceError('graphql-error')}
-    `('should map $code error', async ({ code, error }) => {
-      when(
-        mockAWSAppSyncClient.mutate<RedeemEntitlementsMutation>(anything()),
-      ).thenResolve({
-        errors: [
-          {
-            errorType: code,
-            message: 'graphql-error',
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          } as any,
-        ],
+    `('should map $code error', ({ code, error }) => {
+      it('when error is returned', async () => {
+        when(
+          mockAWSAppSyncClient.mutate<RedeemEntitlementsMutation>(anything()),
+        ).thenResolve({
+          errors: [
+            {
+              errorType: code,
+              message: 'graphql-error',
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            } as any,
+          ],
+        })
+        await expect(apiClient.redeemEntitlements()).rejects.toThrow(error)
       })
-      await expect(apiClient.redeemEntitlements()).rejects.toThrow(error)
+
+      it('when error is thrown', async () => {
+        when(
+          mockAWSAppSyncClient.mutate<RedeemEntitlementsMutation>(anything()),
+        ).thenReject({
+          message: 'error',
+          name: 'error',
+          graphQLErrors: [
+            {
+              name: 'GraphQLError',
+              errorType: code,
+              message: 'graphql-error',
+            },
+          ],
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } as any)
+
+        await expect(apiClient.redeemEntitlements()).rejects.toThrow(error)
+      })
     })
+
+    it.each`
+      networkError           | clientError
+      ${{ statusCode: 401 }} | ${notAuthorizedError}
+      ${{ statusCode: 500 }} | ${'default'}
+      ${{}}                  | ${'default'}
+    `(
+      'should map network error $networkError to $clientError',
+      async ({ networkError, clientError }) => {
+        when(
+          mockAWSAppSyncClient.mutate<RedeemEntitlementsMutation>(anything()),
+        ).thenReject({
+          message: 'error',
+          name: 'error',
+          networkError,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } as any)
+
+        if (clientError === 'default') {
+          clientError = new RequestFailedError(networkError)
+        }
+
+        await expect(apiClient.redeemEntitlements()).rejects.toThrow(
+          clientError,
+        )
+      },
+    )
   })
 })

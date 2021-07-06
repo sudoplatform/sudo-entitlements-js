@@ -2,8 +2,13 @@ import {
   ApiClientManager,
   DefaultApiClientManager,
 } from '@sudoplatform/sudo-api-client'
-import * as SudoCommon from '@sudoplatform/sudo-common'
-import { AppSyncError } from '@sudoplatform/sudo-common'
+import {
+  AppSyncError,
+  FatalError,
+  isAppSyncNetworkError,
+  mapGraphQLToClientError,
+  mapNetworkErrorToClientError,
+} from '@sudoplatform/sudo-common'
 import { NormalizedCacheObject } from 'apollo-cache-inmemory'
 import AWSAppSyncClient from 'aws-appsync'
 import { AmbiguousEntitlementsError } from '../errors/error'
@@ -46,14 +51,17 @@ export class ApiClient {
       }
       error = result.errors?.[0]
     } catch (err) {
-      error = err.graphQLErrors?.[0]
+      if (isAppSyncNetworkError(err)) {
+        throw mapNetworkErrorToClientError(err)
+      }
+      error = err.graphQLErrors?.[0] ?? err
     }
 
     if (error) {
       throw this.mapGraphQLToClientError(error)
     }
 
-    throw new SudoCommon.FatalError(
+    throw new FatalError(
       'getEntitlements did not return any result or any error.',
     )
   }
@@ -73,13 +81,16 @@ export class ApiClient {
       }
       error = result.errors?.[0]
     } catch (err) {
-      error = err.graphQLErrors?.[0]
+      if (isAppSyncNetworkError(err)) {
+        throw mapNetworkErrorToClientError(err)
+      }
+      error = err.graphQLErrors?.[0] ?? err
     }
     if (error) {
       throw this.mapGraphQLToClientError(error)
     }
 
-    throw new SudoCommon.FatalError(
+    throw new FatalError(
       'getEntitlementsConsumption did not return any result or any error.',
     )
   }
@@ -99,13 +110,16 @@ export class ApiClient {
       }
       error = result.errors?.[0]
     } catch (err) {
-      error = err.graphQLErrors?.[0]
+      if (isAppSyncNetworkError(err)) {
+        throw mapNetworkErrorToClientError(err)
+      }
+      error = err.graphQLErrors?.[0] ?? err
     }
     if (error) {
       throw this.mapGraphQLToClientError(error)
     }
 
-    throw new SudoCommon.FatalError(
+    throw new FatalError(
       'redeemEntitlements did not return any result or any error.',
     )
   }
@@ -116,7 +130,7 @@ export class ApiClient {
       case `${prefix}.AmbiguousEntitlementsError`:
         return new AmbiguousEntitlementsError()
       default:
-        return SudoCommon.mapGraphQLToClientError(error)
+        return mapGraphQLToClientError(error)
     }
   }
 }
