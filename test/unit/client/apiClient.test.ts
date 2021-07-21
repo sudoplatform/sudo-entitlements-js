@@ -200,7 +200,10 @@ describe('ApiClient test suite', () => {
         } as any)
 
         if (clientError === 'default') {
-          clientError = new RequestFailedError(networkError)
+          clientError = new RequestFailedError(
+            networkError,
+            networkError.statusCode,
+          )
         }
 
         await expect(apiClient.getEntitlements()).rejects.toThrow(clientError)
@@ -304,7 +307,10 @@ describe('ApiClient test suite', () => {
         } as any)
 
         if (clientError === 'default') {
-          clientError = new RequestFailedError(networkError)
+          clientError = new RequestFailedError(
+            networkError,
+            networkError.statusCode,
+          )
         }
 
         await expect(apiClient.getEntitlementsConsumption()).rejects.toThrow(
@@ -416,7 +422,10 @@ describe('ApiClient test suite', () => {
         } as any)
 
         if (clientError === 'default') {
-          clientError = new RequestFailedError(networkError)
+          clientError = new RequestFailedError(
+            networkError,
+            networkError.statusCode,
+          )
         }
 
         await expect(apiClient.redeemEntitlements()).rejects.toThrow(

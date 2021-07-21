@@ -6,11 +6,12 @@ import {
   TESTAuthenticationProvider,
 } from '@sudoplatform/sudo-user'
 import fs from 'fs'
+import * as _ from 'lodash'
+
 import {
   DefaultSudoEntitlementsClient,
   SudoEntitlementsClient,
 } from '../../src'
-import * as _ from 'lodash'
 
 require('isomorphic-fetch')
 global.crypto = require('isomorphic-webcrypto')
@@ -128,7 +129,7 @@ describe('Bad config sudo-entitlements API integration tests', () => {
       await expect(
         sudoEntitlements.getEntitlements(),
       ).rejects.toThrowErrorMatchingInlineSnapshot(
-        '"API request failed. cause: Error: Network error: Unexpected token < in JSON at position 0, statusCode: undefined"',
+        '"API request failed. cause: ServerParseError: Unexpected token < in JSON at position 0, statusCode: 403"',
       )
     })
   })
@@ -138,7 +139,7 @@ describe('Bad config sudo-entitlements API integration tests', () => {
       await expect(
         sudoEntitlements.getEntitlementsConsumption(),
       ).rejects.toThrowErrorMatchingInlineSnapshot(
-        '"API request failed. cause: Error: Network error: Unexpected token < in JSON at position 0, statusCode: undefined"',
+        '"API request failed. cause: ServerParseError: Unexpected token < in JSON at position 0, statusCode: 403"',
       )
     })
   })
@@ -148,7 +149,7 @@ describe('Bad config sudo-entitlements API integration tests', () => {
       await expect(
         sudoEntitlements.redeemEntitlements(),
       ).rejects.toThrowErrorMatchingInlineSnapshot(
-        '"API request failed. cause: Error: Network error: Unexpected token < in JSON at position 0, statusCode: undefined"',
+        '"API request failed. cause: ServerParseError: Unexpected token < in JSON at position 0, statusCode: 403"',
       )
     })
   })
