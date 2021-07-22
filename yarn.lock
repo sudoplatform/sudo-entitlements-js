@@ -3196,10 +3196,10 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@sudoplatform/sudo-api-client@^9.0.0":
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/@sudoplatform/sudo-api-client/-/sudo-api-client-9.0.0.tgz#1918d3394f3111f78411dca06fbd96a0b084a094"
-  integrity sha512-irTz3ZZPH7ypDqphYTA96kOmK7u46zpsrpbhvTk5xNTC+4aHD5rM8BAlcNLXq7ysoUEwjEzxHudVxZIC5Q5r1g==
+"@sudoplatform/sudo-api-client@^8.0.0":
+  version "8.0.5"
+  resolved "https://registry.yarnpkg.com/@sudoplatform/sudo-api-client/-/sudo-api-client-8.0.5.tgz#a3d44326405642201331d5c1e8e73c375d5799cf"
+  integrity sha512-mw9cKkMHvDaUPR8GBQIfQDiusWEmLalFT7U3t3Nq69T0U8Bd8NgL59R/ndk9I25/WNBdv8K8cerjS0FDEgQ9jg==
   dependencies:
     "@redux-offline/redux-offline" "^2.6.0-native.0"
     "@types/graphql" "^14.5.0"

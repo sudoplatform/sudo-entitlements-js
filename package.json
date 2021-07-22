@@ -28,9 +28,9 @@
     "docs"
   ],
   "peerDependencies": {
-    "@sudoplatform/sudo-api-client": "^9.0.0",
-    "@sudoplatform/sudo-common": "^5.2.1",
-    "@sudoplatform/sudo-user": "^9.0.0"
+    "@sudoplatform/sudo-api-client": "^8.0.0",
+    "@sudoplatform/sudo-common": "^5.0.1",
+    "@sudoplatform/sudo-user": "^8.0.0 || ^9.0.0"
   },
   "dependencies": {
     "apollo-cache-inmemory": "^1.6.6",
@@ -68,7 +68,7 @@
     "@graphql-typed-document-node/apollo-client-2": "^1.0.0",
     "@react-native-community/async-storage": "^1.12.1",
     "@react-native-community/netinfo": "^5.9.10",
-    "@sudoplatform/sudo-api-client": "^9.0.0",
+    "@sudoplatform/sudo-api-client": "^8.0.0",
     "@sudoplatform/sudo-common": "^5.2.1",
     "@sudoplatform/sudo-user": "^9.0.0",
     "@types/jest": "^26.0.24",
