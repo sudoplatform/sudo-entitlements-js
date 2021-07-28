@@ -9,7 +9,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "lint": "yarn lint:eslint && yarn lint:prettier",
-    "lint:eslint": "eslint \"{bin,test,src}/**/*.{ts,tsx}\"",
+    "lint:eslint": "eslint \"{bin,test,src}/**/*.{js,ts,tsx}\"",
     "lint:prettier": "prettier -l \"{bin,test,src}/**/*.{js,json,jsx,ts,tsx}\"",
     "codegen": "graphql-codegen -c codegen.yml",
     "verify": "yarn audit && yarn lint && yarn unit-test",
@@ -35,7 +35,7 @@
   "dependencies": {
     "apollo-cache-inmemory": "^1.6.6",
     "aws-appsync": "4.0.3",
-    "fp-ts": "^2.10.5",
+    "fp-ts": "^2.11.0",
     "graphql": "^15.5.1",
     "io-ts": "^2.2.16",
     "monocle-ts": "^2.3.10",
@@ -68,13 +68,14 @@
     "@graphql-typed-document-node/apollo-client-2": "^1.0.0",
     "@react-native-community/async-storage": "^1.12.1",
     "@react-native-community/netinfo": "^5.9.10",
-    "@sudoplatform/sudo-api-client": "^8.0.0",
+    "@sudoplatform/sudo-api-client": "^8.0.6",
     "@sudoplatform/sudo-common": "^5.2.1",
     "@sudoplatform/sudo-user": "^9.0.0",
     "@types/jest": "^26.0.24",
     "@types/lodash": "^4.14.171",
-    "@typescript-eslint/eslint-plugin": "^4.28.4",
-    "@typescript-eslint/parser": "^4.28.4",
+    "@types/uuid": "^8.3.1",
+    "@typescript-eslint/eslint-plugin": "^4.28.5",
+    "@typescript-eslint/parser": "^4.28.5",
     "apollo-client": "^2.6.10",
     "eslint": "^7.31.0",
     "eslint-config-prettier": "^8.3.0",
@@ -86,10 +87,11 @@
     "prettier": "^2.3.2",
     "react": "16.13.1",
     "react-native": "^0.63.4",
-    "ts-jest": "^27.0.3",
+    "ts-jest": "^27.0.4",
     "ts-mockito": "^2.6.1",
     "typedoc": "0.19.2",
     "typescript": "^4.3.5",
+    "uuid": "^8.3.2",
     "wait-for-expect": "^3.0.2"
   }
 }

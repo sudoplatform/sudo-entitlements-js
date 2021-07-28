@@ -16,6 +16,8 @@ import {
   EntitlementsSet,
   SudoEntitlementsClient,
 } from '../../src'
+import { v4 } from 'uuid'
+
 import {
   describeDefaultEntitlementsSetForTestUsersTests,
   describeIntegrationTestEntitlementsSetTests,
@@ -54,7 +56,7 @@ describe('sudo-entitlements API integration tests', () => {
   let beforeEachComplete = false
   let testAuthenticationProvider: TESTAuthenticationProvider
 
-  beforeAll(async () => {
+  beforeAll(() => {
     const sudoPlatformConfigPath =
       process.env.SUDO_PLATFORM_CONFIG ||
       `${__dirname}/../../config/sudoplatformconfig.json`
@@ -109,7 +111,7 @@ describe('sudo-entitlements API integration tests', () => {
     beforeEachComplete = true
   })
 
-  afterEach(async () => {
+  afterEach(() => {
     beforeEachComplete = false
     sudoUser?.reset()
   })
@@ -137,6 +139,69 @@ describe('sudo-entitlements API integration tests', () => {
       expect(e.name).not.toHaveLength(0)
     })
   }
+
+  describe('getExternalId tests', () => {
+    describeUserAttributeAdminTests(
+      'Tests requiring user attribute admin authority',
+      () => {
+        it('should return correct external ID before redemption', async () => {
+          const externalId = `get-external-id-before-redeem-${v4()}`
+          await updateUserCustomClaims(userPoolId, sudoUser, {
+            ent: {
+              externalId,
+              claims: {},
+            },
+          })
+
+          await expect(sudoEntitlements.getExternalId()).resolves.toEqual(
+            externalId,
+          )
+        })
+
+        describeIntegrationTestEntitlementsSetTests(
+          'Tests needing integration-test entitlements set',
+          () => {
+            it('should return correct external ID after redemption', async () => {
+              const externalId = `get-external-id-after-redeem-${v4()}`
+              await updateUserCustomClaims(userPoolId, sudoUser, {
+                ent: {
+                  externalId,
+                  claims: { 'custom:entitlementsSet': 'integration-test' },
+                },
+              })
+
+              await sudoEntitlements.redeemEntitlements()
+
+              await expect(sudoEntitlements.getExternalId()).resolves.toEqual(
+                externalId,
+              )
+            })
+          },
+        )
+
+        describeDefaultEntitlementsSetForTestUsersTests(
+          'Default entitlements set for test users tests',
+          () => {
+            it('should return correct external ID after redemption', async () => {
+              const externalId = `get-external-id-after-redeem-${v4()}`
+              await updateUserCustomClaims(userPoolId, sudoUser, {
+                ent: {
+                  externalId,
+                  claims: {},
+                },
+              })
+
+              await sudoEntitlements.redeemEntitlements()
+
+              await expect(sudoEntitlements.getExternalId()).resolves.toEqual(
+                externalId,
+              )
+            })
+          },
+        )
+      },
+    )
+  })
 
   describe('getEntitlements tests', () => {
     describe('Common tests', () => {
@@ -186,7 +251,7 @@ describe('sudo-entitlements API integration tests', () => {
 
                   await updateUserCustomClaims(userPoolId, sudoUser, {
                     ent: {
-                      externalId: sudoUser.getUserName(),
+                      externalId: await sudoUser.getUserName(),
                       claims: { 'custom:entitlementsSet': 'integration-test' },
                     },
                   })
@@ -254,7 +319,7 @@ describe('sudo-entitlements API integration tests', () => {
 
               await updateUserCustomClaims(userPoolId, sudoUser, {
                 ent: {
-                  externalId: sudoUser.getUserName(),
+                  externalId: await sudoUser.getUserName(),
                   claims: { 'custom:entitlementsSet': 'integration-test' },
                 },
               })
@@ -328,7 +393,7 @@ describe('sudo-entitlements API integration tests', () => {
 
               await updateUserCustomClaims(userPoolId, sudoUser, {
                 ent: {
-                  externalId: sudoUser.getUserName(),
+                  externalId: await sudoUser.getUserName(),
                   claims: { 'custom:entitlementsSet': 'integration-test' },
                 },
               })
@@ -349,7 +414,7 @@ describe('sudo-entitlements API integration tests', () => {
 
           await updateUserCustomClaims(userPoolId, sudoUser, {
             ent: {
-              externalId: sudoUser.getUserName(),
+              externalId: await sudoUser.getUserName(),
               claims: {
                 'custom:entitlementsSet': 'no-such-entitlements-set',
               },

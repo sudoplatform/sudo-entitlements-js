@@ -56,6 +56,15 @@ type Query {
   #     the configuration or operation of the service.
   #
   getEntitlementsConsumption: EntitlementsConsumption!
+  
+  # Retrieve user's external ID. Useful for test users only to avoid
+  # having to be aware of external ID mapping rules when setting
+  # entitlements for a test user by external ID.
+  # The following errors may be returned:
+  #
+  # sudoplatform.InvalidTokenError:
+  #   - Identity token contains no claims recognized as identifying the external user
+  getExternalId: String!
 }
 
 type Mutation {

@@ -37,7 +37,7 @@ describe('Bad config sudo-entitlements API integration tests', () => {
   let config
   let configBadApiUrl
 
-  beforeAll(async () => {
+  beforeAll(() => {
     const sudoPlatformConfigPath =
       process.env.SUDO_PLATFORM_CONFIG ||
       `${__dirname}/../../config/sudoplatformconfig.json`
@@ -65,13 +65,11 @@ describe('Bad config sudo-entitlements API integration tests', () => {
      * operation.
      */
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     config = JSON.parse(sudoPlatformConfig)
     configBadApiUrl = _.clone(config)
-    configBadApiUrl.apiService.apiUrl = config.apiService.apiUrl.replace(
-      'https://',
-      'http://',
-    )
+    configBadApiUrl.apiService.apiUrl = (
+      config.apiService.apiUrl as string
+    ).replace('https://', 'http://')
 
     testAuthenticationProvider = new TESTAuthenticationProvider(
       'sudo-entitlements-js-test',
@@ -82,13 +80,6 @@ describe('Bad config sudo-entitlements API integration tests', () => {
     const configurationManager = DefaultConfigurationManager.getInstance()
     configurationManager.setConfig(JSON.stringify(configBadApiUrl))
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const identityServiceConfig: any =
-      configurationManager.getConfigSet('identityService')
-    expect(identityServiceConfig?.poolId).toBeTruthy()
-    if (!identityServiceConfig?.poolId) {
-      fail('identityServiceConfig.poolId unexpectedly falsy')
-    }
     sudoUser = new DefaultSudoUserClient()
     DefaultApiClientManager.getInstance().setAuthClient(sudoUser)
     sudoEntitlements = new DefaultSudoEntitlementsClient(sudoUser)
@@ -106,7 +97,7 @@ describe('Bad config sudo-entitlements API integration tests', () => {
     beforeEachComplete = true
   })
 
-  afterEach(async () => {
+  afterEach(() => {
     beforeEachComplete = false
     sudoUser?.reset()
   })

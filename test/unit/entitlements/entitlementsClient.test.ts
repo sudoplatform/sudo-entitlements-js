@@ -27,6 +27,9 @@ describe('DefaultSudoEntitlementsClient test suite', () => {
   })
 
   const now = new Date()
+
+  const externalId = 'external-id'
+
   const entitlementsSet: EntitlementsSet = {
     createdAt: now,
     updatedAt: now,
@@ -111,12 +114,12 @@ describe('DefaultSudoEntitlementsClient test suite', () => {
       ${1.0000001} | ${/precise/}
     `(
       'should throw IllegalArgumentError for $version',
-      ({ version, message }) => {
+      ({ version, message }: { version: number; message: RegExp }) => {
         let thrown: Error | undefined
         try {
           splitUserEntitlementsVersion(version)
         } catch (err) {
-          thrown = err
+          thrown = err as Error
         }
         expect(thrown).toBeInstanceOf(IllegalArgumentError)
         expect(thrown).toMatchObject({
@@ -210,6 +213,31 @@ describe('DefaultSudoEntitlementsClient test suite', () => {
 
       verify(mockSudoUserClient.isSignedIn()).once()
       verify(mockApiClient.getEntitlementsConsumption()).once()
+    })
+  })
+
+  describe('getExternalId tests', () => {
+    it('should throw NotSignedInError if not signed in', async () => {
+      when(mockSudoUserClient.isSignedIn()).thenResolve(false)
+
+      await expect(sudoEntitlementsClient.getExternalId()).rejects.toThrow(
+        SudoCommon.NotSignedInError,
+      )
+
+      verify(mockSudoUserClient.isSignedIn()).once()
+      verify(mockApiClient.getExternalId()).never()
+    })
+
+    it('should invoke ApiClient.getExternalId successfully', async () => {
+      when(mockSudoUserClient.isSignedIn()).thenResolve(true)
+      when(mockApiClient.getExternalId()).thenResolve(externalId)
+
+      await expect(sudoEntitlementsClient.getExternalId()).resolves.toEqual(
+        externalId,
+      )
+
+      verify(mockSudoUserClient.isSignedIn()).once()
+      verify(mockApiClient.getExternalId()).once()
     })
   })
 

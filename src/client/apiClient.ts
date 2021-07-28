@@ -11,6 +11,7 @@ import {
 } from '@sudoplatform/sudo-common'
 import { NormalizedCacheObject } from 'apollo-cache-inmemory'
 import AWSAppSyncClient from 'aws-appsync'
+import { ApolloError } from 'apollo-client'
 import { AmbiguousEntitlementsError } from '../errors/error'
 import {
   EntitlementsConsumption,
@@ -19,6 +20,8 @@ import {
   GetEntitlementsConsumptionQuery,
   GetEntitlementsDocument,
   GetEntitlementsQuery,
+  GetExternalIdDocument,
+  GetExternalIdQuery,
   RedeemEntitlementsDocument,
   RedeemEntitlementsMutation,
 } from '../gen/graphqlTypes'
@@ -54,7 +57,7 @@ export class ApiClient {
       if (isAppSyncNetworkError(err)) {
         throw mapNetworkErrorToClientError(err)
       }
-      error = err.graphQLErrors?.[0] ?? err
+      error = (err as ApolloError).graphQLErrors?.[0] ?? err
     }
 
     if (error) {
@@ -84,7 +87,7 @@ export class ApiClient {
       if (isAppSyncNetworkError(err)) {
         throw mapNetworkErrorToClientError(err)
       }
-      error = err.graphQLErrors?.[0] ?? err
+      error = (err as ApolloError).graphQLErrors?.[0] ?? err
     }
     if (error) {
       throw this.mapGraphQLToClientError(error)
@@ -92,6 +95,35 @@ export class ApiClient {
 
     throw new FatalError(
       'getEntitlementsConsumption did not return any result or any error.',
+    )
+  }
+
+  public async getExternalId(): Promise<string> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let error: any
+    try {
+      const result = await this.client.query<GetExternalIdQuery>({
+        query: GetExternalIdDocument,
+        variables: {},
+        fetchPolicy: 'no-cache',
+      })
+
+      if (result.data) {
+        return result.data.getExternalId
+      }
+      error = result.errors?.[0]
+    } catch (err) {
+      if (isAppSyncNetworkError(err)) {
+        throw mapNetworkErrorToClientError(err)
+      }
+      error = (err as ApolloError).graphQLErrors?.[0] ?? err
+    }
+    if (error) {
+      throw this.mapGraphQLToClientError(error)
+    }
+
+    throw new FatalError(
+      'getExternalId did not return any result or any error.',
     )
   }
 
@@ -113,7 +145,7 @@ export class ApiClient {
       if (isAppSyncNetworkError(err)) {
         throw mapNetworkErrorToClientError(err)
       }
-      error = err.graphQLErrors?.[0] ?? err
+      error = (err as ApolloError).graphQLErrors?.[0] ?? err
     }
     if (error) {
       throw this.mapGraphQLToClientError(error)

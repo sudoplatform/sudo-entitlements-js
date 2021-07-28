@@ -22,7 +22,7 @@ export async function updateUserCustomClaims(
   const identityProvider = new AWS.CognitoIdentityServiceProvider({
     region: process.env.AWS_DEFAULT_REGION || 'us-east-1',
   })
-  const Username = userClient.getUserName()
+  const Username = await userClient.getUserName()
   if (!Username) {
     throw new Error('No username')
   }
@@ -42,7 +42,7 @@ export async function updateUserCustomClaims(
 
   await waitForExpect(async () => {
     await userClient.signInWithKey()
-    const idToken = userClient.getIdToken()
+    const idToken = await userClient.getIdToken()
     expect(idToken).toBeDefined()
     if (!idToken) {
       fail('idToken unexpectedly falsy')
@@ -52,8 +52,10 @@ export async function updateUserCustomClaims(
     if (!decoded || typeof decoded === 'string') {
       fail('decoded unexpectedly falsy or a string')
     }
-    const customTestClaim = decoded['custom:test']
-    const decodingResult = JSON.parse(customTestClaim)
+    const customTestClaim = decoded['custom:test'] as string
+    const decodingResult = JSON.parse(customTestClaim) as
+      | EntTestUserData
+      | undefined
     expect(decodingResult?.ent).toEqual(entTestUserData.ent)
   })
 }

@@ -43,3 +43,9 @@ if (integrationTestEntitlementsSetAvailable) {
 }
 export const describeIntegrationTestEntitlementsSetTests =
   _integrationTestEntitlementsSetTests
+
+console.log({
+  defaultEntitlementsSetForTestUsers,
+  integrationTestEntitlementsSetAvailable,
+  userAttributeAdmin,
+})

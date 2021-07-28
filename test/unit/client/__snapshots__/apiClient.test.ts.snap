@@ -4,4 +4,6 @@ exports[`ApiClient test suite getEntitlements tests should throw a FatalError if
 
 exports[`ApiClient test suite getEntitlementsConsumption tests should throw a FatalError if no data and no errors returned 1`] = `"getEntitlementsConsumption did not return any result or any error."`;
 
+exports[`ApiClient test suite getExternalId tests should throw a FatalError if no data and no errors returned 1`] = `"getExternalId did not return any result or any error."`;
+
 exports[`ApiClient test suite redeemEntitlements tests should throw a FatalError if no data and no errors returned 1`] = `"redeemEntitlements did not return any result or any error."`;

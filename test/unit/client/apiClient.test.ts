@@ -17,6 +17,7 @@ import {
   EntitlementsSet,
   GetEntitlementsConsumptionQuery,
   GetEntitlementsQuery,
+  GetExternalIdQuery,
   RedeemEntitlementsMutation,
 } from '../../../src/gen/graphqlTypes'
 
@@ -316,6 +317,106 @@ describe('ApiClient test suite', () => {
         await expect(apiClient.getEntitlementsConsumption()).rejects.toThrow(
           clientError,
         )
+      },
+    )
+  })
+
+  describe('getExternalId tests', () => {
+    it('should return data if returned', async () => {
+      const externalId = 'external-id'
+      when(
+        mockAWSAppSyncClient.query<GetExternalIdQuery>(anything()),
+      ).thenResolve({
+        data: { getExternalId: externalId },
+        loading: false,
+        networkStatus: NetworkStatus.ready,
+        stale: false,
+      })
+
+      await expect(apiClient.getExternalId()).resolves.toEqual(externalId)
+
+      verify(mockAWSAppSyncClient.query(anything())).once()
+    })
+
+    it('should throw a FatalError if no data and no errors returned', async () => {
+      when(mockAWSAppSyncClient.query(anything())).thenResolve({
+        data: undefined,
+        errors: undefined,
+        loading: false,
+        networkStatus: NetworkStatus.ready,
+        stale: false,
+      })
+
+      await expect(
+        apiClient.getExternalId(),
+      ).rejects.toThrowErrorMatchingSnapshot()
+
+      verify(mockAWSAppSyncClient.query(anything())).once()
+    })
+    describe.each`
+      code                                | error
+      ${'sudoplatform.InvalidTokenError'} | ${new InvalidTokenError()}
+      ${'sudoplatform.ServiceError'}      | ${new ServiceError('graphql-error')}
+    `('should map $code error', ({ code, error }) => {
+      it('when error is returned', async () => {
+        when(mockAWSAppSyncClient.query(anything())).thenResolve({
+          data: undefined,
+          loading: false,
+          networkStatus: NetworkStatus.ready,
+          stale: false,
+          errors: [
+            {
+              errorType: code,
+              message: 'graphql-error',
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            } as any,
+          ],
+        })
+
+        await expect(apiClient.getExternalId()).rejects.toThrow(error)
+      })
+
+      it('when error is thrown', async () => {
+        when(mockAWSAppSyncClient.query(anything())).thenReject({
+          message: 'error',
+          name: 'error',
+          graphQLErrors: [
+            {
+              name: 'GraphQLError',
+              errorType: code,
+              message: 'graphql-error',
+            },
+          ],
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } as any)
+
+        await expect(apiClient.getExternalId()).rejects.toThrow(error)
+      })
+    })
+
+    it.each`
+      networkError           | clientError
+      ${{ statusCode: 401 }} | ${notAuthorizedError}
+      ${{ statusCode: 500 }} | ${'default'}
+      ${{}}                  | ${'default'}
+    `(
+      'should map network error $networkError to $clientError',
+      async ({ networkError, clientError }) => {
+        when(mockAWSAppSyncClient.query(anything())).thenReject({
+          message: 'error',
+          name: 'error',
+          networkError,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } as any)
+
+        if (clientError === 'default') {
+          clientError = new RequestFailedError(
+            networkError,
+            networkError.statusCode,
+          )
+        }
+
+        await expect(apiClient.getExternalId()).rejects.toThrow(clientError)
       },
     )
   })

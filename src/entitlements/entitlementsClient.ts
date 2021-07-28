@@ -250,6 +250,18 @@ export interface SudoEntitlementsClient {
   getEntitlementsConsumption(): Promise<EntitlementsConsumption>
 
   /**
+   * Retrieve external ID for the user.
+   *
+   * @returns [[`string`]]: The user's external ID.
+   *
+   * @throws {@link InvalidTokenError}
+   * - Identity token contains no claims recognized as identifying the external user.
+   *
+   * @function
+   */
+  getExternalId(): Promise<string>
+
+  /**
    * Redeem entitlements for the currently logged in user.
    *
    * If the user has already redeemed entitlements then the user's current
@@ -308,6 +320,14 @@ export class DefaultSudoEntitlementsClient implements SudoEntitlementsClient {
     return EntitlementsConsumptionTransformer.toClient(entitlementsConsumption)
   }
 
+  async getExternalId(): Promise<string> {
+    const signedIn = await this.sudoUserClient.isSignedIn()
+    if (!signedIn) {
+      throw new SudoCommon.NotSignedInError()
+    }
+    const externalId = await this.apiClient.getExternalId()
+    return externalId
+  }
   async redeemEntitlements(): Promise<EntitlementsSet> {
     const signedIn = await this.sudoUserClient.isSignedIn()
     if (!signedIn) {
