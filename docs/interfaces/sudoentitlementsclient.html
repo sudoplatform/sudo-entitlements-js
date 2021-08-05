@@ -94,6 +94,7 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-external"><a href="sudoentitlementsclient.html#consumebooleanentitlements" class="tsd-kind-icon">consume<wbr>Boolean<wbr>Entitlements</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-external"><a href="sudoentitlementsclient.html#getentitlements" class="tsd-kind-icon">get<wbr>Entitlements</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-external"><a href="sudoentitlementsclient.html#getentitlementsconsumption" class="tsd-kind-icon">get<wbr>Entitlements<wbr>Consumption</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-external"><a href="sudoentitlementsclient.html#getexternalid" class="tsd-kind-icon">get<wbr>External<wbr>Id</a></li>
@@ -106,6 +107,62 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-external">
+					<a name="consumebooleanentitlements" class="tsd-anchor"></a>
+					<h3>consume<wbr>Boolean<wbr>Entitlements</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">consume<wbr>Boolean<wbr>Entitlements<span class="tsd-signature-symbol">(</span>entitlementNames<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in src/entitlements/entitlementsClient.ts:250</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Record consumption of a set of boolean entitlements.</p>
+								</div>
+								<p>This is to support services that want a record of
+									usage recorded but have no service side enforcement
+								point.</p>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>{@link NotSignedInError}
+										User is not signed in</p>
+									</dd>
+									<dt>throws</dt>
+									<dd><p>{@link InsufficientEntitlementsError}
+											User is not entitled to one or more of the boolean entitlements.
+											Check entitlements and that redeemEntitlements has been called
+										for the user.</p>
+									</dd>
+									<dt>throws</dt>
+									<dd><p>{@link InvalidArgumentError}
+											One or more of the specified entitlement names does not correspond
+										to a boolean entitlement defined to the entitlements serivce</p>
+									</dd>
+									<dt>throws</dt>
+									<dd><p>{@link ServiceError}
+											An error occurred within the entitlements service that indiciates an issue with
+										the configuration or operation of the service.   *</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>entitlementNames: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Boolean entitlement names to record consumption of</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-external">
 					<a name="getentitlements" class="tsd-anchor"></a>
 					<h3>get<wbr>Entitlements</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-external">
@@ -115,7 +172,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in src/entitlements/entitlementsClient.ts:233</li>
+									<li>Defined in src/entitlements/entitlementsClient.ts:260</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -140,7 +197,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in src/entitlements/entitlementsClient.ts:250</li>
+									<li>Defined in src/entitlements/entitlementsClient.ts:277</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -181,7 +238,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in src/entitlements/entitlementsClient.ts:262</li>
+									<li>Defined in src/entitlements/entitlementsClient.ts:289</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -214,7 +271,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in src/entitlements/entitlementsClient.ts:286</li>
+									<li>Defined in src/entitlements/entitlementsClient.ts:313</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -271,6 +328,9 @@
 					<li class="current tsd-kind-interface tsd-is-external">
 						<a href="sudoentitlementsclient.html" class="tsd-kind-icon">Sudo<wbr>Entitlements<wbr>Client</a>
 						<ul>
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-external">
+								<a href="sudoentitlementsclient.html#consumebooleanentitlements" class="tsd-kind-icon">consume<wbr>Boolean<wbr>Entitlements</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-external">
 								<a href="sudoentitlementsclient.html#getentitlements" class="tsd-kind-icon">get<wbr>Entitlements</a>
 							</li>

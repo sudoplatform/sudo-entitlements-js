@@ -223,6 +223,33 @@ export interface EntitlementsConsumption {
  */
 export interface SudoEntitlementsClient {
   /**
+   * Record consumption of a set of boolean entitlements.
+   *
+   * This is to support services that want a record of
+   * usage recorded but have no service side enforcement
+   * point.
+   *
+   * @param entitlementNames Boolean entitlement names to record consumption of
+   *
+   * @throws {@link NotSignedInError}
+   *   User is not signed in
+   *
+   * @throws {@link InsufficientEntitlementsError}
+   *   User is not entitled to one or more of the boolean entitlements.
+   *   Check entitlements and that redeemEntitlements has been called
+   *   for the user.
+   *
+   * @throws {@link InvalidArgumentError}
+   *   One or more of the specified entitlement names does not correspond
+   *   to a boolean entitlement defined to the entitlements serivce
+   *
+   * @throws {@link ServiceError}
+   *   An error occurred within the entitlements service that indiciates an issue with
+   *   the configuration or operation of the service.   *
+   */
+  consumeBooleanEntitlements(entitlementNames: string[]): Promise<void>
+
+  /**
    * Return any entitlements for the currently logged in user or null if none.
    *
    * This will return undefined for any of the conditions that return Sudos
@@ -336,5 +363,14 @@ export class DefaultSudoEntitlementsClient implements SudoEntitlementsClient {
 
     const entitlements = await this.apiClient.redeemEntitlements()
     return EntitlementsSetTransformer.toClient(entitlements)
+  }
+
+  async consumeBooleanEntitlements(entitlementNames: string[]): Promise<void> {
+    const signedIn = await this.sudoUserClient.isSignedIn()
+    if (!signedIn) {
+      throw new SudoCommon.NotSignedInError()
+    }
+
+    await this.apiClient.consumeBooleanEntitlements(entitlementNames)
   }
 }

@@ -90,4 +90,25 @@ type Mutation {
   # sudoplatform.entitlements.AmbiguousEntitlementsError:
   #   - Multiple identity token claims are recognized and specify conflicting entitlement sets
   redeemEntitlements: EntitlementsSet!
+
+  # Record consumption of a set of boolean entitlements.
+  #
+  # This is to support services that want a record of
+  # usage recorded but have no service side enforcement
+  # point.
+  #
+  # Returns true if user is entitled to all boolean entitlements listed
+  # Never returns false but returns the following errors.
+  #
+  # sudoplatform.InsufficientEntitlementsError:
+  #   - User is not entitled to one or more of the boolean entitlements
+  #
+  # sudoplatform.InvalidArgumentError:
+  #   - One or more of the specified entitlement names does not correspond
+  #     to a boolean entitlement defined to the entitlements serivce
+  #
+  # sudoplatform.ServiceError:
+  #   - An error occurred within the entitlements service that indiciates an issue with
+  #     the configuration or operation of the service.
+  consumeBooleanEntitlements(entitlementNames: [String!]!): Boolean!
 }

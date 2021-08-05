@@ -94,6 +94,7 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="apiclient.html#consumebooleanentitlements" class="tsd-kind-icon">consume<wbr>Boolean<wbr>Entitlements</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="apiclient.html#getentitlements" class="tsd-kind-icon">get<wbr>Entitlements</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="apiclient.html#getentitlementsconsumption" class="tsd-kind-icon">get<wbr>Entitlements<wbr>Consumption</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="apiclient.html#getexternalid" class="tsd-kind-icon">get<wbr>External<wbr>Id</a></li>
@@ -115,7 +116,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in src/client/apiClient.ts:33</li>
+									<li>Defined in src/client/apiClient.ts:35</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -132,6 +133,29 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="consumebooleanentitlements" class="tsd-anchor"></a>
+					<h3>consume<wbr>Boolean<wbr>Entitlements</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">consume<wbr>Boolean<wbr>Entitlements<span class="tsd-signature-symbol">(</span>entitlementNames<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in src/client/apiClient.ts:161</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>entitlementNames: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
 					<a name="getentitlements" class="tsd-anchor"></a>
 					<h3>get<wbr>Entitlements</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
@@ -141,7 +165,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in src/client/apiClient.ts:42</li>
+									<li>Defined in src/client/apiClient.ts:44</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../globals.html#entitlementsset" class="tsd-signature-type">EntitlementsSet</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -158,7 +182,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in src/client/apiClient.ts:72</li>
+									<li>Defined in src/client/apiClient.ts:74</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../globals.html#entitlementsconsumption" class="tsd-signature-type">EntitlementsConsumption</a><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -175,7 +199,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in src/client/apiClient.ts:101</li>
+									<li>Defined in src/client/apiClient.ts:103</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -192,7 +216,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in src/client/apiClient.ts:130</li>
+									<li>Defined in src/client/apiClient.ts:132</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../globals.html#entitlementsset" class="tsd-signature-type">EntitlementsSet</a><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -218,6 +242,9 @@
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-external">
 								<a href="apiclient.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="apiclient.html#consumebooleanentitlements" class="tsd-kind-icon">consume<wbr>Boolean<wbr>Entitlements</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
 								<a href="apiclient.html#getentitlements" class="tsd-kind-icon">get<wbr>Entitlements</a>

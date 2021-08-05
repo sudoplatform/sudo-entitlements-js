@@ -14,6 +14,8 @@ import AWSAppSyncClient from 'aws-appsync'
 import { ApolloError } from 'apollo-client'
 import { AmbiguousEntitlementsError } from '../errors/error'
 import {
+  ConsumeBooleanEntitlementsDocument,
+  ConsumeBooleanEntitlementsMutation,
   EntitlementsConsumption,
   EntitlementsSet,
   GetEntitlementsConsumptionDocument,
@@ -153,6 +155,38 @@ export class ApiClient {
 
     throw new FatalError(
       'redeemEntitlements did not return any result or any error.',
+    )
+  }
+
+  public async consumeBooleanEntitlements(
+    entitlementNames: string[],
+  ): Promise<boolean> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let error: any
+    try {
+      const result =
+        await this.client.mutate<ConsumeBooleanEntitlementsMutation>({
+          mutation: ConsumeBooleanEntitlementsDocument,
+          variables: { entitlementNames },
+          fetchPolicy: 'no-cache',
+        })
+
+      if (result.data) {
+        return result.data.consumeBooleanEntitlements
+      }
+      error = result.errors?.[0]
+    } catch (err) {
+      if (isAppSyncNetworkError(err)) {
+        throw mapNetworkErrorToClientError(err)
+      }
+      error = (err as ApolloError).graphQLErrors?.[0] ?? err
+    }
+    if (error) {
+      throw this.mapGraphQLToClientError(error)
+    }
+
+    throw new FatalError(
+      'consumeBooleanEntitlements did not return any result or any error.',
     )
   }
 

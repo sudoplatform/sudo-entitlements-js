@@ -1,7 +1,15 @@
 import * as SudoCommon from '@sudoplatform/sudo-common'
 import { IllegalArgumentError } from '@sudoplatform/sudo-common'
 import { SudoUserClient } from '@sudoplatform/sudo-user'
-import { instance, mock, reset, verify, when } from 'ts-mockito'
+import {
+  anything,
+  capture,
+  instance,
+  mock,
+  reset,
+  verify,
+  when,
+} from 'ts-mockito'
 import { ApiClient } from '../../../src/client/apiClient'
 import { EntitlementsConsumptionTransformer } from '../../../src/data/transformers/entitlementsConsumptionTransformer'
 import { EntitlementsSetTransformer } from '../../../src/data/transformers/entitlementsSetTransformer'
@@ -265,6 +273,39 @@ describe('DefaultSudoEntitlementsClient test suite', () => {
 
       verify(mockSudoUserClient.isSignedIn()).once()
       verify(mockApiClient.redeemEntitlements()).once()
+    })
+  })
+
+  describe('consumeBooleanEntitlements tests', () => {
+    const entitlementNames = ['some-boolean-entitlement']
+
+    it('should throw NotSignedInError if not signed in', async () => {
+      when(mockSudoUserClient.isSignedIn()).thenResolve(false)
+
+      await expect(
+        sudoEntitlementsClient.consumeBooleanEntitlements(entitlementNames),
+      ).rejects.toThrow(SudoCommon.NotSignedInError)
+
+      verify(mockSudoUserClient.isSignedIn()).once()
+      verify(mockApiClient.consumeBooleanEntitlements(anything())).never()
+    })
+
+    it('should invoke ApiClient.consumeBooleanEntitlements successfully', async () => {
+      when(mockSudoUserClient.isSignedIn()).thenResolve(true)
+      when(mockApiClient.consumeBooleanEntitlements(anything())).thenResolve(
+        true,
+      )
+
+      await expect(
+        sudoEntitlementsClient.consumeBooleanEntitlements(entitlementNames),
+      ).resolves.toBeUndefined()
+
+      verify(mockSudoUserClient.isSignedIn()).once()
+      verify(mockApiClient.consumeBooleanEntitlements(anything())).once()
+      const [actualEntitlementNames] = capture(
+        mockApiClient.consumeBooleanEntitlements,
+      ).first()
+      expect(actualEntitlementNames).toEqual(entitlementNames)
     })
   })
 })

@@ -1,5 +1,6 @@
 import { DefaultApiClientManager } from '@sudoplatform/sudo-api-client'
 import {
+  IllegalArgumentError,
   InvalidTokenError,
   NoEntitlementsError,
   NotAuthorizedError,
@@ -425,6 +426,70 @@ describe('sudo-entitlements API integration tests', () => {
             sudoEntitlements.redeemEntitlements(),
           ).rejects.toThrowError(new InvalidTokenError())
         })
+      },
+    )
+  })
+
+  describe('consumeBooleanEntitlements tests', () => {
+    describe('Common tests', () => {
+      it('should throw NotAuthorizedError when not authenticated', async () => {
+        expectBeforesComplete()
+
+        sudoUser.overrideLatestAuthToken = ''
+
+        await expect(
+          sudoEntitlements.consumeBooleanEntitlements([]),
+        ).rejects.toThrow(new NotAuthorizedError())
+      })
+
+      it('should throw IllegalArgumentError for an invalid entitlement name', async () => {
+        expectBeforesComplete()
+
+        const invaidEntitlementName = v4()
+        await expect(
+          sudoEntitlements.consumeBooleanEntitlements([invaidEntitlementName]),
+        ).rejects.toEqual(new IllegalArgumentError())
+      })
+    })
+
+    describeUserAttributeAdminTests(
+      'Tests requiring user attribute admin authority',
+      () => {
+        describeIntegrationTestEntitlementsSetTests(
+          'Tests needing integration-test entitlements set',
+          () => {
+            it('should permit consumption of boolean entitlement', async () => {
+              expectBeforesComplete()
+
+              await updateUserCustomClaims(userPoolId, sudoUser, {
+                ent: {
+                  externalId: await sudoUser.getUserName(),
+                  claims: {
+                    'custom:entitlementsSet': 'integration-test',
+                  },
+                },
+              })
+
+              await sudoEntitlements.redeemEntitlements()
+
+              let consumed = await sudoEntitlements.getEntitlementsConsumption()
+              expect(consumed.consumption).toHaveLength(0)
+
+              await sudoEntitlements.consumeBooleanEntitlements([
+                'sudoplatform.test.testEntitlement-2',
+              ])
+
+              consumed = await sudoEntitlements.getEntitlementsConsumption()
+              expect(consumed.consumption).toHaveLength(1)
+              expect(consumed.consumption[0]).toMatchObject({
+                name: 'sudoplatform.test.testEntitlement-2',
+                available: 0,
+                value: 1,
+                consumed: 1,
+              })
+            })
+          },
+        )
       },
     )
   })

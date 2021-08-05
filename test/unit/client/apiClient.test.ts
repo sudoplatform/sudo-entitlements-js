@@ -1,5 +1,7 @@
 import { ApiClientManager } from '@sudoplatform/sudo-api-client'
 import {
+  IllegalArgumentError,
+  InsufficientEntitlementsError,
   InvalidTokenError,
   NoEntitlementsError,
   NotAuthorizedError,
@@ -13,6 +15,7 @@ import { anything, instance, mock, reset, verify, when } from 'ts-mockito'
 import { ApiClient } from '../../../src/client/apiClient'
 import { AmbiguousEntitlementsError } from '../../../src/errors/error'
 import {
+  ConsumeBooleanEntitlementsMutation,
   EntitlementsConsumption,
   EntitlementsSet,
   GetEntitlementsConsumptionQuery,
@@ -532,6 +535,120 @@ describe('ApiClient test suite', () => {
         await expect(apiClient.redeemEntitlements()).rejects.toThrow(
           clientError,
         )
+      },
+    )
+  })
+
+  describe('consumeBooleanEntitlements tests', () => {
+    const entitlementNames = ['some-boolean-entitlement']
+    it('should throw a FatalError if no data and no errors returned', async () => {
+      when(
+        mockAWSAppSyncClient.mutate<ConsumeBooleanEntitlementsMutation>(
+          anything(),
+        ),
+      ).thenResolve({})
+
+      await expect(
+        apiClient.consumeBooleanEntitlements(entitlementNames),
+      ).rejects.toThrowErrorMatchingSnapshot()
+
+      verify(mockAWSAppSyncClient.mutate(anything())).once()
+    })
+
+    it('should resolve if API returns', async () => {
+      when(
+        mockAWSAppSyncClient.mutate<ConsumeBooleanEntitlementsMutation>(
+          anything(),
+        ),
+      ).thenResolve({
+        data: { consumeBooleanEntitlements: true },
+      })
+
+      await expect(
+        apiClient.consumeBooleanEntitlements(entitlementNames),
+      ).resolves.toEqual(true)
+
+      verify(mockAWSAppSyncClient.mutate(anything())).once()
+    })
+
+    describe.each`
+      code                                            | error
+      ${'sudoplatform.InsufficientEntitlementsError'} | ${new InsufficientEntitlementsError()}
+      ${'sudoplatform.InvalidArgumentError'}          | ${new IllegalArgumentError()}
+      ${'sudoplatform.ServiceError'}                  | ${new ServiceError('graphql-error')}
+    `('should map $code error', ({ code, error }) => {
+      it('when error is returned', async () => {
+        when(
+          mockAWSAppSyncClient.mutate<ConsumeBooleanEntitlementsMutation>(
+            anything(),
+          ),
+        ).thenResolve({
+          errors: [
+            {
+              errorType: code,
+              message: 'graphql-error',
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            } as any,
+          ],
+        })
+        await expect(
+          apiClient.consumeBooleanEntitlements(entitlementNames),
+        ).rejects.toThrow(error)
+      })
+
+      it('when error is thrown', async () => {
+        when(
+          mockAWSAppSyncClient.mutate<ConsumeBooleanEntitlementsMutation>(
+            anything(),
+          ),
+        ).thenReject({
+          message: 'error',
+          name: 'error',
+          graphQLErrors: [
+            {
+              name: 'GraphQLError',
+              errorType: code,
+              message: 'graphql-error',
+            },
+          ],
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } as any)
+
+        await expect(
+          apiClient.consumeBooleanEntitlements(entitlementNames),
+        ).rejects.toThrow(error)
+      })
+    })
+
+    it.each`
+      networkError           | clientError
+      ${{ statusCode: 401 }} | ${notAuthorizedError}
+      ${{ statusCode: 500 }} | ${'default'}
+      ${{}}                  | ${'default'}
+    `(
+      'should map network error $networkError to $clientError',
+      async ({ networkError, clientError }) => {
+        when(
+          mockAWSAppSyncClient.mutate<ConsumeBooleanEntitlementsMutation>(
+            anything(),
+          ),
+        ).thenReject({
+          message: 'error',
+          name: 'error',
+          networkError,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } as any)
+
+        if (clientError === 'default') {
+          clientError = new RequestFailedError(
+            networkError,
+            networkError.statusCode,
+          )
+        }
+
+        await expect(
+          apiClient.consumeBooleanEntitlements(entitlementNames),
+        ).rejects.toThrow(clientError)
       },
     )
   })
