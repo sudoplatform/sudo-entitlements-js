@@ -16,7 +16,3 @@ generates:
 hooks:
   afterAllFileWrite:
     - prettier --write
-config:
-  maybeValue: T | undefined
-  scalars:
-    AWSJSON: unknown

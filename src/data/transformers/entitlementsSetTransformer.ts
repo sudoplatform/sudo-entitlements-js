@@ -9,7 +9,7 @@ export class EntitlementsSetTransformer {
       updatedAt: new Date(graphql.updatedAtEpochMs),
       version: graphql.version,
       name: graphql.name,
-      description: graphql.description,
+      description: graphql.description ?? undefined,
       entitlements: graphql.entitlements.map(EntitlementTransformer.toClient),
     }
   }

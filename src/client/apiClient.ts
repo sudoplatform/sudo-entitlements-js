@@ -42,8 +42,7 @@ export class ApiClient {
   }
 
   public async getEntitlements(): Promise<EntitlementsSet | null> {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let error: any
+    let error: AppSyncError
     try {
       const result = await this.client.query<GetEntitlementsQuery>({
         query: GetEntitlementsDocument,
@@ -54,10 +53,11 @@ export class ApiClient {
       if (result.data) {
         return result.data.getEntitlements ?? null
       }
-      error = result.errors?.[0]
+      error = result.errors?.[0] as AppSyncError
     } catch (err) {
-      if (isAppSyncNetworkError(err)) {
-        throw mapNetworkErrorToClientError(err)
+      const appSyncError = err as AppSyncError
+      if (isAppSyncNetworkError(appSyncError)) {
+        throw mapNetworkErrorToClientError(appSyncError)
       }
       error = (err as ApolloError).graphQLErrors?.[0] ?? err
     }
@@ -72,8 +72,7 @@ export class ApiClient {
   }
 
   public async getEntitlementsConsumption(): Promise<EntitlementsConsumption> {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let error: any
+    let error: AppSyncError
     try {
       const result = await this.client.query<GetEntitlementsConsumptionQuery>({
         query: GetEntitlementsConsumptionDocument,
@@ -84,10 +83,11 @@ export class ApiClient {
       if (result.data) {
         return result.data.getEntitlementsConsumption
       }
-      error = result.errors?.[0]
+      error = result.errors?.[0] as AppSyncError
     } catch (err) {
-      if (isAppSyncNetworkError(err)) {
-        throw mapNetworkErrorToClientError(err)
+      const appSyncError = err as Error
+      if (isAppSyncNetworkError(appSyncError)) {
+        throw mapNetworkErrorToClientError(appSyncError)
       }
       error = (err as ApolloError).graphQLErrors?.[0] ?? err
     }
@@ -101,8 +101,7 @@ export class ApiClient {
   }
 
   public async getExternalId(): Promise<string> {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let error: any
+    let error: AppSyncError
     try {
       const result = await this.client.query<GetExternalIdQuery>({
         query: GetExternalIdDocument,
@@ -113,10 +112,11 @@ export class ApiClient {
       if (result.data) {
         return result.data.getExternalId
       }
-      error = result.errors?.[0]
+      error = result.errors?.[0] as AppSyncError
     } catch (err) {
-      if (isAppSyncNetworkError(err)) {
-        throw mapNetworkErrorToClientError(err)
+      const appSyncError = err as AppSyncError
+      if (isAppSyncNetworkError(appSyncError)) {
+        throw mapNetworkErrorToClientError(appSyncError)
       }
       error = (err as ApolloError).graphQLErrors?.[0] ?? err
     }
@@ -130,8 +130,7 @@ export class ApiClient {
   }
 
   public async redeemEntitlements(): Promise<EntitlementsSet> {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let error: any
+    let error: AppSyncError
     try {
       const result = await this.client.mutate<RedeemEntitlementsMutation>({
         mutation: RedeemEntitlementsDocument,
@@ -140,12 +139,13 @@ export class ApiClient {
       })
 
       if (result.data) {
-        return result.data.redeemEntitlements ?? null
+        return result.data.redeemEntitlements
       }
-      error = result.errors?.[0]
+      error = result.errors?.[0] as AppSyncError
     } catch (err) {
-      if (isAppSyncNetworkError(err)) {
-        throw mapNetworkErrorToClientError(err)
+      const appSyncError = err as AppSyncError
+      if (isAppSyncNetworkError(appSyncError)) {
+        throw mapNetworkErrorToClientError(appSyncError)
       }
       error = (err as ApolloError).graphQLErrors?.[0] ?? err
     }
@@ -161,8 +161,7 @@ export class ApiClient {
   public async consumeBooleanEntitlements(
     entitlementNames: string[],
   ): Promise<boolean> {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let error: any
+    let error: AppSyncError
     try {
       const result =
         await this.client.mutate<ConsumeBooleanEntitlementsMutation>({
@@ -174,10 +173,11 @@ export class ApiClient {
       if (result.data) {
         return result.data.consumeBooleanEntitlements
       }
-      error = result.errors?.[0]
+      error = result.errors?.[0] as AppSyncError
     } catch (err) {
-      if (isAppSyncNetworkError(err)) {
-        throw mapNetworkErrorToClientError(err)
+      const appSyncError = err as AppSyncError
+      if (isAppSyncNetworkError(appSyncError)) {
+        throw mapNetworkErrorToClientError(appSyncError)
       }
       error = (err as ApolloError).graphQLErrors?.[0] ?? err
     }

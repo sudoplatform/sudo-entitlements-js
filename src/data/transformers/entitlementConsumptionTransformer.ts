@@ -1,7 +1,5 @@
-import {
-  EntitlementConsumption,
-  EntitlementConsumption as EntitlementConsumptionGraphQL,
-} from '../../gen/graphqlTypes'
+import { EntitlementConsumption } from '../../entitlements/entitlementsClient'
+import { EntitlementConsumption as EntitlementConsumptionGraphQL } from '../../gen/graphqlTypes'
 import { EntitlementConsumerTransformer } from './entitlementConsumerTransformer'
 
 export class EntitlementConsumptionTransformer {
@@ -16,8 +14,8 @@ export class EntitlementConsumptionTransformer {
         : undefined,
       consumed: graphql.consumed,
       available: graphql.available,
-      firstConsumedAtEpochMs: graphql.firstConsumedAtEpochMs,
-      lastConsumedAtEpochMs: graphql.lastConsumedAtEpochMs,
+      firstConsumedAtEpochMs: graphql.firstConsumedAtEpochMs ?? undefined,
+      lastConsumedAtEpochMs: graphql.lastConsumedAtEpochMs ?? undefined,
     }
   }
 

@@ -5,7 +5,7 @@ export class EntitlementTransformer {
   public static toClient(graphql: EntitlementGraphQL): EntitlementClient {
     return {
       name: graphql.name,
-      description: graphql.description,
+      description: graphql.description ?? undefined,
       value: graphql.value,
     }
   }

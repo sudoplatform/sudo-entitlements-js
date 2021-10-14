@@ -119,9 +119,7 @@ describe('Bad config sudo-entitlements API integration tests', () => {
       expectBeforesComplete()
       await expect(
         sudoEntitlements.getEntitlements(),
-      ).rejects.toThrowErrorMatchingInlineSnapshot(
-        '"API request failed. cause: ServerParseError: Unexpected token < in JSON at position 0, statusCode: 403"',
-      )
+      ).rejects.toThrowErrorMatchingSnapshot()
     })
   })
 
@@ -129,9 +127,7 @@ describe('Bad config sudo-entitlements API integration tests', () => {
     it('should throw RequestFailedError when connection fails', async () => {
       await expect(
         sudoEntitlements.getEntitlementsConsumption(),
-      ).rejects.toThrowErrorMatchingInlineSnapshot(
-        '"API request failed. cause: ServerParseError: Unexpected token < in JSON at position 0, statusCode: 403"',
-      )
+      ).rejects.toThrowErrorMatchingSnapshot()
     })
   })
 
@@ -139,9 +135,7 @@ describe('Bad config sudo-entitlements API integration tests', () => {
     it('should throw RequestFailedError when connection fails', async () => {
       await expect(
         sudoEntitlements.redeemEntitlements(),
-      ).rejects.toThrowErrorMatchingInlineSnapshot(
-        '"API request failed. cause: ServerParseError: Unexpected token < in JSON at position 0, statusCode: 403"',
-      )
+      ).rejects.toThrowErrorMatchingSnapshot()
     })
   })
 })

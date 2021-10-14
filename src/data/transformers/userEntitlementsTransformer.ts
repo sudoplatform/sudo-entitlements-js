@@ -5,7 +5,7 @@ import { EntitlementTransformer } from './entitlementTransformer'
 export class UserEntitlementsTransformer {
   public static toClient(graphql: UserEntitlementsGraphQL): UserEntitlements {
     return {
-      entitlementsSetName: graphql.entitlementsSetName,
+      entitlementsSetName: graphql.entitlementsSetName ?? undefined,
       version: graphql.version,
       entitlements: graphql.entitlements.map((e) =>
         EntitlementTransformer.toClient(e),

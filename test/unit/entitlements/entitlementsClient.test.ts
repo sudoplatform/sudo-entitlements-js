@@ -19,6 +19,7 @@ import {
   EntitlementsSet,
   splitUserEntitlementsVersion,
 } from '../../../src/entitlements/entitlementsClient'
+import { DefaultSudoEntitlementsClientPrivateOptions } from '../../../src/private/defaultSudoEntitlementsClientPrivateOptions'
 
 describe('DefaultSudoEntitlementsClient test suite', () => {
   const mockSudoUserClient = mock<SudoUserClient>()
@@ -28,9 +29,14 @@ describe('DefaultSudoEntitlementsClient test suite', () => {
   beforeEach(() => {
     reset(mockSudoUserClient)
     reset(mockApiClient)
+
+    const privateOptions: DefaultSudoEntitlementsClientPrivateOptions = {
+      apiClient: instance(mockApiClient),
+    }
+
     sudoEntitlementsClient = new DefaultSudoEntitlementsClient(
       instance(mockSudoUserClient),
-      instance(mockApiClient),
+      privateOptions,
     )
   })
 

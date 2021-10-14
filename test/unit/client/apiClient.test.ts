@@ -451,22 +451,6 @@ describe('ApiClient test suite', () => {
       verify(mockAWSAppSyncClient.mutate(anything())).once()
     })
 
-    it.each`
-      result
-      ${undefined}
-      ${null}
-    `('should return null if $result returned', async ({ result }) => {
-      when(
-        mockAWSAppSyncClient.mutate<RedeemEntitlementsMutation>(anything()),
-      ).thenResolve({
-        data: { redeemEntitlements: result },
-      })
-
-      await expect(apiClient.redeemEntitlements()).resolves.toEqual(null)
-
-      verify(mockAWSAppSyncClient.mutate(anything())).once()
-    })
-
     describe.each`
       code                                                      | error
       ${'sudoplatform.entitlements.AmbiguousEntitlementsError'} | ${new AmbiguousEntitlementsError()}

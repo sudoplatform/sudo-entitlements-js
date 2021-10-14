@@ -4,6 +4,7 @@ import { SudoUserClient } from '@sudoplatform/sudo-user'
 import { ApiClient } from '../client/apiClient'
 import { EntitlementsConsumptionTransformer } from '../data/transformers/entitlementsConsumptionTransformer'
 import { EntitlementsSetTransformer } from '../data/transformers/entitlementsSetTransformer'
+import { DefaultSudoEntitlementsClientPrivateOptions } from '../private/defaultSudoEntitlementsClientPrivateOptions'
 
 /**
  * Representation of an entitlement
@@ -313,14 +314,20 @@ export interface SudoEntitlementsClient {
   redeemEntitlements(): Promise<EntitlementsSet>
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface DefaultSudoEntitlementsClientOptions {}
+
 export class DefaultSudoEntitlementsClient implements SudoEntitlementsClient {
   private readonly apiClient: ApiClient
 
   public constructor(
     private readonly sudoUserClient: SudoUserClient,
-    apiClient?: ApiClient,
+    options?: DefaultSudoEntitlementsClientOptions,
   ) {
-    this.apiClient = apiClient ?? new ApiClient()
+    const privateOptions = options as
+      | DefaultSudoEntitlementsClientPrivateOptions
+      | undefined
+    this.apiClient = privateOptions?.apiClient ?? new ApiClient()
   }
 
   async getEntitlements(): Promise<EntitlementsSet | undefined> {
@@ -355,6 +362,7 @@ export class DefaultSudoEntitlementsClient implements SudoEntitlementsClient {
     const externalId = await this.apiClient.getExternalId()
     return externalId
   }
+
   async redeemEntitlements(): Promise<EntitlementsSet> {
     const signedIn = await this.sudoUserClient.isSignedIn()
     if (!signedIn) {
