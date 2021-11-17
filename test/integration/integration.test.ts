@@ -30,6 +30,18 @@ import { updateUserCustomClaims } from './updateUserCustomClaims'
 require('isomorphic-fetch')
 global.crypto = require('isomorphic-webcrypto')
 
+if (typeof btoa === 'undefined') {
+  global.btoa = function (b) {
+    return Buffer.from(b, 'binary').toString('base64')
+  }
+}
+
+if (typeof atob === 'undefined') {
+  global.atob = function (a) {
+    return Buffer.from(a, 'base64').toString('binary')
+  }
+}
+
 class TestSudoUserClient extends DefaultSudoUserClient {
   public overrideLatestAuthToken?: string
 

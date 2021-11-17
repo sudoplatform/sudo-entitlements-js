@@ -16,6 +16,18 @@ import {
 require('isomorphic-fetch')
 global.crypto = require('isomorphic-webcrypto')
 
+if (typeof btoa === 'undefined') {
+  global.btoa = function (b) {
+    return Buffer.from(b, 'binary').toString('base64')
+  }
+}
+
+if (typeof atob === 'undefined') {
+  global.atob = function (a) {
+    return Buffer.from(a, 'base64').toString('binary')
+  }
+}
+
 /*
  * All tests requiring bad configuration are implemented in this single file
  * since it's not possible for us to reset the constructed AWSAppSyncClient

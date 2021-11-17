@@ -28,9 +28,9 @@
     "docs"
   ],
   "peerDependencies": {
-    "@sudoplatform/sudo-api-client": "^8.0.0",
-    "@sudoplatform/sudo-common": "^5.3.0",
-    "@sudoplatform/sudo-user": "^8.0.0 || ^9.0.0"
+    "@sudoplatform/sudo-api-client": "^9.0.1",
+    "@sudoplatform/sudo-common": "^6.0.0",
+    "@sudoplatform/sudo-user": "^10.0.0"
   },
   "dependencies": {
     "apollo-cache-inmemory": "^1.6.6",
@@ -40,7 +40,7 @@
     "io-ts": "^2.2.16",
     "monocle-ts": "^2.3.11",
     "newtype-ts": "^0.3.4",
-    "redux": "^4.1.1"
+    "redux": "^4.1.2"
   },
   "resolutions": {
     "**/apollo-link": "^1.2.14",
@@ -53,26 +53,27 @@
     "**/node-fetch": "^2.6.5",
     "path-parse": "^1.0.7",
     "@graphql-codegen/cli/**/ansi-regex": "^5.0.1",
-    "jest/**/tmpl": "^1.0.5"
+    "jest/**/tmpl": "^1.0.5",
+    "aws-sdk": "^2.814.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.15.7",
-    "@babel/core": "^7.15.8",
-    "@babel/plugin-proposal-class-properties": "^7.14.5",
-    "@babel/plugin-proposal-private-methods": "^7.14.5",
-    "@babel/preset-env": "^7.15.8",
-    "@babel/preset-typescript": "^7.15.0",
+    "@babel/cli": "^7.16.0",
+    "@babel/core": "^7.16.0",
+    "@babel/plugin-proposal-class-properties": "^7.16.0",
+    "@babel/plugin-proposal-private-methods": "^7.16.0",
+    "@babel/preset-env": "^7.16.0",
+    "@babel/preset-typescript": "^7.16.0",
     "@graphql-codegen/add": "^3.1.0",
     "@graphql-codegen/cli": "^2.2.1",
     "@graphql-codegen/typed-document-node": "^2.1.6",
     "@graphql-codegen/typescript": "^2.2.4",
     "@graphql-codegen/typescript-operations": "^2.1.8",
     "@graphql-typed-document-node/apollo-client-2": "^1.0.0",
-    "@sudoplatform/sudo-api-client": "^8.2.0",
-    "@sudoplatform/sudo-common": "^5.10.1",
-    "@sudoplatform/sudo-user": "^9.1.1",
+    "@sudoplatform/sudo-api-client": "^9.0.1",
+    "@sudoplatform/sudo-common": "^6.0.0",
+    "@sudoplatform/sudo-user": "^10.0.0",
     "@types/jest": "^27.0.2",
-    "@types/lodash": "^4.14.176",
+    "@types/lodash": "^4.14.177",
     "@types/uuid": "^8.3.1",
     "@typescript-eslint/eslint-plugin": "^5.2.0",
     "@typescript-eslint/parser": "^5.2.0",
@@ -87,7 +88,7 @@
     "prettier": "^2.4.1",
     "ts-jest": "^27.0.7",
     "ts-mockito": "^2.6.1",
-    "typedoc": "0.22.7",
+    "typedoc": "^0.22.9",
     "typescript": "^4.4.4",
     "uuid": "^8.3.2",
     "wait-for-expect": "^3.0.2"
