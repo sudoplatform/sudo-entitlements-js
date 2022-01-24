@@ -10,3 +10,4 @@ yarn-error.log
 yalc.lock
 build
 .env
+package.json.old

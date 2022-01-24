@@ -11,6 +11,10 @@ import {
   TESTAuthenticationProvider,
 } from '@sudoplatform/sudo-user'
 import { SudoUserOptions } from '@sudoplatform/sudo-user/lib/user/user-client'
+import {
+  DefaultSudoEntitlementsAdminClient,
+  SudoEntitlementsAdminClient,
+} from '@sudoplatform/sudo-entitlements-admin'
 import fs from 'fs'
 import {
   DefaultSudoEntitlementsClient,
@@ -25,7 +29,6 @@ import {
   describeNoDefaultEntitlementsSetForTestUsersTests,
   describeUserAttributeAdminTests,
 } from './describe'
-import { updateUserCustomClaims } from './updateUserCustomClaims'
 
 require('isomorphic-fetch')
 global.crypto = require('isomorphic-webcrypto')
@@ -63,8 +66,8 @@ describe('sudo-entitlements API integration tests', () => {
   jest.setTimeout(30000)
 
   let sudoEntitlements: SudoEntitlementsClient
+  let sudoEntitlementsAdmin: SudoEntitlementsAdminClient
   let sudoUser: TestSudoUserClient
-  let userPoolId: string
   let beforeAllComplete = false
   let beforeEachComplete = false
   let testAuthenticationProvider: TESTAuthenticationProvider
@@ -106,10 +109,12 @@ describe('sudo-entitlements API integration tests', () => {
     if (!identityServiceConfig?.poolId) {
       fail('identityServiceConfig.poolId unexpectedly falsy')
     }
-    userPoolId = identityServiceConfig.poolId
     sudoUser = new TestSudoUserClient()
     DefaultApiClientManager.getInstance().setAuthClient(sudoUser)
     sudoEntitlements = new DefaultSudoEntitlementsClient(sudoUser)
+    const adminAPIKEY = process.env.ADMIN_API_KEY || 'IAM'
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    sudoEntitlementsAdmin = new DefaultSudoEntitlementsAdminClient(adminAPIKEY)
 
     beforeAllComplete = true
   })
@@ -158,16 +163,10 @@ describe('sudo-entitlements API integration tests', () => {
       'Tests requiring user attribute admin authority',
       () => {
         it('should return correct external ID before redemption', async () => {
-          const externalId = `get-external-id-before-redeem-${v4()}`
-          await updateUserCustomClaims(userPoolId, sudoUser, {
-            ent: {
-              externalId,
-              claims: {},
-            },
-          })
+          const userName = await sudoUser.getUserName()
 
           await expect(sudoEntitlements.getExternalId()).resolves.toEqual(
-            externalId,
+            userName,
           )
         })
 
@@ -175,18 +174,17 @@ describe('sudo-entitlements API integration tests', () => {
           'Tests needing integration-test entitlements set',
           () => {
             it('should return correct external ID after redemption', async () => {
-              const externalId = `get-external-id-after-redeem-${v4()}`
-              await updateUserCustomClaims(userPoolId, sudoUser, {
-                ent: {
-                  externalId,
-                  claims: { 'custom:entitlementsSet': 'integration-test' },
-                },
-              })
+              const userName = await sudoUser.getUserName()
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+              await sudoEntitlementsAdmin.applyEntitlementsSetToUser(
+                userName,
+                'integration-test',
+              )
 
               await sudoEntitlements.redeemEntitlements()
 
               await expect(sudoEntitlements.getExternalId()).resolves.toEqual(
-                externalId,
+                userName,
               )
             })
           },
@@ -196,18 +194,11 @@ describe('sudo-entitlements API integration tests', () => {
           'Default entitlements set for test users tests',
           () => {
             it('should return correct external ID after redemption', async () => {
-              const externalId = `get-external-id-after-redeem-${v4()}`
-              await updateUserCustomClaims(userPoolId, sudoUser, {
-                ent: {
-                  externalId,
-                  claims: {},
-                },
-              })
-
+              const userName = await sudoUser.getUserName()
               await sudoEntitlements.redeemEntitlements()
 
               await expect(sudoEntitlements.getExternalId()).resolves.toEqual(
-                externalId,
+                userName,
               )
             })
           },
@@ -261,14 +252,12 @@ describe('sudo-entitlements API integration tests', () => {
               () => {
                 it('should get integration-test entitlements set for redeemed user', async () => {
                   expectBeforesComplete()
-
-                  await updateUserCustomClaims(userPoolId, sudoUser, {
-                    ent: {
-                      externalId: await sudoUser.getUserName(),
-                      claims: { 'custom:entitlementsSet': 'integration-test' },
-                    },
-                  })
-
+                  const userName = await sudoUser.getUserName()
+                  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+                  await sudoEntitlementsAdmin.applyEntitlementsSetToUser(
+                    userName,
+                    'integration-test',
+                  )
                   const redeemed = await sudoEntitlements.redeemEntitlements()
                   checkIntegrationTestEntitlementsSet(redeemed)
                   const gotten = await sudoEntitlements.getEntitlements()
@@ -329,13 +318,12 @@ describe('sudo-entitlements API integration tests', () => {
           () => {
             it('should get entitlements consumption for redeemed user', async () => {
               expectBeforesComplete()
-
-              await updateUserCustomClaims(userPoolId, sudoUser, {
-                ent: {
-                  externalId: await sudoUser.getUserName(),
-                  claims: { 'custom:entitlementsSet': 'integration-test' },
-                },
-              })
+              const userName = await sudoUser.getUserName()
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+              await sudoEntitlementsAdmin.applyEntitlementsSetToUser(
+                userName,
+                'integration-test',
+              )
 
               const redeemed = await sudoEntitlements.redeemEntitlements()
               checkIntegrationTestEntitlementsSet(redeemed)
@@ -404,40 +392,18 @@ describe('sudo-entitlements API integration tests', () => {
             it('should redeem to integration-test entitlements set', async () => {
               expectBeforesComplete()
 
-              await updateUserCustomClaims(userPoolId, sudoUser, {
-                ent: {
-                  externalId: await sudoUser.getUserName(),
-                  claims: { 'custom:entitlementsSet': 'integration-test' },
-                },
-              })
+              const userName = await sudoUser.getUserName()
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+              await sudoEntitlementsAdmin.applyEntitlementsSetToUser(
+                userName,
+                'integration-test',
+              )
 
               const redeemed = await sudoEntitlements.redeemEntitlements()
               checkIntegrationTestEntitlementsSet(redeemed)
             })
           },
         )
-      },
-    )
-
-    describeUserAttributeAdminTests(
-      'Tests requiring user attribute admin authority',
-      () => {
-        it('should throw InvalidTokenError if no entitlements set can be found', async () => {
-          expectBeforesComplete()
-
-          await updateUserCustomClaims(userPoolId, sudoUser, {
-            ent: {
-              externalId: await sudoUser.getUserName(),
-              claims: {
-                'custom:entitlementsSet': 'no-such-entitlements-set',
-              },
-            },
-          })
-
-          await expect(
-            sudoEntitlements.redeemEntitlements(),
-          ).rejects.toThrowError(new InvalidTokenError())
-        })
       },
     )
   })
@@ -473,14 +439,12 @@ describe('sudo-entitlements API integration tests', () => {
             it('should permit consumption of boolean entitlement', async () => {
               expectBeforesComplete()
 
-              await updateUserCustomClaims(userPoolId, sudoUser, {
-                ent: {
-                  externalId: await sudoUser.getUserName(),
-                  claims: {
-                    'custom:entitlementsSet': 'integration-test',
-                  },
-                },
-              })
+              const userName = await sudoUser.getUserName()
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+              await sudoEntitlementsAdmin.applyEntitlementsSetToUser(
+                userName,
+                'integration-test',
+              )
 
               await sudoEntitlements.redeemEntitlements()
 
