@@ -139,7 +139,7 @@ describe('sudo-entitlements API integration tests', () => {
   })
 
   // Failures in beforeAll do not stop tests executing
-  function expectBeforesComplete(): void {
+  function expectSetupComplete(): void {
     expect({ beforeAllComplete, beforeEachComplete }).toEqual({
       beforeAllComplete: true,
       beforeEachComplete: true,
@@ -210,7 +210,7 @@ describe('sudo-entitlements API integration tests', () => {
   describe('getEntitlements tests', () => {
     describe('Common tests', () => {
       it('should throw NotAuthorizedError when not authenticated', async () => {
-        expectBeforesComplete()
+        expectSetupComplete()
 
         sudoUser.overrideLatestAuthToken = ''
 
@@ -224,7 +224,7 @@ describe('sudo-entitlements API integration tests', () => {
       'Default entitlements set for test users tests',
       () => {
         it('should return null for raw test user', async () => {
-          expectBeforesComplete()
+          expectSetupComplete()
 
           await expect(
             sudoEntitlements.getEntitlements(),
@@ -237,7 +237,7 @@ describe('sudo-entitlements API integration tests', () => {
       'No default entitlements set for test users tests',
       () => {
         it('should throw NoEntitlementsError for raw test user', async () => {
-          expectBeforesComplete()
+          expectSetupComplete()
 
           await expect(
             sudoEntitlements.getEntitlements(),
@@ -251,7 +251,7 @@ describe('sudo-entitlements API integration tests', () => {
               'Tests requiring user attribute admin authority',
               () => {
                 it('should get integration-test entitlements set for redeemed user', async () => {
-                  expectBeforesComplete()
+                  expectSetupComplete()
                   const userName = await sudoUser.getUserName()
                   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
                   await sudoEntitlementsAdmin.applyEntitlementsSetToUser(
@@ -274,7 +274,7 @@ describe('sudo-entitlements API integration tests', () => {
   describe('getEntitlementsConsumption tests', () => {
     describe('Common tests', () => {
       it('should throw NotAuthorizedError when not authenticated', async () => {
-        expectBeforesComplete()
+        expectSetupComplete()
 
         sudoUser.overrideLatestAuthToken = ''
 
@@ -288,7 +288,7 @@ describe('sudo-entitlements API integration tests', () => {
       'Default entitlements set for test users tests',
       () => {
         it('should throw NoEntitlementsError for raw test user', async () => {
-          expectBeforesComplete()
+          expectSetupComplete()
 
           await expect(
             sudoEntitlements.getEntitlementsConsumption(),
@@ -301,7 +301,7 @@ describe('sudo-entitlements API integration tests', () => {
       'No default entitlements set for test users tests',
       () => {
         it('should throw NoEntitlementsError for raw test user', async () => {
-          expectBeforesComplete()
+          expectSetupComplete()
 
           await expect(
             sudoEntitlements.getEntitlementsConsumption(),
@@ -317,7 +317,7 @@ describe('sudo-entitlements API integration tests', () => {
           'Tests requiring user attribute admin authority',
           () => {
             it('should get entitlements consumption for redeemed user', async () => {
-              expectBeforesComplete()
+              expectSetupComplete()
               const userName = await sudoUser.getUserName()
               // eslint-disable-next-line @typescript-eslint/no-unsafe-call
               await sudoEntitlementsAdmin.applyEntitlementsSetToUser(
@@ -347,7 +347,7 @@ describe('sudo-entitlements API integration tests', () => {
   describe('redeemEntitlements tests', () => {
     describe('Common tests', () => {
       it('should throw NotAuthorizedError when not authenticated', async () => {
-        expectBeforesComplete()
+        expectSetupComplete()
 
         sudoUser.overrideLatestAuthToken = ''
 
@@ -361,7 +361,7 @@ describe('sudo-entitlements API integration tests', () => {
       'Default entitlements set for test users tests',
       () => {
         it('should succeed for raw test user', async () => {
-          expectBeforesComplete()
+          expectSetupComplete()
 
           await expect(
             sudoEntitlements.redeemEntitlements(),
@@ -373,12 +373,12 @@ describe('sudo-entitlements API integration tests', () => {
     describeNoDefaultEntitlementsSetForTestUsersTests(
       'No default entitlements set for test users tests',
       () => {
-        it('should throw InvalidTokenError for raw test user', async () => {
-          expectBeforesComplete()
+        it('should throw NoEntitlementsError for raw test user', async () => {
+          expectSetupComplete()
 
           await expect(
             sudoEntitlements.redeemEntitlements(),
-          ).rejects.toThrowError(new InvalidTokenError())
+          ).rejects.toThrowError(new NoEntitlementsError())
         })
       },
     )
@@ -390,7 +390,7 @@ describe('sudo-entitlements API integration tests', () => {
           'Tests requiring user attribute admin authority',
           () => {
             it('should redeem to integration-test entitlements set', async () => {
-              expectBeforesComplete()
+              expectSetupComplete()
 
               const userName = await sudoUser.getUserName()
               // eslint-disable-next-line @typescript-eslint/no-unsafe-call
@@ -411,7 +411,7 @@ describe('sudo-entitlements API integration tests', () => {
   describe('consumeBooleanEntitlements tests', () => {
     describe('Common tests', () => {
       it('should throw NotAuthorizedError when not authenticated', async () => {
-        expectBeforesComplete()
+        expectSetupComplete()
 
         sudoUser.overrideLatestAuthToken = ''
 
@@ -421,11 +421,11 @@ describe('sudo-entitlements API integration tests', () => {
       })
 
       it('should throw IllegalArgumentError for an invalid entitlement name', async () => {
-        expectBeforesComplete()
+        expectSetupComplete()
 
-        const invaidEntitlementName = v4()
+        const invalidEntitlementName = v4()
         await expect(
-          sudoEntitlements.consumeBooleanEntitlements([invaidEntitlementName]),
+          sudoEntitlements.consumeBooleanEntitlements([invalidEntitlementName]),
         ).rejects.toEqual(new IllegalArgumentError())
       })
     })
@@ -437,7 +437,7 @@ describe('sudo-entitlements API integration tests', () => {
           'Tests needing integration-test entitlements set',
           () => {
             it('should permit consumption of boolean entitlement', async () => {
-              expectBeforesComplete()
+              expectSetupComplete()
 
               const userName = await sudoUser.getUserName()
               // eslint-disable-next-line @typescript-eslint/no-unsafe-call

@@ -13,7 +13,13 @@ import { NetworkStatus } from 'apollo-client'
 import AWSAppSyncClient from 'aws-appsync'
 import { anything, instance, mock, reset, verify, when } from 'ts-mockito'
 import { ApiClient } from '../../../src/client/apiClient'
-import { AmbiguousEntitlementsError } from '../../../src/errors/error'
+import {
+  AmbiguousEntitlementsError,
+  EntitlementsSequenceNotFoundError,
+  EntitlementsSetNotFoundError,
+  NoBillingGroupError,
+  NoExternalIdError,
+} from '../../../src/errors/error'
 import {
   ConsumeBooleanEntitlementsMutation,
   EntitlementsConsumption,
@@ -124,10 +130,15 @@ describe('ApiClient test suite', () => {
     })
 
     it.each`
-      code                                  | error
-      ${'sudoplatform.NoEntitlementsError'} | ${new NoEntitlementsError()}
-      ${'sudoplatform.InvalidTokenError'}   | ${new InvalidTokenError()}
-      ${'sudoplatform.ServiceError'}        | ${new ServiceError('graphql-error')}
+      code                                                             | error
+      ${'sudoplatform.entitlements.AmbiguousEntitlementsError'}        | ${new AmbiguousEntitlementsError()}
+      ${'sudoplatform.entitlements.EntitlementsSequenceNotFoundError'} | ${new EntitlementsSequenceNotFoundError()}
+      ${'sudoplatform.entitlements.EntitlementsSetNotFoundError'}      | ${new EntitlementsSetNotFoundError()}
+      ${'sudoplatform.entitlements.NoBillingGroupError'}               | ${new NoBillingGroupError()}
+      ${'sudoplatform.entitlements.NoExternalIdError'}                 | ${new NoExternalIdError()}
+      ${'sudoplatform.InvalidTokenError'}                              | ${new InvalidTokenError()}
+      ${'sudoplatform.NoEntitlementsError'}                            | ${new NoEntitlementsError()}
+      ${'sudoplatform.ServiceError'}                                   | ${new ServiceError('graphql-error')}
     `('should map $code error when returned', async ({ code, error }) => {
       when(mockAWSAppSyncClient.query(anything())).thenResolve({
         data: undefined,
@@ -147,10 +158,15 @@ describe('ApiClient test suite', () => {
     })
 
     describe.each`
-      code                                  | error
-      ${'sudoplatform.NoEntitlementsError'} | ${new NoEntitlementsError()}
-      ${'sudoplatform.InvalidTokenError'}   | ${new InvalidTokenError()}
-      ${'sudoplatform.ServiceError'}        | ${new ServiceError('graphql-error')}
+      code                                                             | error
+      ${'sudoplatform.entitlements.AmbiguousEntitlementsError'}        | ${new AmbiguousEntitlementsError()}
+      ${'sudoplatform.entitlements.EntitlementsSequenceNotFoundError'} | ${new EntitlementsSequenceNotFoundError()}
+      ${'sudoplatform.entitlements.EntitlementsSetNotFoundError'}      | ${new EntitlementsSetNotFoundError()}
+      ${'sudoplatform.entitlements.NoBillingGroupError'}               | ${new NoBillingGroupError()}
+      ${'sudoplatform.entitlements.NoExternalIdError'}                 | ${new NoExternalIdError()}
+      ${'sudoplatform.InvalidTokenError'}                              | ${new InvalidTokenError()}
+      ${'sudoplatform.NoEntitlementsError'}                            | ${new NoEntitlementsError()}
+      ${'sudoplatform.ServiceError'}                                   | ${new ServiceError('graphql-error')}
     `('should map $code error', ({ code, error }) => {
       it('when error is returned', async () => {
         when(mockAWSAppSyncClient.query(anything())).thenResolve({
@@ -250,10 +266,15 @@ describe('ApiClient test suite', () => {
     })
 
     describe.each`
-      code                                  | error
-      ${'sudoplatform.NoEntitlementsError'} | ${new NoEntitlementsError()}
-      ${'sudoplatform.InvalidTokenError'}   | ${new InvalidTokenError()}
-      ${'sudoplatform.ServiceError'}        | ${new ServiceError('graphql-error')}
+      code                                                             | error
+      ${'sudoplatform.entitlements.AmbiguousEntitlementsError'}        | ${new AmbiguousEntitlementsError()}
+      ${'sudoplatform.entitlements.EntitlementsSequenceNotFoundError'} | ${new EntitlementsSequenceNotFoundError()}
+      ${'sudoplatform.entitlements.EntitlementsSetNotFoundError'}      | ${new EntitlementsSetNotFoundError()}
+      ${'sudoplatform.entitlements.NoBillingGroupError'}               | ${new NoBillingGroupError()}
+      ${'sudoplatform.entitlements.NoExternalIdError'}                 | ${new NoExternalIdError()}
+      ${'sudoplatform.InvalidTokenError'}                              | ${new InvalidTokenError()}
+      ${'sudoplatform.NoEntitlementsError'}                            | ${new NoEntitlementsError()}
+      ${'sudoplatform.ServiceError'}                                   | ${new ServiceError('graphql-error')}
     `('should map $code error', ({ code, error }) => {
       it('when error is returned', async () => {
         when(mockAWSAppSyncClient.query(anything())).thenResolve({
@@ -357,9 +378,15 @@ describe('ApiClient test suite', () => {
       verify(mockAWSAppSyncClient.query(anything())).once()
     })
     describe.each`
-      code                                | error
-      ${'sudoplatform.InvalidTokenError'} | ${new InvalidTokenError()}
-      ${'sudoplatform.ServiceError'}      | ${new ServiceError('graphql-error')}
+      code                                                             | error
+      ${'sudoplatform.entitlements.AmbiguousEntitlementsError'}        | ${new AmbiguousEntitlementsError()}
+      ${'sudoplatform.entitlements.EntitlementsSequenceNotFoundError'} | ${new EntitlementsSequenceNotFoundError()}
+      ${'sudoplatform.entitlements.EntitlementsSetNotFoundError'}      | ${new EntitlementsSetNotFoundError()}
+      ${'sudoplatform.entitlements.NoBillingGroupError'}               | ${new NoBillingGroupError()}
+      ${'sudoplatform.entitlements.NoExternalIdError'}                 | ${new NoExternalIdError()}
+      ${'sudoplatform.InvalidTokenError'}                              | ${new InvalidTokenError()}
+      ${'sudoplatform.NoEntitlementsError'}                            | ${new NoEntitlementsError()}
+      ${'sudoplatform.ServiceError'}                                   | ${new ServiceError('graphql-error')}
     `('should map $code error', ({ code, error }) => {
       it('when error is returned', async () => {
         when(mockAWSAppSyncClient.query(anything())).thenResolve({
@@ -452,10 +479,15 @@ describe('ApiClient test suite', () => {
     })
 
     describe.each`
-      code                                                      | error
-      ${'sudoplatform.entitlements.AmbiguousEntitlementsError'} | ${new AmbiguousEntitlementsError()}
-      ${'sudoplatform.InvalidTokenError'}                       | ${new InvalidTokenError()}
-      ${'sudoplatform.ServiceError'}                            | ${new ServiceError('graphql-error')}
+      code                                                             | error
+      ${'sudoplatform.entitlements.AmbiguousEntitlementsError'}        | ${new AmbiguousEntitlementsError()}
+      ${'sudoplatform.entitlements.EntitlementsSequenceNotFoundError'} | ${new EntitlementsSequenceNotFoundError()}
+      ${'sudoplatform.entitlements.EntitlementsSetNotFoundError'}      | ${new EntitlementsSetNotFoundError()}
+      ${'sudoplatform.entitlements.NoBillingGroupError'}               | ${new NoBillingGroupError()}
+      ${'sudoplatform.entitlements.NoExternalIdError'}                 | ${new NoExternalIdError()}
+      ${'sudoplatform.InvalidTokenError'}                              | ${new InvalidTokenError()}
+      ${'sudoplatform.NoEntitlementsError'}                            | ${new NoEntitlementsError()}
+      ${'sudoplatform.ServiceError'}                                   | ${new ServiceError('graphql-error')}
     `('should map $code error', ({ code, error }) => {
       it('when error is returned', async () => {
         when(

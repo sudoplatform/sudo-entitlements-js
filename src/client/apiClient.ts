@@ -12,7 +12,13 @@ import {
 import { NormalizedCacheObject } from 'apollo-cache-inmemory'
 import AWSAppSyncClient from 'aws-appsync'
 import { ApolloError } from 'apollo-client'
-import { AmbiguousEntitlementsError } from '../errors/error'
+import {
+  AmbiguousEntitlementsError,
+  EntitlementsSequenceNotFoundError,
+  EntitlementsSetNotFoundError,
+  NoBillingGroupError,
+  NoExternalIdError,
+} from '../errors/error'
 import {
   ConsumeBooleanEntitlementsDocument,
   ConsumeBooleanEntitlementsMutation,
@@ -195,6 +201,14 @@ export class ApiClient {
     switch (error.errorType) {
       case `${prefix}.AmbiguousEntitlementsError`:
         return new AmbiguousEntitlementsError()
+      case `${prefix}.EntitlementsSequenceNotFoundError`:
+        return new EntitlementsSequenceNotFoundError()
+      case `${prefix}.EntitlementsSetNotFoundError`:
+        return new EntitlementsSetNotFoundError()
+      case `${prefix}.NoBillingGroupError`:
+        return new NoBillingGroupError()
+      case `${prefix}.NoExternalIdError`:
+        return new NoExternalIdError()
       default:
         return mapGraphQLToClientError(error)
     }
