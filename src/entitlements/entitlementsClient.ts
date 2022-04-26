@@ -1,6 +1,7 @@
 import * as SudoCommon from '@sudoplatform/sudo-common'
 import { IllegalArgumentError } from '@sudoplatform/sudo-common'
 import { SudoUserClient } from '@sudoplatform/sudo-user'
+import { Config, getEntitlementsServiceConfig } from '../core/sdk-config'
 import { ApiClient } from '../client/apiClient'
 import { EntitlementsConsumptionTransformer } from '../data/transformers/entitlementsConsumptionTransformer'
 import { EntitlementsSetTransformer } from '../data/transformers/entitlementsSetTransformer'
@@ -315,15 +316,19 @@ export interface SudoEntitlementsClient {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface DefaultSudoEntitlementsClientOptions {}
+export interface DefaultSudoEntitlementsClientOptions {
+  config?: Config
+}
 
 export class DefaultSudoEntitlementsClient implements SudoEntitlementsClient {
   private readonly apiClient: ApiClient
+  private config: Config
 
   public constructor(
     private readonly sudoUserClient: SudoUserClient,
     options?: DefaultSudoEntitlementsClientOptions,
   ) {
+    this.config = options?.config ?? getEntitlementsServiceConfig()
     const privateOptions = options as
       | DefaultSudoEntitlementsClientPrivateOptions
       | undefined

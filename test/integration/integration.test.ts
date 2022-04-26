@@ -1,7 +1,6 @@
 import { DefaultApiClientManager } from '@sudoplatform/sudo-api-client'
 import {
   IllegalArgumentError,
-  InvalidTokenError,
   NoEntitlementsError,
   NotAuthorizedError,
 } from '@sudoplatform/sudo-common'
@@ -93,6 +92,9 @@ describe('sudo-entitlements API integration tests', () => {
       .toString()
     expect(registerKey).toMatch(/.+/)
     expect(registerKeyId).toMatch(/.+/)
+    DefaultConfigurationManager.getInstance().setConfig(
+      sudoPlatformConfig.trim(),
+    )
 
     testAuthenticationProvider = new TESTAuthenticationProvider(
       'sudo-entitlements-js-test',

@@ -52,3 +52,13 @@ export class EntitlementsSequenceNotFoundError extends Error {
     this.name = 'EntitlementsSequenceNotFoundError'
   }
 }
+
+/**
+ * Indicates the configuration related to Entitlements Service is not found.
+ */
+export class EntitlementsServiceConfigNotFound extends Error {
+  constructor() {
+    super('Entitlements service configuration not found.')
+    this.name = 'entitlementsServiceConfigNotFound'
+  }
+}

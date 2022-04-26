@@ -1,5 +1,8 @@
 import * as SudoCommon from '@sudoplatform/sudo-common'
-import { IllegalArgumentError } from '@sudoplatform/sudo-common'
+import {
+  DefaultConfigurationManager,
+  IllegalArgumentError,
+} from '@sudoplatform/sudo-common'
 import { SudoUserClient } from '@sudoplatform/sudo-user'
 import {
   anything,
@@ -20,6 +23,11 @@ import {
   splitUserEntitlementsVersion,
 } from '../../../src/entitlements/entitlementsClient'
 import { DefaultSudoEntitlementsClientPrivateOptions } from '../../../src/private/defaultSudoEntitlementsClientPrivateOptions'
+
+const testConfig = {
+  entitlementsService: {},
+}
+DefaultConfigurationManager.getInstance().setConfig(JSON.stringify(testConfig))
 
 describe('DefaultSudoEntitlementsClient test suite', () => {
   const mockSudoUserClient = mock<SudoUserClient>()
