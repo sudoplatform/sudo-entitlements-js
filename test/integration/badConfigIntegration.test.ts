@@ -14,7 +14,8 @@ import {
 } from '../../src'
 
 require('isomorphic-fetch')
-global.crypto = require('isomorphic-webcrypto')
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+global.crypto = require('crypto').webcrypto
 
 if (typeof btoa === 'undefined') {
   global.btoa = function (b) {
