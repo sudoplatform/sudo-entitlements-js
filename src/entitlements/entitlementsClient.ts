@@ -233,19 +233,19 @@ export interface SudoEntitlementsClient {
    *
    * @param entitlementNames Boolean entitlement names to record consumption of
    *
-   * @throws {@link NotSignedInError}
+   * @throws NotSignedInError
    *   User is not signed in
    *
-   * @throws {@link InsufficientEntitlementsError}
+   * @throws InsufficientEntitlementsError
    *   User is not entitled to one or more of the boolean entitlements.
    *   Check entitlements and that redeemEntitlements has been called
    *   for the user.
    *
-   * @throws {@link InvalidArgumentError}
+   * @throws InvalidArgumentError
    *   One or more of the specified entitlement names does not correspond
    *   to a boolean entitlement defined to the entitlements serivce
    *
-   * @throws {@link ServiceError}
+   * @throws ServiceError
    *   An error occurred within the entitlements service that indiciates an issue with
    *   the configuration or operation of the service.   *
    */
@@ -266,10 +266,10 @@ export interface SudoEntitlementsClient {
    *
    * @returns [[`EntitlementsConsumption`]]: Current entitlements and consumption for the logged in user.
    *
-   * @throws {@link NoEntitlementsError}
+   * @throws NoEntitlementsError
    * - Identity token has not been redeemed.
    *
-   * @throws {@link InvalidTokenError}
+   * @throws InvalidTokenError
    * - Identity token contains no FSSO user identity information
    * - Identity token contains no claims recognized as entitling the user
    * - Identity token claims that are recognized specify unrecognized entitlements sets
@@ -283,7 +283,7 @@ export interface SudoEntitlementsClient {
    *
    * @returns [[`string`]]: The user's external ID.
    *
-   * @throws {@link InvalidTokenError}
+   * @throws InvalidTokenError
    * - Identity token contains no claims recognized as identifying the external user.
    *
    * @function
@@ -300,16 +300,16 @@ export interface SudoEntitlementsClient {
    *
    * @returns Redeemed or currently active entitlements set for the logged in user.
    *
-   * @throws {@link InvalidTokenError}
+   * @throws InvalidTokenError
    * - Identity token contains no FSSO user identity information
    * - Identity token contains no claims recognized as entitling the user
    * - Identity token claims that are recognized specify unrecognized entitlements sets
    *
-   * @throws {@link ServiceError}
+   * @throws ServiceError
    *  - An error occurred within the entitlements service that indicates an issue with
    *    the configuration or operation of the service.
    *
-   * @throws (@link AmbiguousEntitlementsError}
+   * @throws {@link AmbiguousEntitlementsError}
    *  - Multiple identity token claims are recognized and specify conflicting entitlement sets
    */
   redeemEntitlements(): Promise<EntitlementsSet>
