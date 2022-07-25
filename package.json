@@ -29,9 +29,9 @@
     "docs"
   ],
   "peerDependencies": {
-    "@sudoplatform/sudo-api-client": "^10.0.0",
-    "@sudoplatform/sudo-common": "^6.0.0",
-    "@sudoplatform/sudo-user": "^10.0.0"
+    "@sudoplatform/sudo-api-client": "^11.0.0",
+    "@sudoplatform/sudo-common": "^7.0.2",
+    "@sudoplatform/sudo-user": "^11.0.0"
   },
   "dependencies": {
     "apollo-cache-inmemory": "^1.6.6",
