@@ -11,9 +11,9 @@ module.exports = {
       files: "src/**/*.ts",
       parser: '@typescript-eslint/parser',
       parserOptions: {
-        project: './tsconfig.eslint.json'
+        project: './tsconfig.json'
       },
-      plugins: ['@typescript-eslint'],
+      plugins: ['@typescript-eslint', 'tree-shaking'],
       extends: [
         'plugin:@typescript-eslint/recommended',
         'plugin:@typescript-eslint/recommended-requiring-type-checking',
@@ -35,14 +35,15 @@ module.exports = {
           {
             'ignoreStatic': true
           }
-        ]
+        ],
+        "tree-shaking/no-side-effects-in-initialization": 2
       },
     },
     {
       files: "test/**/*.ts",
       parser: '@typescript-eslint/parser',
       parserOptions: {
-        project: './tsconfig.eslint.json'
+        project: './tsconfig.test.json'
       },
       plugins: ['@typescript-eslint'],
       extends: [

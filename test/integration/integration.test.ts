@@ -4,12 +4,12 @@ import {
   NoEntitlementsError,
   NotAuthorizedError,
 } from '@sudoplatform/sudo-common'
-import { DefaultConfigurationManager } from '@sudoplatform/sudo-common/lib/configurationManager/defaultConfigurationManager'
+import { DefaultConfigurationManager } from '@sudoplatform/sudo-common'
 import {
   DefaultSudoUserClient,
   TESTAuthenticationProvider,
 } from '@sudoplatform/sudo-user'
-import { SudoUserOptions } from '@sudoplatform/sudo-user/lib/user/user-client'
+import { SudoUserOptions } from '@sudoplatform/sudo-user/types/user/user-client'
 import {
   DefaultSudoEntitlementsAdminClient,
   SudoEntitlementsAdminClient,
@@ -178,7 +178,10 @@ describe('sudo-entitlements API integration tests', () => {
           () => {
             it('should return correct external ID after redemption', async () => {
               const userName = await sudoUser.getUserName()
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+              expect(userName).toBeDefined()
+              if (!userName) {
+                fail('userName unexpectedly falsy')
+              }
               await sudoEntitlementsAdmin.applyEntitlementsSetToUser(
                 userName,
                 'integration-test',
@@ -256,7 +259,10 @@ describe('sudo-entitlements API integration tests', () => {
                 it('should get integration-test entitlements set for redeemed user', async () => {
                   expectSetupComplete()
                   const userName = await sudoUser.getUserName()
-                  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+                  expect(userName).toBeDefined()
+                  if (!userName) {
+                    fail('userName unexpectedly falsy')
+                  }
                   await sudoEntitlementsAdmin.applyEntitlementsSetToUser(
                     userName,
                     'integration-test',
@@ -322,7 +328,10 @@ describe('sudo-entitlements API integration tests', () => {
             it('should get entitlements consumption for redeemed user', async () => {
               expectSetupComplete()
               const userName = await sudoUser.getUserName()
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+              expect(userName).toBeDefined()
+              if (!userName) {
+                fail('userName unexpectedly falsy')
+              }
               await sudoEntitlementsAdmin.applyEntitlementsSetToUser(
                 userName,
                 'integration-test',
@@ -396,7 +405,10 @@ describe('sudo-entitlements API integration tests', () => {
               expectSetupComplete()
 
               const userName = await sudoUser.getUserName()
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+              expect(userName).toBeDefined()
+              if (!userName) {
+                fail('userName unexpectedly falsy')
+              }
               await sudoEntitlementsAdmin.applyEntitlementsSetToUser(
                 userName,
                 'integration-test',
@@ -443,7 +455,10 @@ describe('sudo-entitlements API integration tests', () => {
               expectSetupComplete()
 
               const userName = await sudoUser.getUserName()
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+              expect(userName).toBeDefined()
+              if (!userName) {
+                fail('userName unexpectedly falsy')
+              }
               await sudoEntitlementsAdmin.applyEntitlementsSetToUser(
                 userName,
                 'integration-test',

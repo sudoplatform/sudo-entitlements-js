@@ -2,6 +2,7 @@ import { DefaultConfigurationManager } from '@sudoplatform/sudo-common'
 import * as t from 'io-ts'
 import { EntitlementsServiceConfigNotFound } from '../errors/error'
 
+// eslint-disable-next-line tree-shaking/no-side-effects-in-initialization
 export const Config = t.type({})
 
 export type Config = t.TypeOf<typeof Config>

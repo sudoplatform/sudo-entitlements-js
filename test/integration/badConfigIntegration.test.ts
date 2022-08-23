@@ -1,5 +1,5 @@
 import { DefaultApiClientManager } from '@sudoplatform/sudo-api-client'
-import { DefaultConfigurationManager } from '@sudoplatform/sudo-common/lib/configurationManager/defaultConfigurationManager'
+import { DefaultConfigurationManager } from '@sudoplatform/sudo-common'
 import {
   DefaultSudoUserClient,
   SudoUserClient,
@@ -120,7 +120,7 @@ describe('Bad config sudo-entitlements API integration tests', () => {
   })
 
   // Failures in beforeAll do not stop tests executing
-  function expectBeforesComplete(): void {
+  function expectSetupComplete(): void {
     expect({ beforeAllComplete, beforeEachComplete }).toEqual({
       beforeAllComplete: true,
       beforeEachComplete: true,
@@ -129,7 +129,7 @@ describe('Bad config sudo-entitlements API integration tests', () => {
 
   describe('getEntitlements tests', () => {
     it('should throw RequestFailedError when connection fails', async () => {
-      expectBeforesComplete()
+      expectSetupComplete()
       await expect(
         sudoEntitlements.getEntitlements(),
       ).rejects.toThrowErrorMatchingSnapshot()
