@@ -41,7 +41,7 @@
     "types"
   ],
   "peerDependencies": {
-    "@sudoplatform/sudo-api-client": "^12.2.1",
+    "@sudoplatform/sudo-api-client": "^13.0.0",
     "@sudoplatform/sudo-common": "^8.3.0",
     "@sudoplatform/sudo-user": "^12.2.3"
   },
@@ -70,7 +70,7 @@
     "@graphql-codegen/typescript": "^2.8.7",
     "@graphql-codegen/typescript-operations": "^2.5.12",
     "@graphql-typed-document-node/apollo-client-2": "^1.0.0",
-    "@sudoplatform/sudo-api-client": "^12.2.1",
+    "@sudoplatform/sudo-api-client": "^13.0.0",
     "@sudoplatform/sudo-common": "^8.3.0",
     "@sudoplatform/sudo-entitlements-admin": "^11.1.0",
     "@sudoplatform/sudo-user": "^12.2.3",

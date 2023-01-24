@@ -3351,10 +3351,10 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@sudoplatform/sudo-api-client@^12.2.1":
-  version "12.2.1"
-  resolved "https://registry.yarnpkg.com/@sudoplatform/sudo-api-client/-/sudo-api-client-12.2.1.tgz#d0ee14e4d5c470047de482f307bb64c2a7775145"
-  integrity sha512-MaDZirpPUH+ohXqdfWjOpq/Dgm9Z+T1gl7frRfCRxWeiPquwbbFSGvaSt94TJy1PE0oL/KTXNCD09qUa1QSVTg==
+"@sudoplatform/sudo-api-client@^13.0.0":
+  version "13.0.0"
+  resolved "https://registry.yarnpkg.com/@sudoplatform/sudo-api-client/-/sudo-api-client-13.0.0.tgz#0299418b02c31ca47981c264eac654a0bcd1d118"
+  integrity sha512-PdF9hi1YaJTlGgXuEHSK0VSLaCR7JeI3pnRyhSOabydve0MAm5T+RXp6EByfMk25EXrBInvTsWvt5wrBIc2TYg==
   dependencies:
     apollo-cache-inmemory "^1.6.6"
     apollo-link "^1.2.14"
