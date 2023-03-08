@@ -41,9 +41,9 @@
     "types"
   ],
   "peerDependencies": {
-    "@sudoplatform/sudo-api-client": "^13.0.0",
-    "@sudoplatform/sudo-common": "^8.3.0",
-    "@sudoplatform/sudo-user": "^12.2.3"
+    "@sudoplatform/sudo-api-client": "^14.0.0",
+    "@sudoplatform/sudo-common": "^8.3.1",
+    "@sudoplatform/sudo-user": "^13.0.0"
   },
   "dependencies": {
     "apollo-cache-inmemory": "^1.6.6",
@@ -53,58 +53,66 @@
     "io-ts": "^2.2.20",
     "monocle-ts": "^2.3.13",
     "newtype-ts": "^0.3.5",
-    "redux": "^4.2.0",
-    "tslib": "^2.4.1"
+    "redux": "^4.2.1",
+    "tslib": "^2.5.0"
   },
   "resolutions": {
     "**/apollo-link": "^1.2.14",
     "**/apollo-cache-inmemory": "^1.6.6",
-    "node-fetch": "^2.6.7",
+    "node-fetch": "^2.6.9",
     "json5": "^2.2.2",
-    "aws-appsync": "^4.1.9"
+    "aws-appsync": "^4.1.9",
+    "undici": "^5.19.1",
+    "ua-parser-js": "^0.7.33"
   },
   "devDependencies": {
     "@graphql-codegen/add": "^3.2.3",
-    "@graphql-codegen/cli": "^2.16.4",
-    "@graphql-codegen/typed-document-node": "^2.3.12",
-    "@graphql-codegen/typescript": "^2.8.7",
-    "@graphql-codegen/typescript-operations": "^2.5.12",
+    "@graphql-codegen/cli": "^2.16.5",
+    "@graphql-codegen/typed-document-node": "^2.3.13",
+    "@graphql-codegen/typescript": "^2.8.8",
+    "@graphql-codegen/typescript-operations": "^2.5.13",
     "@graphql-typed-document-node/apollo-client-2": "^1.0.0",
-    "@sudoplatform/sudo-api-client": "^13.0.0",
-    "@sudoplatform/sudo-common": "^8.3.0",
+    "@sudoplatform/sudo-api-client": "^14.0.0",
+    "@sudoplatform/sudo-common": "^8.3.1",
     "@sudoplatform/sudo-entitlements-admin": "^11.1.0",
-    "@sudoplatform/sudo-user": "^12.2.3",
+    "@sudoplatform/sudo-user": "^13.0.0",
     "@types/jest": "^27.5.2",
     "@types/lodash": "^4.14.191",
-    "@types/uuid": "^9.0.0",
-    "@typescript-eslint/eslint-plugin": "^5.48.2",
-    "@typescript-eslint/parser": "^5.48.2",
+    "@types/uuid": "^9.0.1",
+    "@typescript-eslint/eslint-plugin": "^5.54.1",
+    "@typescript-eslint/parser": "^5.54.1",
     "apollo-client": "^2.6.10",
     "concurrently": "^7.6.0",
-    "eslint": "^8.32.0",
-    "eslint-config-prettier": "^8.6.0",
+    "eslint": "^8.35.0",
+    "eslint-config-prettier": "^8.7.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-tree-shaking": "^1.10.0",
     "husky": "^8.0.3",
     "jest": "^27.5.1",
     "lodash": "^4.17.21",
-    "prettier": "^2.8.3",
+    "prettier": "^2.8.4",
     "ts-jest": "^27.1.5",
     "ts-mockito": "^2.6.1",
     "ts-node": "^10.9.1",
-    "typedoc": "^0.23.24",
-    "typescript": "^4.9.4",
+    "typedoc": "^0.23.26",
+    "typescript": "^4.9.5",
     "uuid": "^9.0.0",
     "wait-for-expect": "^3.0.2"
   },
   "outdatedSuppressions": {
     "major": {
-      "graphql": 1676161723,
-      "node-fetch": 1676161723,
-      "jest": 1676161723,
-      "ts-jest": 1676161723,
-      "@types/jest": 1676161723
+      "graphql": 1680838678,
+      "@graphql-codegen/cli": 1680838677,
+      "@graphql-codegen/typed-document-node": 1680838678,
+      "@graphql-codegen/typescript": 1680838678,
+      "@graphql-codegen/typescript-operations": 1680838678,
+      "@graphql-codegen/add": 1680838677,
+      "node-fetch": 1680838679,
+      "jest": 1680838678,
+      "ts-jest": 1680838679,
+      "@types/jest": 1680838678,
+      "ua-parser-js": 1680838679
     }
   }
 }
