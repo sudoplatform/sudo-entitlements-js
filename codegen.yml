@@ -13,6 +13,11 @@ generates:
       - typescript
       - typescript-operations
       - typed-document-node
+    config:
+      scalars:
+        ID:
+          input: 'string'
+          output: 'string'
 hooks:
   afterAllFileWrite:
     - prettier --write

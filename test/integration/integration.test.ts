@@ -30,6 +30,7 @@ import {
 } from './describe'
 
 require('isomorphic-fetch')
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 global.crypto = require('crypto').webcrypto
 

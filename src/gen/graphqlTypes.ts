@@ -12,46 +12,55 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
   [SubKey in K]: Maybe<T[SubKey]>
 }
+export type MakeEmpty<
+  T extends { [key: string]: unknown },
+  K extends keyof T,
+> = { [_ in K]?: never }
+export type Incremental<T> =
+  | T
+  | {
+      [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never
+    }
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string
-  String: string
-  Boolean: boolean
-  Int: number
-  Float: number
-  AWSDate: any
-  AWSDateTime: any
-  AWSEmail: any
-  AWSIPAddress: any
-  AWSJSON: any
-  AWSPhone: any
-  AWSTime: any
-  AWSTimestamp: any
-  AWSURL: any
+  ID: { input: string; output: string }
+  String: { input: string; output: string }
+  Boolean: { input: boolean; output: boolean }
+  Int: { input: number; output: number }
+  Float: { input: number; output: number }
+  AWSDate: { input: any; output: any }
+  AWSDateTime: { input: any; output: any }
+  AWSEmail: { input: any; output: any }
+  AWSIPAddress: { input: any; output: any }
+  AWSJSON: { input: any; output: any }
+  AWSPhone: { input: any; output: any }
+  AWSTime: { input: any; output: any }
+  AWSTimestamp: { input: any; output: any }
+  AWSURL: { input: any; output: any }
 }
 
 export type Entitlement = {
   __typename?: 'Entitlement'
-  description?: Maybe<Scalars['String']>
-  name: Scalars['String']
-  value: Scalars['Int']
+  description?: Maybe<Scalars['String']['output']>
+  name: Scalars['String']['output']
+  value: Scalars['Int']['output']
 }
 
 export type EntitlementConsumer = {
   __typename?: 'EntitlementConsumer'
-  id: Scalars['ID']
-  issuer: Scalars['String']
+  id: Scalars['ID']['output']
+  issuer: Scalars['String']['output']
 }
 
 export type EntitlementConsumption = {
   __typename?: 'EntitlementConsumption'
-  available: Scalars['Int']
-  consumed: Scalars['Int']
+  available: Scalars['Int']['output']
+  consumed: Scalars['Int']['output']
   consumer?: Maybe<EntitlementConsumer>
-  firstConsumedAtEpochMs?: Maybe<Scalars['Float']>
-  lastConsumedAtEpochMs?: Maybe<Scalars['Float']>
-  name: Scalars['String']
-  value: Scalars['Int']
+  firstConsumedAtEpochMs?: Maybe<Scalars['Float']['output']>
+  lastConsumedAtEpochMs?: Maybe<Scalars['Float']['output']>
+  name: Scalars['String']['output']
+  value: Scalars['Int']['output']
 }
 
 export type EntitlementsConsumption = {
@@ -62,40 +71,42 @@ export type EntitlementsConsumption = {
 
 export type EntitlementsSet = {
   __typename?: 'EntitlementsSet'
-  createdAtEpochMs: Scalars['Float']
-  description?: Maybe<Scalars['String']>
+  createdAtEpochMs: Scalars['Float']['output']
+  description?: Maybe<Scalars['String']['output']>
   entitlements: Array<Entitlement>
-  name: Scalars['String']
-  updatedAtEpochMs: Scalars['Float']
-  version: Scalars['Float']
+  name: Scalars['String']['output']
+  updatedAtEpochMs: Scalars['Float']['output']
+  version: Scalars['Float']['output']
 }
 
 export type Mutation = {
   __typename?: 'Mutation'
-  consumeBooleanEntitlements: Scalars['Boolean']
+  consumeBooleanEntitlements: Scalars['Boolean']['output']
   redeemEntitlements: EntitlementsSet
 }
 
 export type MutationConsumeBooleanEntitlementsArgs = {
-  entitlementNames: Array<Scalars['String']>
+  entitlementNames: Array<Scalars['String']['input']>
 }
 
 export type Query = {
   __typename?: 'Query'
   getEntitlements?: Maybe<EntitlementsSet>
   getEntitlementsConsumption: EntitlementsConsumption
-  getExternalId: Scalars['String']
+  getExternalId: Scalars['String']['output']
 }
 
 export type UserEntitlements = {
   __typename?: 'UserEntitlements'
   entitlements: Array<Entitlement>
-  entitlementsSetName?: Maybe<Scalars['String']>
-  version: Scalars['Float']
+  entitlementsSetName?: Maybe<Scalars['String']['output']>
+  version: Scalars['Float']['output']
 }
 
 export type ConsumeBooleanEntitlementsMutationVariables = Exact<{
-  entitlementNames: Array<Scalars['String']> | Scalars['String']
+  entitlementNames:
+    | Array<Scalars['String']['input']>
+    | Scalars['String']['input']
 }>
 
 export type ConsumeBooleanEntitlementsMutation = {
@@ -324,7 +335,22 @@ export const UserEntitlementsFragmentDoc = {
         ],
       },
     },
-    ...EntitlementFragmentDoc.definitions,
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'Entitlement' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'Entitlement' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'value' } },
+        ],
+      },
+    },
   ],
 } as unknown as DocumentNode<UserEntitlementsFragment, unknown>
 export const EntitlementConsumerFragmentDoc = {
@@ -388,7 +414,21 @@ export const EntitlementConsumptionFragmentDoc = {
         ],
       },
     },
-    ...EntitlementConsumerFragmentDoc.definitions,
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'EntitlementConsumer' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'EntitlementConsumer' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'issuer' } },
+        ],
+      },
+    },
   ],
 } as unknown as DocumentNode<EntitlementConsumptionFragment, unknown>
 export const EntitlementsConsumptionFragmentDoc = {
@@ -433,8 +473,106 @@ export const EntitlementsConsumptionFragmentDoc = {
         ],
       },
     },
-    ...UserEntitlementsFragmentDoc.definitions,
-    ...EntitlementConsumptionFragmentDoc.definitions,
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'Entitlement' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'Entitlement' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'value' } },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'EntitlementConsumer' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'EntitlementConsumer' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'issuer' } },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserEntitlements' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'UserEntitlements' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'version' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'entitlementsSetName' },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'entitlements' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'FragmentSpread',
+                  name: { kind: 'Name', value: 'Entitlement' },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'EntitlementConsumption' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'EntitlementConsumption' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'consumer' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'FragmentSpread',
+                  name: { kind: 'Name', value: 'EntitlementConsumer' },
+                },
+              ],
+            },
+          },
+          { kind: 'Field', name: { kind: 'Name', value: 'value' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'consumed' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'available' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'firstConsumedAtEpochMs' },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'lastConsumedAtEpochMs' },
+          },
+        ],
+      },
+    },
   ],
 } as unknown as DocumentNode<EntitlementsConsumptionFragment, unknown>
 export const EntitlementsSetFragmentDoc = {
@@ -471,7 +609,22 @@ export const EntitlementsSetFragmentDoc = {
         ],
       },
     },
-    ...EntitlementFragmentDoc.definitions,
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'Entitlement' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'Entitlement' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'value' } },
+        ],
+      },
+    },
   ],
 } as unknown as DocumentNode<EntitlementsSetFragment, unknown>
 export const ConsumeBooleanEntitlementsDocument = {
@@ -554,7 +707,53 @@ export const GetEntitlementsDocument = {
         ],
       },
     },
-    ...EntitlementsSetFragmentDoc.definitions,
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'Entitlement' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'Entitlement' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'value' } },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'EntitlementsSet' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'EntitlementsSet' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'createdAtEpochMs' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'updatedAtEpochMs' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'version' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'entitlements' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'FragmentSpread',
+                  name: { kind: 'Name', value: 'Entitlement' },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
   ],
 } as unknown as DocumentNode<
   GetEntitlementsQuery,
@@ -586,7 +785,145 @@ export const GetEntitlementsConsumptionDocument = {
         ],
       },
     },
-    ...EntitlementsConsumptionFragmentDoc.definitions,
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'Entitlement' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'Entitlement' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'value' } },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserEntitlements' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'UserEntitlements' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'version' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'entitlementsSetName' },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'entitlements' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'FragmentSpread',
+                  name: { kind: 'Name', value: 'Entitlement' },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'EntitlementConsumer' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'EntitlementConsumer' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'issuer' } },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'EntitlementConsumption' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'EntitlementConsumption' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'consumer' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'FragmentSpread',
+                  name: { kind: 'Name', value: 'EntitlementConsumer' },
+                },
+              ],
+            },
+          },
+          { kind: 'Field', name: { kind: 'Name', value: 'value' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'consumed' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'available' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'firstConsumedAtEpochMs' },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'lastConsumedAtEpochMs' },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'EntitlementsConsumption' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'EntitlementsConsumption' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'entitlements' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'FragmentSpread',
+                  name: { kind: 'Name', value: 'UserEntitlements' },
+                },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'consumption' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'FragmentSpread',
+                  name: { kind: 'Name', value: 'EntitlementConsumption' },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
   ],
 } as unknown as DocumentNode<
   GetEntitlementsConsumptionQuery,
@@ -634,7 +971,53 @@ export const RedeemEntitlementsDocument = {
         ],
       },
     },
-    ...EntitlementsSetFragmentDoc.definitions,
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'Entitlement' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'Entitlement' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'value' } },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'EntitlementsSet' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'EntitlementsSet' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'createdAtEpochMs' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'updatedAtEpochMs' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'version' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'entitlements' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'FragmentSpread',
+                  name: { kind: 'Name', value: 'Entitlement' },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
   ],
 } as unknown as DocumentNode<
   RedeemEntitlementsMutation,
