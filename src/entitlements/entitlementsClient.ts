@@ -1,3 +1,9 @@
+/*
+ * Copyright © 2023 Anonyome Labs, Inc. All rights reserved.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import * as SudoCommon from '@sudoplatform/sudo-common'
 import { IllegalArgumentError } from '@sudoplatform/sudo-common'
 import { SudoUserClient } from '@sudoplatform/sudo-user'

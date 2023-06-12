@@ -1,3 +1,9 @@
+/*
+ * Copyright © 2023 Anonyome Labs, Inc. All rights reserved.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { UserEntitlements } from '../../entitlements/entitlementsClient'
 import { UserEntitlements as UserEntitlementsGraphQL } from '../../gen/graphqlTypes'
 import { EntitlementTransformer } from './entitlementTransformer'

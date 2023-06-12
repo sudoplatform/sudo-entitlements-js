@@ -1,3 +1,9 @@
+/*
+ * Copyright © 2023 Anonyome Labs, Inc. All rights reserved.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 /**
  * The identity token contained multiple recognized claims identifying
  * different entitlements sets on redemption.
