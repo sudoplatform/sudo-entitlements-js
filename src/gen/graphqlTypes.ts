@@ -43,7 +43,7 @@ export type Entitlement = {
   __typename?: 'Entitlement'
   description?: Maybe<Scalars['String']['output']>
   name: Scalars['String']['output']
-  value: Scalars['Int']['output']
+  value: Scalars['Float']['output']
 }
 
 export type EntitlementConsumer = {
@@ -54,13 +54,13 @@ export type EntitlementConsumer = {
 
 export type EntitlementConsumption = {
   __typename?: 'EntitlementConsumption'
-  available: Scalars['Int']['output']
-  consumed: Scalars['Int']['output']
+  available: Scalars['Float']['output']
+  consumed: Scalars['Float']['output']
   consumer?: Maybe<EntitlementConsumer>
   firstConsumedAtEpochMs?: Maybe<Scalars['Float']['output']>
   lastConsumedAtEpochMs?: Maybe<Scalars['Float']['output']>
   name: Scalars['String']['output']
-  value: Scalars['Int']['output']
+  value: Scalars['Float']['output']
 }
 
 export type EntitlementsConsumption = {

@@ -122,9 +122,17 @@ describe('sudo-entitlements API integration tests', () => {
     sudoUser = new TestSudoUserClient()
     DefaultApiClientManager.getInstance().setAuthClient(sudoUser)
     sudoEntitlements = new DefaultSudoEntitlementsClient(sudoUser)
-    const adminAPIKEY = process.env.ADMIN_API_KEY || 'IAM'
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    sudoEntitlementsAdmin = new DefaultSudoEntitlementsAdminClient(adminAPIKEY)
+
+    let adminApiKey = process.env.ADMIN_API_KEY?.trim()
+    const adminApiKeyPath = '${__dirname}/../../config/api.key'
+    if (!adminApiKey && fs.existsSync('${__dirname}/../../config/')) {
+      adminApiKey = fs.readFileSync(adminApiKeyPath).toString()?.trim()
+    }
+    if (!adminApiKey) {
+      adminApiKey = 'IAM'
+    }
+
+    sudoEntitlementsAdmin = new DefaultSudoEntitlementsAdminClient(adminApiKey)
 
     beforeAllComplete = true
   })
@@ -277,7 +285,11 @@ describe('sudo-entitlements API integration tests', () => {
                   const redeemed = await sudoEntitlements.redeemEntitlements()
                   checkIntegrationTestEntitlementsSet(redeemed)
                   const gotten = await sudoEntitlements.getEntitlements()
-                  expect(gotten).toEqual(redeemed)
+                  expect(gotten).toEqual({
+                    ...redeemed,
+                    // Get may result in a lazy update so updatedAt may differ
+                    updatedAt: gotten?.updatedAt ?? redeemed.updatedAt,
+                  })
                 })
               },
             )
@@ -491,6 +503,38 @@ describe('sudo-entitlements API integration tests', () => {
             })
           },
         )
+      },
+    )
+  })
+
+  describe('Large entitlement value tests', () => {
+    describeIntegrationTestEntitlementsSetTests(
+      'Tests needing integration-test entitlements set',
+      () => {
+        it('should reflect large entitlements on redemption and consumption query', async () => {
+          expectSetupComplete()
+
+          const userName = await sudoUser.getUserName()
+          expect(userName).toBeDefined()
+          if (!userName) {
+            fail('userName unexpectedly falsy')
+          }
+          const entitlement = {
+            name: 'sudoplatform.test.testEntitlement-1',
+            description: '',
+            value: 2 ** 52 - 1,
+          }
+          await sudoEntitlementsAdmin.applyEntitlementsToUser(userName, [
+            entitlement,
+          ])
+
+          const redeemed = await sudoEntitlements.redeemEntitlements()
+          expect(redeemed.entitlements).toEqual([entitlement])
+
+          const consumption =
+            await sudoEntitlements.getEntitlementsConsumption()
+          expect(consumption.entitlements.entitlements).toEqual([entitlement])
+        })
       },
     )
   })

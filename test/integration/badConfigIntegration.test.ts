@@ -90,6 +90,11 @@ describe('Bad config sudo-entitlements API integration tests', () => {
     configBadApiUrl.apiService.apiUrl = (
       config.apiService.apiUrl as string
     ).replace('https://', 'http://')
+    if (configBadApiUrl.entitlementsService) {
+      configBadApiUrl.entitlementsService.apiUrl = (
+        config.entitlementsService.apiUrl as string | undefined
+      )?.replace('https://', 'http://')
+    }
 
     testAuthenticationProvider = new TESTAuthenticationProvider(
       'sudo-entitlements-js-test',
