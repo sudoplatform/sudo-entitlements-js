@@ -279,8 +279,6 @@ export interface SudoEntitlementsClient {
    * - Identity token contains no FSSO user identity information
    * - Identity token contains no claims recognized as entitling the user
    * - Identity token claims that are recognized specify unrecognized entitlements sets
-   *
-   * @function
    */
   getEntitlementsConsumption(): Promise<EntitlementsConsumption>
 
@@ -291,8 +289,6 @@ export interface SudoEntitlementsClient {
    *
    * @throws InvalidTokenError
    * - Identity token contains no claims recognized as identifying the external user.
-   *
-   * @function
    */
   getExternalId(): Promise<string>
 

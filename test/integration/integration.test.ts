@@ -27,8 +27,10 @@ import {
   SudoEntitlementsClient,
 } from '../../src'
 import { v4 } from 'uuid'
+import waitForExpect from 'wait-for-expect'
 
 import {
+  defaultEntitlementsSetForNonTestUsers,
   describeDefaultEntitlementsSetForTestUsersTests,
   describeIntegrationTestEntitlementsSetTests,
   describeNoDefaultEntitlementsSetForTestUsersTests,
@@ -71,6 +73,8 @@ class TestSudoUserClient extends DefaultSudoUserClient {
 
 describe('sudo-entitlements API integration tests', () => {
   jest.setTimeout(30000)
+  waitForExpect.defaults.interval = 250
+  waitForExpect.defaults.timeout = 10000
 
   let sudoEntitlements: SudoEntitlementsClient
   let sudoEntitlementsAdmin: SudoEntitlementsAdminClient
@@ -78,6 +82,7 @@ describe('sudo-entitlements API integration tests', () => {
   let beforeAllComplete = false
   let beforeEachComplete = false
   let testAuthenticationProvider: TESTAuthenticationProvider
+  let expectRedeemOnUserRegistration: boolean
 
   beforeAll(() => {
     const sudoPlatformConfigPath =
@@ -119,14 +124,25 @@ describe('sudo-entitlements API integration tests', () => {
     if (!identityServiceConfig?.poolId) {
       fail('identityServiceConfig.poolId unexpectedly falsy')
     }
+
+    const entitlementsServiceConfig: any = configurationManager.getConfigSet(
+      'entitlementsService',
+    )
+
+    expectRedeemOnUserRegistration =
+      (entitlementsServiceConfig.redeemOnUserRegistration &&
+        defaultEntitlementsSetForNonTestUsers) ??
+      false
+
     sudoUser = new TestSudoUserClient()
     DefaultApiClientManager.getInstance().setAuthClient(sudoUser)
     sudoEntitlements = new DefaultSudoEntitlementsClient(sudoUser)
 
     let adminApiKey = process.env.ADMIN_API_KEY?.trim()
     const adminApiKeyPath = '${__dirname}/../../config/api.key'
-    if (!adminApiKey && fs.existsSync('${__dirname}/../../config/')) {
+    if (!adminApiKey && fs.existsSync(adminApiKeyPath)) {
       adminApiKey = fs.readFileSync(adminApiKeyPath).toString()?.trim()
+      console.log('Read admin api key', { adminApiKeyPath, adminApiKey })
     }
     if (!adminApiKey) {
       adminApiKey = 'IAM'
@@ -244,12 +260,18 @@ describe('sudo-entitlements API integration tests', () => {
     describeDefaultEntitlementsSetForTestUsersTests(
       'Default entitlements set for test users tests',
       () => {
-        it('should return null for raw test user', async () => {
+        it('should return null for raw test user if auto-redeem not enabled', async () => {
           expectSetupComplete()
 
-          await expect(
-            sudoEntitlements.getEntitlements(),
-          ).resolves.toBeUndefined()
+          if (expectRedeemOnUserRegistration) {
+            await waitForExpect(() =>
+              expect(sudoEntitlements.getEntitlements()).resolves.toBeTruthy(),
+            )
+          } else {
+            await expect(
+              sudoEntitlements.getEntitlements(),
+            ).resolves.toBeUndefined()
+          }
         })
       },
     )
@@ -257,12 +279,18 @@ describe('sudo-entitlements API integration tests', () => {
     describeNoDefaultEntitlementsSetForTestUsersTests(
       'No default entitlements set for test users tests',
       () => {
-        it('should throw NoEntitlementsError for raw test user', async () => {
+        it('should return undefined for raw test user if no auto-redeem', async () => {
           expectSetupComplete()
 
-          await expect(
-            sudoEntitlements.getEntitlements(),
-          ).resolves.toBeUndefined()
+          if (expectRedeemOnUserRegistration) {
+            await waitForExpect(() =>
+              expect(sudoEntitlements.getEntitlements()).resolves.toBeTruthy(),
+            )
+          } else {
+            await expect(
+              sudoEntitlements.getEntitlements(),
+            ).resolves.toBeUndefined()
+          }
         })
 
         describeIntegrationTestEntitlementsSetTests(
@@ -315,12 +343,20 @@ describe('sudo-entitlements API integration tests', () => {
     describeDefaultEntitlementsSetForTestUsersTests(
       'Default entitlements set for test users tests',
       () => {
-        it('should throw NoEntitlementsError for raw test user', async () => {
+        it('should throw NoEntitlementsError for raw test user if auto-redeem not enabled', async () => {
           expectSetupComplete()
 
-          await expect(
-            sudoEntitlements.getEntitlementsConsumption(),
-          ).rejects.toThrowError(new NoEntitlementsError())
+          if (expectRedeemOnUserRegistration) {
+            await waitForExpect(() =>
+              expect(
+                sudoEntitlements.getEntitlementsConsumption(),
+              ).resolves.toBeTruthy(),
+            )
+          } else {
+            await expect(
+              sudoEntitlements.getEntitlementsConsumption(),
+            ).rejects.toThrowError(new NoEntitlementsError())
+          }
         })
       },
     )
@@ -328,12 +364,20 @@ describe('sudo-entitlements API integration tests', () => {
     describeNoDefaultEntitlementsSetForTestUsersTests(
       'No default entitlements set for test users tests',
       () => {
-        it('should throw NoEntitlementsError for raw test user', async () => {
+        it('should throw NoEntitlementsError for raw test user if no auto-redeem', async () => {
           expectSetupComplete()
 
-          await expect(
-            sudoEntitlements.getEntitlementsConsumption(),
-          ).rejects.toThrowError(new NoEntitlementsError())
+          if (expectRedeemOnUserRegistration) {
+            await waitForExpect(() =>
+              expect(
+                sudoEntitlements.getEntitlementsConsumption(),
+              ).resolves.toBeTruthy(),
+            )
+          } else {
+            await expect(
+              sudoEntitlements.getEntitlementsConsumption(),
+            ).rejects.toThrowError(new NoEntitlementsError())
+          }
         })
       },
     )
@@ -404,12 +448,20 @@ describe('sudo-entitlements API integration tests', () => {
     describeNoDefaultEntitlementsSetForTestUsersTests(
       'No default entitlements set for test users tests',
       () => {
-        it('should throw NoEntitlementsError for raw test user', async () => {
+        it('should throw NoEntitlementsError for raw test user if no auto-redeem', async () => {
           expectSetupComplete()
 
-          await expect(
-            sudoEntitlements.redeemEntitlements(),
-          ).rejects.toThrowError(new NoEntitlementsError())
+          if (expectRedeemOnUserRegistration) {
+            await waitForExpect(() =>
+              expect(
+                sudoEntitlements.redeemEntitlements(),
+              ).resolves.toBeTruthy(),
+            )
+          } else {
+            await expect(
+              sudoEntitlements.redeemEntitlements(),
+            ).rejects.toThrowError(new NoEntitlementsError())
+          }
         })
       },
     )

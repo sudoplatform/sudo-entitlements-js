@@ -1,7 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`Bad config sudo-entitlements API integration tests getEntitlements tests should throw RequestFailedError when connection fails 1`] = `"API request failed. cause: Unexpected token < in JSON at position 0, statusCode: 403"`;
-
-exports[`Bad config sudo-entitlements API integration tests getEntitlementsConsumption tests should throw RequestFailedError when connection fails 1`] = `"API request failed. cause: Unexpected token < in JSON at position 0, statusCode: 403"`;
-
-exports[`Bad config sudo-entitlements API integration tests redeemEntitlements tests should throw RequestFailedError when connection fails 1`] = `"API request failed. cause: Unexpected token < in JSON at position 0, statusCode: 403"`;

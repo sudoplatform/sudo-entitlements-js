@@ -38,6 +38,13 @@ if (userAttributeAdmin) {
 export const describeUserAttributeAdminTests = _userAttributeAdminTests
 
 /**
+ * Further variation, if auto redeem is enabled then non-test user
+ * defaulting is applied to test users.
+ */
+export const defaultEntitlementsSetForNonTestUsers =
+  process.env.DEFAULT_ENTITLEMENTS_SET_FOR_NON_TEST_USERS === 'true'
+
+/**
  * Variation for tests that can exploit the "integration-test" entitlements
  * set deployed in ent-dev. Assignment to integration-test admin requires
  */
@@ -52,6 +59,7 @@ export const describeIntegrationTestEntitlementsSetTests =
 
 console.log({
   defaultEntitlementsSetForTestUsers,
+  defaultEntitlementsSetForNonTestUsers,
   integrationTestEntitlementsSetAvailable,
   userAttributeAdmin,
 })

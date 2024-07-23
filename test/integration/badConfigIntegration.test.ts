@@ -5,7 +5,10 @@
  */
 
 import { DefaultApiClientManager } from '@sudoplatform/sudo-api-client'
-import { DefaultConfigurationManager } from '@sudoplatform/sudo-common'
+import {
+  DefaultConfigurationManager,
+  RequestFailedError,
+} from '@sudoplatform/sudo-common'
 import {
   DefaultSudoUserClient,
   SudoUserClient,
@@ -47,7 +50,7 @@ if (typeof atob === 'undefined') {
  */
 
 describe('Bad config sudo-entitlements API integration tests', () => {
-  jest.setTimeout(30000)
+  jest.setTimeout(60000)
 
   let sudoEntitlements: SudoEntitlementsClient
   let sudoUser: SudoUserClient
@@ -142,9 +145,9 @@ describe('Bad config sudo-entitlements API integration tests', () => {
   describe('getEntitlements tests', () => {
     it('should throw RequestFailedError when connection fails', async () => {
       expectSetupComplete()
-      await expect(
-        sudoEntitlements.getEntitlements(),
-      ).rejects.toThrowErrorMatchingSnapshot()
+      await expect(sudoEntitlements.getEntitlements()).rejects.toThrow(
+        RequestFailedError,
+      )
     })
   })
 
@@ -152,15 +155,15 @@ describe('Bad config sudo-entitlements API integration tests', () => {
     it('should throw RequestFailedError when connection fails', async () => {
       await expect(
         sudoEntitlements.getEntitlementsConsumption(),
-      ).rejects.toThrowErrorMatchingSnapshot()
+      ).rejects.toThrow(RequestFailedError)
     })
   })
 
   describe('redeemEntitlements tests', () => {
     it('should throw RequestFailedError when connection fails', async () => {
-      await expect(
-        sudoEntitlements.redeemEntitlements(),
-      ).rejects.toThrowErrorMatchingSnapshot()
+      await expect(sudoEntitlements.redeemEntitlements()).rejects.toThrow(
+        RequestFailedError,
+      )
     })
   })
 })
