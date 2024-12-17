@@ -23,6 +23,7 @@ module.exports = {
       rules: {
         'prefer-const': 'error',
         'no-unused-expressions': 'error',
+        '@typescript-eslint/no-floating-promises': 'error',
         quotes: [
           'error',
           'single',
@@ -56,6 +57,7 @@ module.exports = {
         'prefer-const': 'error',
         'no-unused-expressions': 'error',
         '@typescript-eslint/no-unsafe-argument': 'off',
+        '@typescript-eslint/no-floating-promises': 'error',
         quotes: [
           'error',
           'single',

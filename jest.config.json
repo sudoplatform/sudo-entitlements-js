@@ -19,9 +19,8 @@
       "lines": 90
     }
   },
-  "globals": {
-    "ts-jest": {
-      "tsconfig": "tsconfig.test.json"
-    }
+  "transformIgnorePatterns": ["/node_modules/(?!(\\@aws-sdk)/)"],
+  "transform": {
+    ".*\\.ts$": ["ts-jest", {"tsconfig": "tsconfig.test.json"}]
   }
 }

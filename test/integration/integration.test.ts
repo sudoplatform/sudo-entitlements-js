@@ -15,7 +15,7 @@ import {
   DefaultSudoUserClient,
   TESTAuthenticationProvider,
 } from '@sudoplatform/sudo-user'
-import { SudoUserOptions } from '@sudoplatform/sudo-user/types/user/user-client'
+import { internal } from '@sudoplatform/sudo-user'
 import {
   DefaultSudoEntitlementsAdminClient,
   SudoEntitlementsAdminClient,
@@ -37,9 +37,10 @@ import {
   describeUserAttributeAdminTests,
 } from './describe'
 
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 require('isomorphic-fetch')
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+// eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports
 global.crypto = require('crypto').webcrypto
 
 if (typeof btoa === 'undefined') {
@@ -57,7 +58,7 @@ if (typeof atob === 'undefined') {
 class TestSudoUserClient extends DefaultSudoUserClient {
   public overrideLatestAuthToken?: string
 
-  public constructor(options?: SudoUserOptions) {
+  public constructor(options?: internal.SudoUserOptions) {
     super(options)
   }
 
@@ -65,8 +66,8 @@ class TestSudoUserClient extends DefaultSudoUserClient {
     return this.overrideLatestAuthToken ?? super.getLatestAuthToken()
   }
 
-  public reset() {
-    super.reset()
+  public async reset() {
+    await super.reset()
     this.overrideLatestAuthToken = undefined
   }
 }
@@ -163,9 +164,9 @@ describe('sudo-entitlements API integration tests', () => {
     beforeEachComplete = true
   })
 
-  afterEach(() => {
+  afterEach(async () => {
     beforeEachComplete = false
-    sudoUser?.reset()
+    await sudoUser?.reset()
   })
 
   afterAll(() => {

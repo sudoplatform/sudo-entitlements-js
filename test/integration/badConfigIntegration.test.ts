@@ -22,9 +22,10 @@ import {
   SudoEntitlementsClient,
 } from '../../src'
 
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 require('isomorphic-fetch')
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+// eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports
 global.crypto = require('crypto').webcrypto
 
 if (typeof btoa === 'undefined') {
@@ -125,9 +126,9 @@ describe('Bad config sudo-entitlements API integration tests', () => {
     beforeEachComplete = true
   })
 
-  afterEach(() => {
+  afterEach(async () => {
     beforeEachComplete = false
-    sudoUser?.reset()
+    await sudoUser?.reset()
   })
 
   afterAll(() => {
