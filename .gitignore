@@ -12,3 +12,5 @@ yalc.lock
 build
 .env
 package.json.old
+
+.yarn/install-state.gz

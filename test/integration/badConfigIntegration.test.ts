@@ -40,16 +40,6 @@ if (typeof atob === 'undefined') {
   }
 }
 
-/*
- * All tests requiring bad configuration are implemented in this single file
- * since it's not possible for us to reset the constructed AWSAppSyncClient
- * as it has a private global variable that records offline storage prefixes
- * forever. This makes it impossible to reset configuration and reconstruct
- * the client since any offline storage prefix used by the consuming SDK will
- * be forever recorded as "in use" resulting in failed construction of the
- * AWSAppSyncClient.
- */
-
 describe('Bad config sudo-entitlements API integration tests', () => {
   jest.setTimeout(60000)
 

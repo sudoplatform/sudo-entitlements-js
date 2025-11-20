@@ -11,13 +11,10 @@ import {
 import {
   AppSyncError,
   FatalError,
-  isAppSyncNetworkError,
+  isGraphQLNetworkError,
   mapGraphQLToClientError,
   mapNetworkErrorToClientError,
 } from '@sudoplatform/sudo-common'
-import { NormalizedCacheObject } from 'apollo-cache-inmemory'
-import AWSAppSyncClient from 'aws-appsync'
-import { ApolloError } from 'apollo-client'
 import {
   AmbiguousEntitlementsError,
   EntitlementsSequenceNotFoundError,
@@ -39,20 +36,19 @@ import {
   RedeemEntitlementsDocument,
   RedeemEntitlementsMutation,
 } from '../gen/graphqlTypes'
+import { GraphQLClient } from '@sudoplatform/sudo-user'
 
 /**
  * AppSync wrapper to use to invoke Entitlements Service APIs.
  */
 export class ApiClient {
-  private readonly client: AWSAppSyncClient<NormalizedCacheObject>
+  private readonly client: GraphQLClient
 
   public constructor(apiClientManager?: ApiClientManager) {
     const clientManager =
       apiClientManager ?? DefaultApiClientManager.getInstance()
 
-    this.client = clientManager.getClient({
-      disableOffline: true,
-    })
+    this.client = clientManager.getClient({})
   }
 
   public async getEntitlements(): Promise<EntitlementsSet | null> {
@@ -61,7 +57,6 @@ export class ApiClient {
       const result = await this.client.query<GetEntitlementsQuery>({
         query: GetEntitlementsDocument,
         variables: {},
-        fetchPolicy: 'no-cache',
       })
 
       if (result.data) {
@@ -69,11 +64,7 @@ export class ApiClient {
       }
       error = result.errors?.[0] as AppSyncError
     } catch (err) {
-      const appSyncError = err as AppSyncError
-      if (isAppSyncNetworkError(appSyncError)) {
-        throw mapNetworkErrorToClientError(appSyncError)
-      }
-      error = (err as ApolloError).graphQLErrors?.[0] ?? err
+      error = this.interpretError(err)
     }
 
     if (error) {
@@ -91,7 +82,6 @@ export class ApiClient {
       const result = await this.client.query<GetEntitlementsConsumptionQuery>({
         query: GetEntitlementsConsumptionDocument,
         variables: {},
-        fetchPolicy: 'no-cache',
       })
 
       if (result.data) {
@@ -99,11 +89,7 @@ export class ApiClient {
       }
       error = result.errors?.[0] as AppSyncError
     } catch (err) {
-      const appSyncError = err as Error
-      if (isAppSyncNetworkError(appSyncError)) {
-        throw mapNetworkErrorToClientError(appSyncError)
-      }
-      error = (err as ApolloError).graphQLErrors?.[0] ?? err
+      error = this.interpretError(err)
     }
     if (error) {
       throw this.mapGraphQLToClientError(error)
@@ -120,7 +106,6 @@ export class ApiClient {
       const result = await this.client.query<GetExternalIdQuery>({
         query: GetExternalIdDocument,
         variables: {},
-        fetchPolicy: 'no-cache',
       })
 
       if (result.data) {
@@ -128,11 +113,7 @@ export class ApiClient {
       }
       error = result.errors?.[0] as AppSyncError
     } catch (err) {
-      const appSyncError = err as AppSyncError
-      if (isAppSyncNetworkError(appSyncError)) {
-        throw mapNetworkErrorToClientError(appSyncError)
-      }
-      error = (err as ApolloError).graphQLErrors?.[0] ?? err
+      error = this.interpretError(err)
     }
     if (error) {
       throw this.mapGraphQLToClientError(error)
@@ -149,7 +130,6 @@ export class ApiClient {
       const result = await this.client.mutate<RedeemEntitlementsMutation>({
         mutation: RedeemEntitlementsDocument,
         variables: {},
-        fetchPolicy: 'no-cache',
       })
 
       if (result.data) {
@@ -157,11 +137,7 @@ export class ApiClient {
       }
       error = result.errors?.[0] as AppSyncError
     } catch (err) {
-      const appSyncError = err as AppSyncError
-      if (isAppSyncNetworkError(appSyncError)) {
-        throw mapNetworkErrorToClientError(appSyncError)
-      }
-      error = (err as ApolloError).graphQLErrors?.[0] ?? err
+      error = this.interpretError(err)
     }
     if (error) {
       throw this.mapGraphQLToClientError(error)
@@ -181,7 +157,6 @@ export class ApiClient {
         await this.client.mutate<ConsumeBooleanEntitlementsMutation>({
           mutation: ConsumeBooleanEntitlementsDocument,
           variables: { entitlementNames },
-          fetchPolicy: 'no-cache',
         })
 
       if (result.data) {
@@ -189,11 +164,7 @@ export class ApiClient {
       }
       error = result.errors?.[0] as AppSyncError
     } catch (err) {
-      const appSyncError = err as AppSyncError
-      if (isAppSyncNetworkError(appSyncError)) {
-        throw mapNetworkErrorToClientError(appSyncError)
-      }
-      error = (err as ApolloError).graphQLErrors?.[0] ?? err
+      error = this.interpretError(err)
     }
     if (error) {
       throw this.mapGraphQLToClientError(error)
@@ -202,6 +173,24 @@ export class ApiClient {
     throw new FatalError(
       'consumeBooleanEntitlements did not return any result or any error.',
     )
+  }
+
+  private interpretError(err: unknown): AppSyncError {
+    let error: AppSyncError
+    const appSyncError = err as AppSyncError
+    if (isGraphQLNetworkError(appSyncError)) {
+      throw mapNetworkErrorToClientError(appSyncError)
+    }
+    error = appSyncError
+    const baseError = err as Error
+    if (
+      'graphQLErrors' in baseError &&
+      Array.isArray(baseError.graphQLErrors) &&
+      baseError.graphQLErrors.length > 0
+    ) {
+      error = baseError.graphQLErrors[0] as AppSyncError
+    }
+    return error
   }
 
   private mapGraphQLToClientError(error: AppSyncError): Error {

@@ -140,7 +140,7 @@ describe('sudo-entitlements API integration tests', () => {
     sudoEntitlements = new DefaultSudoEntitlementsClient(sudoUser)
 
     let adminApiKey = process.env.ADMIN_API_KEY?.trim()
-    const adminApiKeyPath = '${__dirname}/../../config/api.key'
+    const adminApiKeyPath = `${__dirname}/../../config/api.key`
     if (!adminApiKey && fs.existsSync(adminApiKeyPath)) {
       adminApiKey = fs.readFileSync(adminApiKeyPath).toString()?.trim()
       console.log('Read admin api key', { adminApiKeyPath, adminApiKey })

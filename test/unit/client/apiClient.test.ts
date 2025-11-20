@@ -14,9 +14,6 @@ import {
   RequestFailedError,
   ServiceError,
 } from '@sudoplatform/sudo-common'
-import { NormalizedCacheObject } from 'apollo-cache-inmemory'
-import { NetworkStatus } from 'apollo-client'
-import AWSAppSyncClient from 'aws-appsync'
 import { anything, instance, mock, reset, verify, when } from 'ts-mockito'
 import { ApiClient } from '../../../src/client/apiClient'
 import {
@@ -35,10 +32,11 @@ import {
   GetExternalIdQuery,
   RedeemEntitlementsMutation,
 } from '../../../src/gen/graphqlTypes'
+import { GraphQLClient } from '@sudoplatform/sudo-user'
 
 describe('ApiClient test suite', () => {
   const mockApiClientManager = mock<ApiClientManager>()
-  const mockAWSAppSyncClient = mock<AWSAppSyncClient<NormalizedCacheObject>>()
+  const mockGraphQLClient = mock<GraphQLClient>()
 
   let apiClient: ApiClient
 
@@ -46,10 +44,10 @@ describe('ApiClient test suite', () => {
 
   beforeEach(() => {
     reset(mockApiClientManager)
-    reset(mockAWSAppSyncClient)
+    reset(mockGraphQLClient)
 
     when(mockApiClientManager.getClient(anything())).thenReturn(
-      instance(mockAWSAppSyncClient),
+      instance(mockGraphQLClient),
     )
 
     apiClient = new ApiClient(instance(mockApiClientManager))
@@ -85,35 +83,29 @@ describe('ApiClient test suite', () => {
   describe('getEntitlements tests', () => {
     it('should return data if returned', async () => {
       when(
-        mockAWSAppSyncClient.query<GetEntitlementsQuery>(anything()),
+        mockGraphQLClient.query<GetEntitlementsQuery>(anything()),
       ).thenResolve({
         data: { getEntitlements: entitlementsSet },
-        loading: false,
-        networkStatus: NetworkStatus.ready,
-        stale: false,
       })
 
       await expect(apiClient.getEntitlements()).resolves.toEqual(
         entitlementsSet,
       )
 
-      verify(mockAWSAppSyncClient.query(anything())).once()
+      verify(mockGraphQLClient.query(anything())).once()
     })
 
     it('should throw a FatalError if no data and no errors returned', async () => {
-      when(mockAWSAppSyncClient.query(anything())).thenResolve({
+      when(mockGraphQLClient.query(anything())).thenResolve({
         data: undefined,
         errors: undefined,
-        loading: false,
-        networkStatus: NetworkStatus.ready,
-        stale: false,
       })
 
       await expect(
         apiClient.getEntitlements(),
       ).rejects.toThrowErrorMatchingSnapshot()
 
-      verify(mockAWSAppSyncClient.query(anything())).once()
+      verify(mockGraphQLClient.query(anything())).once()
     })
 
     it.each`
@@ -122,17 +114,14 @@ describe('ApiClient test suite', () => {
       ${null}
     `('should return null if $result returned', async ({ result }) => {
       when(
-        mockAWSAppSyncClient.query<GetEntitlementsQuery>(anything()),
+        mockGraphQLClient.query<GetEntitlementsQuery>(anything()),
       ).thenResolve({
         data: { getEntitlements: result },
-        loading: false,
-        networkStatus: NetworkStatus.ready,
-        stale: false,
       })
 
       await expect(apiClient.getEntitlements()).resolves.toEqual(null)
 
-      verify(mockAWSAppSyncClient.query(anything())).once()
+      verify(mockGraphQLClient.query(anything())).once()
     })
 
     it.each`
@@ -146,11 +135,8 @@ describe('ApiClient test suite', () => {
       ${'sudoplatform.NoEntitlementsError'}                            | ${new NoEntitlementsError()}
       ${'sudoplatform.ServiceError'}                                   | ${new ServiceError('graphql-error')}
     `('should map $code error when returned', async ({ code, error }) => {
-      when(mockAWSAppSyncClient.query(anything())).thenResolve({
+      when(mockGraphQLClient.query(anything())).thenResolve({
         data: undefined,
-        loading: false,
-        networkStatus: NetworkStatus.ready,
-        stale: false,
         errors: [
           {
             errorType: code,
@@ -175,11 +161,8 @@ describe('ApiClient test suite', () => {
       ${'sudoplatform.ServiceError'}                                   | ${new ServiceError('graphql-error')}
     `('should map $code error', ({ code, error }) => {
       it('when error is returned', async () => {
-        when(mockAWSAppSyncClient.query(anything())).thenResolve({
+        when(mockGraphQLClient.query(anything())).thenResolve({
           data: undefined,
-          loading: false,
-          networkStatus: NetworkStatus.ready,
-          stale: false,
           errors: [
             {
               errorType: code,
@@ -193,7 +176,7 @@ describe('ApiClient test suite', () => {
       })
 
       it('when error is thrown', async () => {
-        when(mockAWSAppSyncClient.query(anything())).thenReject({
+        when(mockGraphQLClient.query(anything())).thenReject({
           message: 'error',
           name: 'error',
           graphQLErrors: [
@@ -211,24 +194,24 @@ describe('ApiClient test suite', () => {
     })
 
     it.each`
-      networkError           | clientError
-      ${{ statusCode: 401 }} | ${notAuthorizedError}
-      ${{ statusCode: 500 }} | ${'default'}
-      ${{}}                  | ${'default'}
+      networkError                          | clientError
+      ${{ _response: { statusCode: 401 } }} | ${notAuthorizedError}
+      ${{ _response: { statusCode: 500 } }} | ${'default'}
+      ${{ _response: {} }}                  | ${'default'}
     `(
       'should map network error $networkError to $clientError',
       async ({ networkError, clientError }) => {
-        when(mockAWSAppSyncClient.query(anything())).thenReject({
+        when(mockGraphQLClient.query(anything())).thenReject({
           message: 'error',
           name: 'error',
-          networkError,
+          originalError: networkError,
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } as any)
 
         if (clientError === 'default') {
           clientError = new RequestFailedError(
             networkError,
-            networkError.statusCode,
+            networkError._response.statusCode,
           )
         }
 
@@ -240,35 +223,29 @@ describe('ApiClient test suite', () => {
   describe('getEntitlementsConsumption tests', () => {
     it('should return data if returned', async () => {
       when(
-        mockAWSAppSyncClient.query<GetEntitlementsConsumptionQuery>(anything()),
+        mockGraphQLClient.query<GetEntitlementsConsumptionQuery>(anything()),
       ).thenResolve({
         data: { getEntitlementsConsumption: entitlementsConsumption },
-        loading: false,
-        networkStatus: NetworkStatus.ready,
-        stale: false,
       })
 
       await expect(apiClient.getEntitlementsConsumption()).resolves.toEqual(
         entitlementsConsumption,
       )
 
-      verify(mockAWSAppSyncClient.query(anything())).once()
+      verify(mockGraphQLClient.query(anything())).once()
     })
 
     it('should throw a FatalError if no data and no errors returned', async () => {
-      when(mockAWSAppSyncClient.query(anything())).thenResolve({
+      when(mockGraphQLClient.query(anything())).thenResolve({
         data: undefined,
         errors: undefined,
-        loading: false,
-        networkStatus: NetworkStatus.ready,
-        stale: false,
       })
 
       await expect(
         apiClient.getEntitlementsConsumption(),
       ).rejects.toThrowErrorMatchingSnapshot()
 
-      verify(mockAWSAppSyncClient.query(anything())).once()
+      verify(mockGraphQLClient.query(anything())).once()
     })
 
     describe.each`
@@ -283,11 +260,8 @@ describe('ApiClient test suite', () => {
       ${'sudoplatform.ServiceError'}                                   | ${new ServiceError('graphql-error')}
     `('should map $code error', ({ code, error }) => {
       it('when error is returned', async () => {
-        when(mockAWSAppSyncClient.query(anything())).thenResolve({
+        when(mockGraphQLClient.query(anything())).thenResolve({
           data: undefined,
-          loading: false,
-          networkStatus: NetworkStatus.ready,
-          stale: false,
           errors: [
             {
               errorType: code,
@@ -303,7 +277,7 @@ describe('ApiClient test suite', () => {
       })
 
       it('when error is thrown', async () => {
-        when(mockAWSAppSyncClient.query(anything())).thenReject({
+        when(mockGraphQLClient.query(anything())).thenReject({
           message: 'error',
           name: 'error',
           graphQLErrors: [
@@ -323,24 +297,24 @@ describe('ApiClient test suite', () => {
     })
 
     it.each`
-      networkError           | clientError
-      ${{ statusCode: 401 }} | ${notAuthorizedError}
-      ${{ statusCode: 500 }} | ${'default'}
-      ${{}}                  | ${'default'}
+      networkError                          | clientError
+      ${{ _response: { statusCode: 401 } }} | ${notAuthorizedError}
+      ${{ _response: { statusCode: 500 } }} | ${'default'}
+      ${{ _response: {} }}                  | ${'default'}
     `(
       'should map network error $networkError to $clientError',
       async ({ networkError, clientError }) => {
-        when(mockAWSAppSyncClient.query(anything())).thenReject({
+        when(mockGraphQLClient.query(anything())).thenReject({
           message: 'error',
           name: 'error',
-          networkError,
+          originalError: networkError,
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } as any)
 
         if (clientError === 'default') {
           clientError = new RequestFailedError(
             networkError,
-            networkError.statusCode,
+            networkError._response.statusCode,
           )
         }
 
@@ -354,34 +328,28 @@ describe('ApiClient test suite', () => {
   describe('getExternalId tests', () => {
     it('should return data if returned', async () => {
       const externalId = 'external-id'
-      when(
-        mockAWSAppSyncClient.query<GetExternalIdQuery>(anything()),
-      ).thenResolve({
-        data: { getExternalId: externalId },
-        loading: false,
-        networkStatus: NetworkStatus.ready,
-        stale: false,
-      })
+      when(mockGraphQLClient.query<GetExternalIdQuery>(anything())).thenResolve(
+        {
+          data: { getExternalId: externalId },
+        },
+      )
 
       await expect(apiClient.getExternalId()).resolves.toEqual(externalId)
 
-      verify(mockAWSAppSyncClient.query(anything())).once()
+      verify(mockGraphQLClient.query(anything())).once()
     })
 
     it('should throw a FatalError if no data and no errors returned', async () => {
-      when(mockAWSAppSyncClient.query(anything())).thenResolve({
+      when(mockGraphQLClient.query(anything())).thenResolve({
         data: undefined,
         errors: undefined,
-        loading: false,
-        networkStatus: NetworkStatus.ready,
-        stale: false,
       })
 
       await expect(
         apiClient.getExternalId(),
       ).rejects.toThrowErrorMatchingSnapshot()
 
-      verify(mockAWSAppSyncClient.query(anything())).once()
+      verify(mockGraphQLClient.query(anything())).once()
     })
     describe.each`
       code                                                             | error
@@ -395,11 +363,8 @@ describe('ApiClient test suite', () => {
       ${'sudoplatform.ServiceError'}                                   | ${new ServiceError('graphql-error')}
     `('should map $code error', ({ code, error }) => {
       it('when error is returned', async () => {
-        when(mockAWSAppSyncClient.query(anything())).thenResolve({
+        when(mockGraphQLClient.query(anything())).thenResolve({
           data: undefined,
-          loading: false,
-          networkStatus: NetworkStatus.ready,
-          stale: false,
           errors: [
             {
               errorType: code,
@@ -413,7 +378,7 @@ describe('ApiClient test suite', () => {
       })
 
       it('when error is thrown', async () => {
-        when(mockAWSAppSyncClient.query(anything())).thenReject({
+        when(mockGraphQLClient.query(anything())).thenReject({
           message: 'error',
           name: 'error',
           graphQLErrors: [
@@ -431,24 +396,24 @@ describe('ApiClient test suite', () => {
     })
 
     it.each`
-      networkError           | clientError
-      ${{ statusCode: 401 }} | ${notAuthorizedError}
-      ${{ statusCode: 500 }} | ${'default'}
-      ${{}}                  | ${'default'}
+      networkError                          | clientError
+      ${{ _response: { statusCode: 401 } }} | ${notAuthorizedError}
+      ${{ _response: { statusCode: 500 } }} | ${'default'}
+      ${{ _response: {} }}                  | ${'default'}
     `(
       'should map network error $networkError to $clientError',
       async ({ networkError, clientError }) => {
-        when(mockAWSAppSyncClient.query(anything())).thenReject({
+        when(mockGraphQLClient.query(anything())).thenReject({
           message: 'error',
           name: 'error',
-          networkError,
+          originalError: networkError,
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } as any)
 
         if (clientError === 'default') {
           clientError = new RequestFailedError(
             networkError,
-            networkError.statusCode,
+            networkError._response.statusCode,
           )
         }
 
@@ -460,19 +425,21 @@ describe('ApiClient test suite', () => {
   describe('redeemEntitlements tests', () => {
     it('should throw a FatalError if no data and no errors returned', async () => {
       when(
-        mockAWSAppSyncClient.mutate<RedeemEntitlementsMutation>(anything()),
-      ).thenResolve({})
+        mockGraphQLClient.mutate<RedeemEntitlementsMutation>(anything()),
+      ).thenResolve({
+        data: null as any,
+      })
 
       await expect(
         apiClient.redeemEntitlements(),
       ).rejects.toThrowErrorMatchingSnapshot()
 
-      verify(mockAWSAppSyncClient.mutate(anything())).once()
+      verify(mockGraphQLClient.mutate(anything())).once()
     })
 
     it('should return data if returned', async () => {
       when(
-        mockAWSAppSyncClient.mutate<RedeemEntitlementsMutation>(anything()),
+        mockGraphQLClient.mutate<RedeemEntitlementsMutation>(anything()),
       ).thenResolve({
         data: { redeemEntitlements: entitlementsSet },
       })
@@ -481,7 +448,7 @@ describe('ApiClient test suite', () => {
         entitlementsSet,
       )
 
-      verify(mockAWSAppSyncClient.mutate(anything())).once()
+      verify(mockGraphQLClient.mutate(anything())).once()
     })
 
     describe.each`
@@ -497,8 +464,9 @@ describe('ApiClient test suite', () => {
     `('should map $code error', ({ code, error }) => {
       it('when error is returned', async () => {
         when(
-          mockAWSAppSyncClient.mutate<RedeemEntitlementsMutation>(anything()),
+          mockGraphQLClient.mutate<RedeemEntitlementsMutation>(anything()),
         ).thenResolve({
+          data: null as any,
           errors: [
             {
               errorType: code,
@@ -512,7 +480,7 @@ describe('ApiClient test suite', () => {
 
       it('when error is thrown', async () => {
         when(
-          mockAWSAppSyncClient.mutate<RedeemEntitlementsMutation>(anything()),
+          mockGraphQLClient.mutate<RedeemEntitlementsMutation>(anything()),
         ).thenReject({
           message: 'error',
           name: 'error',
@@ -531,26 +499,26 @@ describe('ApiClient test suite', () => {
     })
 
     it.each`
-      networkError           | clientError
-      ${{ statusCode: 401 }} | ${notAuthorizedError}
-      ${{ statusCode: 500 }} | ${'default'}
-      ${{}}                  | ${'default'}
+      networkError                          | clientError
+      ${{ _response: { statusCode: 401 } }} | ${notAuthorizedError}
+      ${{ _response: { statusCode: 500 } }} | ${'default'}
+      ${{ _response: {} }}                  | ${'default'}
     `(
       'should map network error $networkError to $clientError',
       async ({ networkError, clientError }) => {
         when(
-          mockAWSAppSyncClient.mutate<RedeemEntitlementsMutation>(anything()),
+          mockGraphQLClient.mutate<RedeemEntitlementsMutation>(anything()),
         ).thenReject({
           message: 'error',
           name: 'error',
-          networkError,
+          originalError: networkError,
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } as any)
 
         if (clientError === 'default') {
           clientError = new RequestFailedError(
             networkError,
-            networkError.statusCode,
+            networkError._response.statusCode,
           )
         }
 
@@ -565,21 +533,23 @@ describe('ApiClient test suite', () => {
     const entitlementNames = ['some-boolean-entitlement']
     it('should throw a FatalError if no data and no errors returned', async () => {
       when(
-        mockAWSAppSyncClient.mutate<ConsumeBooleanEntitlementsMutation>(
+        mockGraphQLClient.mutate<ConsumeBooleanEntitlementsMutation>(
           anything(),
         ),
-      ).thenResolve({})
+      ).thenResolve({
+        data: null as any,
+      })
 
       await expect(
         apiClient.consumeBooleanEntitlements(entitlementNames),
       ).rejects.toThrowErrorMatchingSnapshot()
 
-      verify(mockAWSAppSyncClient.mutate(anything())).once()
+      verify(mockGraphQLClient.mutate(anything())).once()
     })
 
     it('should resolve if API returns', async () => {
       when(
-        mockAWSAppSyncClient.mutate<ConsumeBooleanEntitlementsMutation>(
+        mockGraphQLClient.mutate<ConsumeBooleanEntitlementsMutation>(
           anything(),
         ),
       ).thenResolve({
@@ -590,7 +560,7 @@ describe('ApiClient test suite', () => {
         apiClient.consumeBooleanEntitlements(entitlementNames),
       ).resolves.toEqual(true)
 
-      verify(mockAWSAppSyncClient.mutate(anything())).once()
+      verify(mockGraphQLClient.mutate(anything())).once()
     })
 
     describe.each`
@@ -601,10 +571,11 @@ describe('ApiClient test suite', () => {
     `('should map $code error', ({ code, error }) => {
       it('when error is returned', async () => {
         when(
-          mockAWSAppSyncClient.mutate<ConsumeBooleanEntitlementsMutation>(
+          mockGraphQLClient.mutate<ConsumeBooleanEntitlementsMutation>(
             anything(),
           ),
         ).thenResolve({
+          data: null as any,
           errors: [
             {
               errorType: code,
@@ -620,7 +591,7 @@ describe('ApiClient test suite', () => {
 
       it('when error is thrown', async () => {
         when(
-          mockAWSAppSyncClient.mutate<ConsumeBooleanEntitlementsMutation>(
+          mockGraphQLClient.mutate<ConsumeBooleanEntitlementsMutation>(
             anything(),
           ),
         ).thenReject({
@@ -643,28 +614,28 @@ describe('ApiClient test suite', () => {
     })
 
     it.each`
-      networkError           | clientError
-      ${{ statusCode: 401 }} | ${notAuthorizedError}
-      ${{ statusCode: 500 }} | ${'default'}
-      ${{}}                  | ${'default'}
+      networkError                          | clientError
+      ${{ _response: { statusCode: 401 } }} | ${notAuthorizedError}
+      ${{ _response: { statusCode: 500 } }} | ${'default'}
+      ${{ _response: {} }}                  | ${'default'}
     `(
       'should map network error $networkError to $clientError',
       async ({ networkError, clientError }) => {
         when(
-          mockAWSAppSyncClient.mutate<ConsumeBooleanEntitlementsMutation>(
+          mockGraphQLClient.mutate<ConsumeBooleanEntitlementsMutation>(
             anything(),
           ),
         ).thenReject({
           message: 'error',
           name: 'error',
-          networkError,
+          originalError: networkError,
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } as any)
 
         if (clientError === 'default') {
           clientError = new RequestFailedError(
             networkError,
-            networkError.statusCode,
+            networkError._response.statusCode,
           )
         }
 
