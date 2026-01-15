@@ -80,6 +80,8 @@ jobs:
           mkdir -p config
           rm -rf config/*
           echo "$SUDO_PLATFORM_CONFIG" > config/sudoplatformconfig.json
+          echo "$REGISTER_KEY_ID" > config/register_key.id
+          echo "$REGISTER_KEY" > config/register_key.private
           yarn smoketest
         working-directory: ${{ env.PACKAGE_DIR }}
 
