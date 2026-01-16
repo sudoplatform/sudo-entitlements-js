@@ -82,6 +82,7 @@ jobs:
           echo "$SUDO_PLATFORM_CONFIG" > config/sudoplatformconfig.json
           echo "$REGISTER_KEY_ID" > config/register_key.id
           echo "$REGISTER_KEY" > config/register_key.private
+          unset SUDO_PLATFORM_CONFIG REGISTER_KEY_ID REGISTER_KEY
           yarn smoketest
         working-directory: ${{ env.PACKAGE_DIR }}
 
